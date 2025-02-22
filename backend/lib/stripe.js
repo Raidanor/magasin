@@ -1,4 +1,4 @@
-import stripe from "stripe"
+import Stripe from "stripe"
 
 import dotenv from "dotenv"
 

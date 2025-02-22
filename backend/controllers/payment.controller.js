@@ -1,6 +1,7 @@
 import { stripe } from "../lib/stripe.js"
 import dotenv from "dotenv"
 import Coupon from "../models/coupon.model.js"
+import Order from "../models/order.model.js"
 
 dotenv.config()
 
@@ -52,7 +53,14 @@ export const createCheckoutSession = async (req, res) => {
             [],
             metadata: {
                 userId: req.user._id.toString(),
-                couponCode: couponCode || "" 
+                couponCode: couponCode || "",
+                products: JSON.stringify(
+                    products.map((p) =>({
+                        id: p._id,
+                        quantity: p.quantity,
+                        price: p.price
+                    }))
+                )
             }
         })
 
@@ -63,6 +71,47 @@ export const createCheckoutSession = async (req, res) => {
         
     } catch (error) {
         console.log("Error in createCheckoutSession function")
+        res.status(401).json({ message: "Server error", error: error.message })
+    }
+}
+
+export const checkoutSuccess = async (req, res) => {
+    try {
+        const {sessionId} = req.body
+        const session = await stripe.checkout.sessions.retrieve(sessionId)
+
+        if (session.payment_status === "paid"){
+            if (session.metadata.couponCode) 
+            {
+               await Coupon.findOneAndUpdate({
+                code: session.metadata.couponCode, userId: session.metadata.userId
+               },
+               { isActive: false }
+            )
+            }
+
+            // create a new Order
+            const products = JSON.parse(session.metadata.products)
+            const newOrder = new Order({
+                user: session.metadata.userId,
+                products: products.map(p => ({
+                    id: p._id,
+                    quantity: p.quantity,
+                    price: p.price
+                })),
+                totalAmount: session.amount_total / 100,
+                paymentIntent: session.payment_intent,
+                stripeSessionId: sessionId
+            })
+            await newOrder.save()
+            res.status(200).json({
+                success: true,
+                message: "Payment successful, order created and coupon deactivated if used",
+                orderId: newOrder._id
+            })
+        }
+    } catch (error) {
+        console.log("Error in checkoutSuccess function")
         res.status(401).json({ message: "Server error", error: error.message })
     }
 }
