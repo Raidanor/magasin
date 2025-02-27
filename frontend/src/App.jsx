@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
+import CategoryPage from './pages/CategoryPage.jsx'
 
 // Components import
 import Navbar from "./components/Navbar.jsx"
@@ -40,6 +41,7 @@ function App() {
                     <Route path= "/signup" element= {user ? <Navigate to="/" /> : <SignUpPage /> } />
                     <Route path= "/login" element={user ? <Navigate to="/" /> : <LoginPage /> }/>
                     <Route path= "/secret-dashboard" element={user?.role === "admin" ? <Navigate to="/login" /> : <AdminPage /> }/>
+                    <Route path= "/category/:category" element={ <CategoryPage /> }/>
                 </Routes>
             </div>
             <Toaster />
