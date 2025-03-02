@@ -43,6 +43,4 @@ const PeopleAlsoBought = () => {
 }
 
 
-<div className='mt-8'>className='text-2xl font-semibold text-emerald-400'export default Peo
-    People also bought
-    </div>
+export default PeopleAlsoBought
