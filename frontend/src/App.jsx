@@ -22,7 +22,7 @@ import { useCartStore } from './stores/useCartStore.js'
 
 function App() {
     const { user, checkAuth, checkingAuth } = useUserStore()
-    const { getCartItems } = useCartStore
+    const { getCartItems } = useCartStore()
 
     useEffect(() => {
         checkAuth()

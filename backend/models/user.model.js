@@ -13,11 +13,23 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true
     },
+
+    phoneNumber:{
+        type: String,
+        required: [true, "Phone number is required"],
+    },
     password:{
         type: String,
         required: [true, "Password is required"],
-        minlength: [6, "Password must be atleast 8 characters long"]
+        minlength: [6, "Password must be atleast 6 characters long"]
     },
+
+    address:{
+        type: String,
+        required: [true, "Address is required"],
+
+    },
+    
     cartItems:[
         {
             quantity:{

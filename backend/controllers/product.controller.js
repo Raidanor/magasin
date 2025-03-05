@@ -95,7 +95,7 @@ export const getRecommendedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
             {
-                sample: {size:4},
+                $sample: {size:2},
             },
             {
                 $project:{
@@ -115,10 +115,11 @@ export const getRecommendedProducts = async (req, res) => {
 }
 
 export const getProductsByCategory = async (req, res) => {
-    const { category } = req.params.category
+    const { category } = req.params
     try {
         const products = await Product.find({ category })
         res.json({products})
+        console.log(products)
     } catch (error) {
         console.log("Error in getProductsByCategory function")
         res.status(401).json({ error: error.message})

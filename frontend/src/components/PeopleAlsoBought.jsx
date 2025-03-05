@@ -18,6 +18,7 @@ const PeopleAlsoBought = () => {
             try {
                 const res = await axios.get("/products/recommendations")
                 setRecommendations(res.data)
+                // console.log(recommendations)
             } catch (error) {
                 toast.error(error.response.message.data)
             } finally {
@@ -34,9 +35,9 @@ const PeopleAlsoBought = () => {
                 People also bought
             </h3>
             <div className='mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-                {recommendations.map(product => (
+                {/* {recommendations.map((product) => (
                     <ProductCard hey={product._id} product={product} />
-                ))}
+                ))} */}
             </div>
         </div>
     )

@@ -59,10 +59,10 @@ export const removeAllFromCart = async (req, res) => {
 
 export const updateQuantity = async (req, res) => {
     try {
-        const { id:productId } = req.params.id
+        const { id:productId } = req.params
         const { quantity } = req.body
         const user = req.user
-        const existingItem = user.cartItems.fint((item) => item.id === productId.Id)
+        const existingItem = user.cartItems.find((item) => item.id === productId)
 
         if (existingItem) {
             if (quantity === 0){
