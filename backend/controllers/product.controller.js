@@ -40,7 +40,7 @@ export const getFeaturedProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category } = req.body
+        const { name, description, price, image, category, size } = req.body
 
         let cloudinaryResponse = null
 
@@ -54,7 +54,8 @@ export const createProduct = async (req, res) => {
             description,
             price,
             image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
-            category
+            category,
+            size
         })
 
         res.status(201).json(product)

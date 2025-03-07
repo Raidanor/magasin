@@ -20,7 +20,7 @@ const CreateProductForm = () => {
 		e.preventDefault();
 		try {
 			await createProduct(newProduct);
-			setNewProduct({ name: "", description: "", price: "", category: "", image: "" });
+			setNewProduct({ name: "", description: "", price: "", category: "", image: "", size: "" });
 		} catch {
 			console.log("error creating a product");
 		}
@@ -116,11 +116,29 @@ const CreateProductForm = () => {
 						required
 					>
 						<option value=''>Select a category</option>
-						{categories.map((category) => (
+						    {categories.map((category) => (
 							<option key={category} value={category}>
 								{category}
-							</option>
+						</option>
 						))}
+					</select>
+				</div>
+
+                <div>
+					<label htmlFor='size' className='block text-sm font-medium text-gray-300'>
+						Add size (Optional)
+					</label>
+					<select
+						id='size'
+						name='size'
+						value={newProduct.size}
+						onChange={(e) => setNewProduct({ ...newProduct, size: e.target.value })}
+						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
+						 shadow-sm py-2 px-3 text-white focus:outline-none 
+						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+						required
+					>
+						
 					</select>
 				</div>
 
