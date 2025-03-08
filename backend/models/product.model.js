@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
     },
     image:{
         type: String,
-        required: [true, "Image is required"]
+        required: [false, "Image is required"]
     },
     category:{
         type: String,
@@ -26,13 +26,11 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    size:[
-        {
-            type: String,
-            default: "",
-            required: false
-        }
-    ]
+    sizes:{
+        type: Array,
+        default: []
+    }
+        
 }, {timestamps: true})
 
 

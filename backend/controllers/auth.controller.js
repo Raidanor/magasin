@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 const generateToken = (userId) => {
     const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m"
+        expiresIn: "30m"
     })
     const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: "7d"
@@ -22,7 +22,7 @@ const setCookies = (res, accessToken, refreshToken) => {
         httpOnly: true,  //prevent XSS attacks
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 15 * 60 * 1000
+        maxAge: 30 * 60 * 1000
     })
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,  //prevent XSS attacks
