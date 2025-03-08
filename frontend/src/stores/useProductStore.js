@@ -12,7 +12,6 @@ export const useProductStore = create((set) => ({
 		set({ loading: true });
 		try {
 			const res = await axios.post("/products", productData);
-            console.log("productData: ", productData)
 			set((prevState) => ({
 				products: [...prevState.products, res.data],
 				loading: false,

@@ -8,6 +8,7 @@ const ProductCard = ({ product }) => {
 	const { addToCart } = useCartStore();
 
 
+
 	const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Please login to add products to cart", { id: "login" });
@@ -17,6 +18,11 @@ const ProductCard = ({ product }) => {
 			addToCart(product);
 		}
 	};
+
+    function testFunction()
+    {
+        console.log(product.sizes[0])
+    }
 
 	return (
 		<div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg'>
@@ -32,6 +38,7 @@ const ProductCard = ({ product }) => {
 						<span className='text-3xl font-bold text-emerald-400'>${product.price}</span>
 					</p>
 				</div>
+                
 				<button
 					className='flex items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
 					 text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
@@ -40,6 +47,18 @@ const ProductCard = ({ product }) => {
 					<ShoppingCart size={22} className='mr-2' />
 					Add to cart
 				</button>
+                { product.sizes.length > 0 &&
+                    <ul className="">
+                        {product.sizes.map(size => (
+                            <li className="flex items-center justify-center rounded-lg px-5 py-2.5 text-center text-sm font-medium
+					 text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300">{size}</li>
+                        ))}
+                    </ul>
+                }
+
+                {/* <button className='rounded-lg' onClick={testFunction}>
+                    TEST
+                </button> */}
 			</div>
 		</div>
 	);
