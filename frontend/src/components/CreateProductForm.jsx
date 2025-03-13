@@ -9,10 +9,9 @@ const CreateProductForm = () => {
 	const [newProduct, setNewProduct] = useState({
 		name: "",
 		description: "",
-		price: "",
+		info: [],
 		category: "",
 		image: "",
-        sizes: [""]
 	});
     
     const [s, setS] = useState('')

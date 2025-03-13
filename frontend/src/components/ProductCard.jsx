@@ -3,10 +3,28 @@ import { ShoppingCart } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 import { useEffect, useState } from "react";
+import Select from "react-dropdown-select"
 
 const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
+
+    const [s, setS] = useState("")
+
+    useEffect(() => {
+        console.log(s[0])
+    })
+
+    const options = [
+        {
+          id: 1,
+          name: 'Leanne Graham'
+        },
+        {
+          id: 2,
+          name: 'Ervin Howell'
+        }
+      ];
 
 
 
@@ -14,19 +32,22 @@ const ProductCard = ({ product }) => {
 		if (!user) {
 			toast.error("Please login to add products to cart", { id: "login" });
 			return;
-		} else {
+		}
+        else {
 			// add to cart
-			addToCart(product);
+			// addToCart(product);
+            console.log(product)
 		}
 	};
 
 	return (
         
-            <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg'>
+            <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4'>
                 <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
                     <img className='object-cover w-full' src={product.image} alt='product image' />
                     {/* <div className='absolute inset-0 bg-black bg-opacity-20' /> */}
                 </div>
+                
 
                 <div className='mt-4 px-5 pb-5'>
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
@@ -47,12 +68,22 @@ const ProductCard = ({ product }) => {
 
                         
                             { product.sizes.length > 0 &&
-                                <select className="flex bg-emerald-600 rounded-lg mt-2 justify-items-end" >
+                                <select className="flex bg-emerald-600 rounded-lg mt-2" >
                                     {product.sizes.map(size => (
-                                        <option value={size}>{size}</option>
+                                        <option  value={size}>{size}</option>
                                     ))}
                                 </select>
                             }
+                        <Select
+                            className="flex bg-emerald-600 rounded-lg mt-2 text-black my-10"
+                            options={options}
+                            labelField="name"
+                            valueField="id"
+                            onChange={(values) => setS(values)}
+                            
+                            closeOnSelect={true}
+                        />
+                            
                         
                     </div>
                 </div>

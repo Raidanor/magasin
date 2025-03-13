@@ -9,11 +9,18 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    price:{
-        type: Number,
-        min: 0,
-        required: true
-    },
+    info: [{
+        price:{
+            type: Number,
+            min: 0,
+            required: true
+        },
+        sizes:{
+            type: Array,
+            default: []
+        }
+    }],
+    
     image:{
         type: String,
         required: [false, "Image is required"]
@@ -26,10 +33,7 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    sizes:{
-        type: Array,
-        default: []
-    }
+    
         
 }, {timestamps: true})
 
