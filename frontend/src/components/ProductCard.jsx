@@ -9,23 +9,35 @@ const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
+    const p = product
+
+    const [newProduct, setNewProduct] = useState(product)
+    
+
     const [s, setS] = useState("")
 
     useEffect(() => {
-        console.log(s[0])
-    })
+        // setNewProduct({...newProduct,  info: product.info[0]})
 
-    const options = [
-        {
-          id: 1,
-          name: 'Leanne Graham'
-        },
-        {
-          id: 2,
-          name: 'Ervin Howell'
-        }
-      ];
+        let newInfo = []
+        product?.info?.forEach(element => {
+            if (element.size === s[0]?.size) {
+                // console.log(element)
+                newInfo = {price: element.price, size: s}
+                setNewProduct({...newProduct,  info: newInfo})
+            }
+        });
+        console.log(product)
+        console.log(newProduct)
 
+
+    }, [s])
+
+    const selected = product.info
+
+    // useEffect(() => {
+    //     setNewProduct({...newProduct,  info: info })
+    // })
 
 
 	const handleAddToCart = () => {
@@ -35,7 +47,7 @@ const ProductCard = ({ product }) => {
 		}
         else {
 			// add to cart
-			// addToCart(product);
+			// addToCart(product)
             console.log(product)
 		}
 	};
@@ -53,7 +65,7 @@ const ProductCard = ({ product }) => {
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                     <div className='mt-2 mb-5 flex items-center justify-between'>
                         <p>
-                            <span className='text-3xl font-bold text-emerald-400'>Rs.{product.price}</span>
+                            <span className='text-3xl font-bold text-emerald-400'>Rs.{newProduct?.info?.price}</span>
                         </p>
                     </div>
                     <div>
@@ -66,19 +78,11 @@ const ProductCard = ({ product }) => {
                             Add to cart
                         </button>
 
-                        
-                            { product.sizes.length > 0 &&
-                                <select className="flex bg-emerald-600 rounded-lg mt-2" >
-                                    {product.sizes.map(size => (
-                                        <option  value={size}>{size}</option>
-                                    ))}
-                                </select>
-                            }
                         <Select
-                            className="flex bg-emerald-600 rounded-lg mt-2 text-black my-10"
-                            options={options}
-                            labelField="name"
-                            valueField="id"
+                            className=" bg-emerald-600 rounded-lg mt-2 text-black z-100"
+                            options={selected}
+                            labelField="size"
+                            valueField="price"
                             onChange={(values) => setS(values)}
                             
                             closeOnSelect={true}
@@ -91,4 +95,4 @@ const ProductCard = ({ product }) => {
        
 	);
 };
-export default ProductCard;
+export default ProductCard
