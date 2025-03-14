@@ -48,8 +48,6 @@ const CreateProductForm = () => {
 
     useEffect(() => {
         setNewProduct({...newProduct,  info: info })
-        console.log(newProduct.info)
-
     }, [newProduct.info, info])
 
     const addToArray = async() => {

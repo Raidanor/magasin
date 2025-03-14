@@ -85,7 +85,7 @@ const PurchaseSuccessPage = () => {
 						<Link
 							to={"/"}
 							className='w-full bg-gray-700 hover:bg-gray-600 text-emerald-400 font-bold py-2 px-4 
-            rounded-lg transition duration-300 flex items-center justify-center'
+                            rounded-lg transition duration-300 flex items-center justify-center'
 						>
 							Continue Shopping
 							<ArrowRight className='ml-2' size={18} />

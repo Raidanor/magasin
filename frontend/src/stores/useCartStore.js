@@ -48,7 +48,7 @@ export const useCartStore = create((set, get) => ({
 	},
 	addToCart: async (product) => {
 		try {
-			await axios.post("/cart", { productId: product._id });
+			await axios.post("/cart", { productId: product._id, info: product.info });
 			toast.success("Product added to cart");
 
 			set((prevState) => {
@@ -84,7 +84,7 @@ export const useCartStore = create((set, get) => ({
 	},
 	calculateTotals: () => {
 		const { cart, coupon } = get();
-		const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+		const subtotal = cart.reduce((sum, item) => sum + item.info.price * item.quantity, 0);
 		let total = subtotal;
 
 		if (coupon) {
