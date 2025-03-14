@@ -4,6 +4,8 @@ import { useCartStore } from "../stores/useCartStore";
 const CartItem = ({ item }) => {
 	const { removeFromCart, updateQuantity } = useCartStore();
 
+    console.log(item)
+
 	return (
 		<div className='rounded-lg border p-4 shadow-sm border-gray-700 bg-gray-800 md:p-6'>
 			<div className='space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0'>
@@ -34,7 +36,7 @@ const CartItem = ({ item }) => {
 					</div>
 
 					<div className='text-end md:order-4 md:w-32'>
-						<p className='text-base font-bold text-emerald-400'>${item.info.price}</p>
+						<p className='text-base font-bold text-emerald-400'>Rs.{item.info.price}</p>
 					</div>
 				</div>
 

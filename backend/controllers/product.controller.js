@@ -7,11 +7,11 @@ import Product from "../models/product.model.js"
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product .find({})
+        const products = await Product.find({})
         res.json({ products})
     } catch (error) {
         console.log("Error in getAllProducts function")
-        res.status(401).json({message: error.message})
+        res.status(500).json({message: error.message})
     }
 }
 
@@ -122,7 +122,7 @@ export const getProductsByCategory = async (req, res) => {
         // console.log(products)
     } catch (error) {
         console.log("Error in getProductsByCategory function")
-        res.status(401).json({ error: error.message})
+        res.status(500).json({ error: error.message})
         
     }
 }
@@ -140,7 +140,7 @@ export const toggleFeaturedProduct  = async (req, res) => {
         }
     } catch (error) {
         console.log("Error in toggleFeaturedProduct function")
-        res.status(401).json({ error: error.message})
+        res.status(500).json({ error: error.message})
     }
 }
 

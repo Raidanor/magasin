@@ -9,8 +9,6 @@ const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
-    const p = product
-
     const [newProduct, setNewProduct] = useState(product)
     
 
@@ -19,7 +17,7 @@ const ProductCard = ({ product }) => {
     useEffect(() => {
         // setNewProduct({...newProduct,  info: product.info[0]})
 
-        let newInfo = []
+        let newInfo = {}
         product.info.forEach(element => {
             if (element.size === s[0]?.size) {
                 // console.log(element)
@@ -30,7 +28,6 @@ const ProductCard = ({ product }) => {
     }, [s])
 
     const selected = product.info
-
     // useEffect(() => {
     //     setNewProduct({...newProduct,  info: info })
     // })
@@ -48,6 +45,8 @@ const ProductCard = ({ product }) => {
                 toast.error("Select a size first")
             }
             else {
+                
+                if (newProduct.info.length) setNewProduct({...newProduct,  info: newProduct.info[0]})
                 addToCart(newProduct)
                 console.log(newProduct)
             }
