@@ -15,12 +15,9 @@ const ProductCard = ({ product }) => {
     const [s, setS] = useState("")
 
     useEffect(() => {
-        // setNewProduct({...newProduct,  info: product.info[0]})
-
         let newInfo = {}
         product.info.forEach(element => {
             if (element.size === s[0]?.size) {
-                // console.log(element)
                 newInfo = {price: element.price, size: s[0].size}
                 setNewProduct({...newProduct,  info: newInfo})
             }
@@ -28,10 +25,10 @@ const ProductCard = ({ product }) => {
     }, [s])
 
     const selected = product.info
-    // useEffect(() => {
-    //     setNewProduct({...newProduct,  info: info })
-    // })
 
+    useEffect(() => {
+        if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+    })
 
 	const handleAddToCart = () => {
 		if (!user) {
@@ -46,7 +43,9 @@ const ProductCard = ({ product }) => {
             }
             else {
                 
-                if (newProduct.info.length) setNewProduct({...newProduct,  info: newProduct.info[0]})
+                // setNewProduct({...newProduct,  info: newProduct.info[0]})
+                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+
                 addToCart(newProduct)
                 console.log(newProduct)
             }
