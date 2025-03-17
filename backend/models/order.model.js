@@ -19,11 +19,15 @@ const orderSchema = new mongoose.Schema(
 					required: true,
 					min: 1,
 				},
-				price: {
-					type: Number,
-					required: true,
-					min: 0,
-				},
+                info:{
+                    price: {
+                        type: Number,
+                        required: true,
+                        min: 0
+                    },
+
+                    size: { type: String, default: "" }
+                }
 			},
 		],
 		totalAmount: {

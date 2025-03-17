@@ -1,6 +1,5 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
-import { useEffect } from "react";
 
 const CartItem = ({ item }) => {
 	const { removeFromCart, updateQuantity } = useCartStore();

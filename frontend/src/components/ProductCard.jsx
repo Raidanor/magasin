@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
                 if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
 
                 addToCart(newProduct)
-                console.log(newProduct)
+                // console.log(newProduct)
             }
 		}
 	};

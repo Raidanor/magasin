@@ -57,7 +57,7 @@ export const createCheckoutSession = async (req, res) => {
 					products.map((p) => ({
 						id: p._id,
 						quantity: p.quantity,
-						price: p.info.price,
+						info: p.info,
 					}))
 				),
 			},
@@ -93,12 +93,13 @@ export const checkoutSuccess = async (req, res) => {
 
 			// create a new Order
 			const products = JSON.parse(session.metadata.products);
+            console.log(products)
 			const newOrder = new Order({
 				user: session.metadata.userId,
 				products: products.map((product) => ({
 					product: product.id,
 					quantity: product.quantity,
-					price: product.price,
+					info: product.info,
 				})),
 				totalAmount: session.amount_total / 100, // convert from cents to dollars,
 				stripeSessionId: sessionId,
