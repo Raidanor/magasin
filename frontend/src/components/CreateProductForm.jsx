@@ -9,26 +9,29 @@ const CreateProductForm = () => {
 	const [newProduct, setNewProduct] = useState({
 		name: "",
 		description: "",
-		price: "",
+		info: [],
 		category: "",
 		image: "",
-        sizes: [""]
 	});
     
     const [s, setS] = useState('')
-    const [array, setArray] = useState([])
+    const [p, setP] = useState('')
+    const [info, setInfo] = useState([])
 
 	const { createProduct, loading } = useProductStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+            console.log(newProduct)
 			await createProduct(newProduct);
 
-			setNewProduct({ name: "", description: "", price: "", category: "", image: "", sizes: [] });
-            setArray([])
-		} catch {
-			console.log("error creating a product");
+			setNewProduct({ name: "", description: "", info: [], category: "", image: "" });
+            setInfo([])
+            setS("")
+            setP("")
+		} catch (error) {
+			console.log("error creating a product: ", error.message);
 		}
 	};
 
@@ -46,16 +49,16 @@ const CreateProductForm = () => {
 	};
 
     useEffect(() => {
-        setNewProduct({...newProduct,  sizes: array })
-    }, [newProduct.sizes, array])
+        setNewProduct({...newProduct,  info: info })
+    }, [newProduct.info, info])
 
     const addToArray = async() => {
         try {
-            setArray(arr => [...arr, s])
+            setInfo(info => [...info, {price: p, size: s}])
+            setP("")
             setS("")
-            setNewProduct({...newProduct,  sizes: array })
         } catch (error) {
-            console.log("error in addSize")
+            console.log("error in addToArray")
         }
     }
 
@@ -106,22 +109,49 @@ const CreateProductForm = () => {
 
 				<div>
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
-						Price
+						Add Price & Size
 					</label>
+                    <div className="flex w-100 my-2">
 					<input
 						type='number'
 						id='price'
 						name='price'
 						value={newProduct.price}
-						onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+						onChange={(e) => setP(e.target.value)}
 						step='0.01'
-						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm 
+                        placeholder="Price"
+						className='mt-1 block w-50 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
 						required
 					/>
+                    <input
+						id='size'
+						name='size'
+                        type='text'
+						value={s}
+                        placeholder="Size(Optional)"
+						onChange={(e) => setS(e.target.value)}
+						className='flex ml-2 mt-1 w-50 bg-gray-700 border border-gray-600 rounded-md
+						 shadow-sm py-2 px-3 text-white focus:outline-none 
+						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+						
+					    >
+					</input>
+                    <br/>
+                    </div>
+                    <button className='flex justify-center mt -2 py-2 px-4 border border-transparent rounded-md 
+					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                    onClick={ addToArray }>Add</button>
+                    
+                    
 				</div>
-
+                <ul>
+                    {info.map(inf => (
+                        <li>price: {inf.price} size: {inf.size}</li>
+                    ))}
+                </ul>
 				<div>
 					<label htmlFor='category' className='block text-sm font-medium text-gray-300'>
 						Category
@@ -144,38 +174,6 @@ const CreateProductForm = () => {
 						))}
 					</select>
 				</div>
-
-                {/* <div>
-					<label htmlFor='size' className='block text-sm font-medium text-gray-300'>
-						Add size (Optional)
-					</label>
-
-                    
-                    <input
-						id='size'
-						name='size'
-						value={s.s}
-						onChange={(e) => setS(e.target.value)}
-						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
-						 shadow-sm py-2 px-3 text-white focus:outline-none 
-						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
-						
-					    >
-					</input>
-
-                    <button className='flex justify-center py-2 px-4 border border-transparent rounded-md 
-					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
-					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                    onClick={ () => addSize(s) }>Add</button>
-
-                    { (size.length > 0) &&
-                        <ul>
-                            {size.map( size => {
-                                <li>{size}</li>
-                            })}
-                        </ul>
-                    }               
-				</div> */}
 
 				<div className='mt-1 flex items-center'>
 					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
@@ -210,37 +208,30 @@ const CreateProductForm = () => {
 				</button>
 			</form>
 
-            <div>
-					<label htmlFor='size' className='block text-sm font-medium text-gray-300'>
-						Add size (Optional)
-					</label>
-
+            {/* <div>
+                <label htmlFor='size' className='block text-sm font-medium text-gray-300'>
+                    Add size (Optional)
+                </label>
+                <input
+                    id='size'
+                    name='size'
+                    type='text'
+                    value={s}
+                    onChange={(e) => setS(e.target.value)}
+                    className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
+                        shadow-sm py-2 px-3 text-white focus:outline-none 
+                        focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
                     
-                    <input
-						id='size'
-						name='size'
-                        type='text'
-						value={s}
-						onChange={(e) => setS(e.target.value)}
-						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
-						 shadow-sm py-2 px-3 text-white focus:outline-none 
-						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
-						
-					    >
-					</input>
-                    <br/>
-                    <button className='flex justify-center py-2 px-4 border border-transparent rounded-md 
-					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
-					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                    onClick={ addToArray }>Add</button>
-       
-				</div>
+                    >
+                </input>
+                <br/>
+                <button className='flex justify-center py-2 px-4 border border-transparent rounded-md 
+                shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                onClick={ addToArray }>Add</button>
+            </div> */}
 
-                <ul>
-                    {array.map(arr => (
-                        <li>{arr}</li>
-                    ))}
-                </ul>
+                
 		</motion.div>
 	);
 };

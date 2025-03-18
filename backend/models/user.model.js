@@ -39,6 +39,13 @@ const userSchema = new mongoose.Schema({
             product:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product"
+            },
+            info:{
+                price: {
+                    type: Number,
+                    default: 0
+                },
+                size: { type: String, default: "" }
             }
         }
     ],

@@ -19,11 +19,15 @@ const orderSchema = new mongoose.Schema(
 					required: true,
 					min: 1,
 				},
-				price: {
-					type: Number,
-					required: true,
-					min: 0,
-				},
+                info:{
+                    price: {
+                        type: Number,
+                        required: true,
+                        min: 0
+                    },
+
+                    size: { type: String, default: "" }
+                }
 			},
 		],
 		totalAmount: {
@@ -31,6 +35,10 @@ const orderSchema = new mongoose.Schema(
 			required: true,
 			min: 0,
 		},
+        payment_type: {
+            type: String,
+            default: ""
+        },
 		stripeSessionId: {
 			type: String,
 			unique: true,

@@ -7,11 +7,11 @@ import Product from "../models/product.model.js"
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product .find({})
+        const products = await Product.find({})
         res.json({ products})
     } catch (error) {
         console.log("Error in getAllProducts function")
-        res.status(401).json({message: error.message})
+        res.status(500).json({message: error.message})
     }
 }
 
@@ -40,7 +40,7 @@ export const getFeaturedProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category, sizes } = req.body
+        const { name, description, info, image, category} = req.body
 
         let cloudinaryResponse = null
 
@@ -52,10 +52,9 @@ export const createProduct = async (req, res) => {
         const product = await Product.create({
             name,
             description,
-            price,
+            info,
             image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
             category,
-            sizes: sizes
         })
 
         res.status(201).json(product)
@@ -123,7 +122,7 @@ export const getProductsByCategory = async (req, res) => {
         // console.log(products)
     } catch (error) {
         console.log("Error in getProductsByCategory function")
-        res.status(401).json({ error: error.message})
+        res.status(500).json({ error: error.message})
         
     }
 }
@@ -141,7 +140,7 @@ export const toggleFeaturedProduct  = async (req, res) => {
         }
     } catch (error) {
         console.log("Error in toggleFeaturedProduct function")
-        res.status(401).json({ error: error.message})
+        res.status(500).json({ error: error.message})
     }
 }
 
