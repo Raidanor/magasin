@@ -100,6 +100,7 @@ export const checkoutSuccess = async (req, res) => {
 					info: product.info,
 				})),
 				totalAmount: session.amount_total / 100, // convert from cents to dollars,
+                payment_type: "stripe",
 				stripeSessionId: sessionId,
 			});
 
