@@ -7,12 +7,10 @@ import axios from "../lib/axios";
 
 import { useEffect, useState } from "react";
 
-const stripePromise = loadStripe(
-	"pk_test_51Qv0awRhPunrIm29dMktxT76QcSP1OncMfiKlsNXyHBNksxYNWbIPxrwiDlrgf6mWDeCMpbIE0Ile5GlUUTaS90A00NQqrjH6W"
-);
+const stripePromise = loadStripe("pk_test_51Qv0awRhPunrIm29dMktxT76QcSP1OncMfiKlsNXyHBNksxYNWbIPxrwiDlrgf6mWDeCMpbIE0Ile5GlUUTaS90A00NQqrjH6W")
 
 const OrderSummary = () => {
-	const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
+	const { total, subtotal, coupon, isCouponApplied, cart, clearCart } = useCartStore();
     
 	const savings = subtotal - total;
 	const formattedSubtotal = subtotal.toFixed(2);
@@ -28,7 +26,6 @@ const OrderSummary = () => {
 			couponCode: coupon ? coupon.code : null,
 		});
         
-
 		const session = res.data;
 		const result = await stripe.redirectToCheckout({
 			sessionId: session.id,
@@ -37,8 +34,20 @@ const OrderSummary = () => {
 		if (result.error) {
 			console.error("Error:", result.error);
 		}
-        
 	};
+
+    const handlePayment_Cash = async (type) => {
+        // console.log(cart)
+		const res = await axios.post("/payments/pay-cash", {
+			products: cart,
+			couponCode: coupon ? coupon.code : null,
+            payment_type: type,
+            total: total
+		})
+
+        clearCart()
+        window.location.href = "/purchase-success"
+	}
 
 	return (
 		<motion.div
@@ -97,15 +106,6 @@ const OrderSummary = () => {
 			</div>
 
             <Modal open={isOpen} onClose={() => {setIsOpen(false)}}>
-                {/* <motion.button
-					className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
-					onClick={handlePayment}
-				>
-					Proceed to Checkout
-				</motion.button> */}
-
                 <button
 					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
@@ -119,25 +119,23 @@ const OrderSummary = () => {
 					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
-					onClick={handlePayment}
+					onClick={() => handlePayment_Cash("cash")}
 				>
-					Pay on delivery
+					Pay cash on delivery
 				</button>
 
                 <button
 					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
-					onClick={handlePayment}
+					onClick={() => handlePayment_Cash("pickup")}
 				>
-					Pick-up
+					Self Pick-up
 				</button>
-                
             </Modal>
-            
 		</motion.div>
-	);
-};
+	)
+}
 export default OrderSummary;
 
 function Modal ({ open, children, onClose }) {

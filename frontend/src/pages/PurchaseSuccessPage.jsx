@@ -6,7 +6,6 @@ import axios from "../lib/axios";
 import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {
-	const [isProcessing, setIsProcessing] = useState(true);
 	const { clearCart } = useCartStore();
 	const [error, setError] = useState(null);
 
@@ -25,13 +24,12 @@ const PurchaseSuccessPage = () => {
 		const sessionId = new URLSearchParams(window.location.search).get("session_id");
 		if (sessionId) {
 			handleCheckoutSuccess(sessionId);
-		} else {
-			setIsProcessing(false);
-			setError("No session ID found in the URL");
 		}
+        // else {
+		// 	setIsProcessing(false);
+		// 	setError("No session ID found in the URL");
+		// }
 	}, [clearCart]);
-
-	if (isProcessing) return "Processing...";
 
 	if (error) return `Error: ${error}`;
 
@@ -75,7 +73,7 @@ const PurchaseSuccessPage = () => {
 					<div className='space-y-4'>
 						<button
 							className='w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4
-             rounded-lg transition duration-300 flex items-center justify-center'
+                            rounded-lg transition duration-300 flex items-center justify-center'
 						>
 							<HandHeart className='mr-2' size={18} />
 							Thanks for trusting us!

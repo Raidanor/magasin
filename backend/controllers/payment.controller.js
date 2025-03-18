@@ -44,11 +44,9 @@ export const createCheckoutSession = async (req, res) => {
 			success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
 			discounts: coupon
-				? [
-						{
-							coupon: await createStripeCoupon(coupon.discountPercentage),
-						},
-				  ]
+				? [{
+				    coupon: await createStripeCoupon(coupon.discountPercentage),
+                }]
 				: [],
 			metadata: {
 				userId: req.user._id.toString(),
@@ -113,6 +111,52 @@ export const checkoutSuccess = async (req, res) => {
 				orderId: newOrder._id,
 			});
 		}
+	} catch (error) {
+		console.error("Error processing successful checkout:", error);
+		res.status(500).json({ message: "Error processing successful checkout", error: error.message });
+	}
+};
+
+export const payCash = async (req, res) => {
+	try {
+        const { products, coupon_Code, total, payment_type} = req.body
+        const user = req.user
+		
+        if (coupon_Code) {
+            await Coupon.findOneAndUpdate(
+                {
+                    code: coupon_Code,
+                    userId: user._id,
+                },
+                {
+                    isActive: false,
+                }
+            );
+        }
+
+        // create a new Order
+
+        // console.log(products)
+        const newOrder = new Order({
+            user: user._id,
+            products: products.map((product) => ({
+                product: product._id,
+                quantity: product.quantity,
+                info: product.info,
+            })),
+            payment_type,
+            totalAmount: total
+            // stripeSessionId: sessionId,
+        });
+
+        await newOrder.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Order created and coupon deactivated if used.",
+            orderId: newOrder._id,
+        });
+		
 	} catch (error) {
 		console.error("Error processing successful checkout:", error);
 		res.status(500).json({ message: "Error processing successful checkout", error: error.message });
