@@ -9,7 +9,7 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
         const analyticsData = await getAnalyticsData()
         
         const endDate = new Date()
-        const startDate = new (endDate.getTime() - (7 * 24 * 60 * 60 * 1000))
+        const startDate = new Date(endDate.getTime() - (7 * 24 * 60 * 60 * 1000))
 
         const dailySalesData = await getDailySalesData(startDate, endDate)
        
@@ -18,7 +18,7 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
             dailySalesData
         })
     } catch (error) {
-        console.log("Error in analytics route")
+        console.log("Error in analytics route", error.message)
         res.status(401).json({ message: "Server error", error: error.message })
     }
 })

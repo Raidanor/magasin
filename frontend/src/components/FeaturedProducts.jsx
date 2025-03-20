@@ -21,6 +21,17 @@ const FeaturedProducts = ({ featuredProducts }) => {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
+    const handleAddToCart = (p) => {
+        const temp = {
+            _id: p._id,
+            info: p.info[0],
+            quantity: p.quantity,
+            image: p.image,
+            description: p.description,
+        }
+        addToCart(temp)
+    }
+
 	const nextSlide = () => {
 		setCurrentIndex((prevIndex) => prevIndex + itemsPerPage);
 	};
@@ -32,6 +43,8 @@ const FeaturedProducts = ({ featuredProducts }) => {
 	const isStartDisabled = currentIndex === 0;
 	const isEndDisabled = currentIndex >= featuredProducts.length - itemsPerPage;
 
+    // for inner carousel
+    // const [currentIndexInner, setCurrentIndexInner] = useState(0);
 	return (
 		<div className='py-12'>
 			<div className='container mx-auto px-4'>
@@ -42,23 +55,49 @@ const FeaturedProducts = ({ featuredProducts }) => {
 							className='flex transition-transform duration-300 ease-in-out'
 							style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
 						>
-							{featuredProducts?.map((product) => (
+							{featuredProducts?.map((product) => {
+                                const [currentIndexInner, setCurrentIndexInner] = useState(0);
+                                const prevSlideInner = () => {
+                                    setCurrentIndexInner((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+                                }
+                                const nextSlideInner = () => {
+                                    setCurrentIndexInner((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+                                }
+                                return(
 								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
 									<div className='bg-gray-800 bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
-										<div className='overflow-hidden'>
-											<img
-												src={product.image}
-												alt={product.name}
-												className='w-full h-48 object-cover transition-transform duration-300 ease-in-out hover:scale-110'
-											/>
-										</div>
+                                    
+                                    <div className="flex w-full relative flex-col overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4">
+                                        <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
+                                            <img
+                                            src={product?.images[currentIndexInner]}
+                                            className="object-cover w-full"
+                                            />
+                                        </div>
+                                        {product.images.length > 1 &&
+                                        <>
+                                            <button
+                                                onClick={prevSlideInner}
+                                                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                                            >
+                                                <ChevronLeft size={20} />
+                                            </button>
+                                            <button
+                                                onClick={nextSlideInner}
+                                                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                                            >
+                                                <ChevronRight size={20} />
+                                            </button>
+                                        </>
+                                        }
+                                    </div>
 										<div className='p-4'>
 											<h3 className='text-lg font-semibold mb-2 text-white'>{product.name}</h3>
 											<p className='text-emerald-300 font-medium mb-4'>
 												Rs.{product?.info[0].price}
 											</p>
 											<button
-												onClick={() => addToCart(product)}
+												onClick={() => {handleAddToCart(product)}}
 												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
 												flex items-center justify-center'
 											>
@@ -68,17 +107,17 @@ const FeaturedProducts = ({ featuredProducts }) => {
 										</div>
 									</div>
 								</div>
-							))}
+							)})}
 						</div>
 					</div>
 					<button
 						onClick={prevSlide}
 						disabled={isStartDisabled}
-						className={`absolute top-1/2 -left-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
+						className={`absolute top-1/2  -left-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
 							isStartDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
 						}`}
 					>
-						<ChevronLeft className='w-6 h-6' />
+						<ChevronLeft size={40} />
 					</button>
 
 					<button
@@ -88,7 +127,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 							isEndDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
 						}`}
 					>
-						<ChevronRight className='w-6 h-6' />
+						<ChevronRight size={40}/>
 					</button>
 				</div>
 			</div>

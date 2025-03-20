@@ -29,7 +29,7 @@ export const addToCart = async (req, res) => {
 		if (existingItem) {
 			existingItem.quantity += 1;
 		} else {
-			user.cartItems.push(product._id, product);
+			user.cartItems.push(product._id);
 		}
 
 		await user.save();
