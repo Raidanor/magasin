@@ -136,8 +136,6 @@ export const payCash = async (req, res) => {
         }
 
         // create a new Order
-
-        // console.log(products)
         const newOrder = new Order({
             user: user._id,
             products: products.map((product) => ({

@@ -6,30 +6,26 @@ import axios from "../lib/axios";
 import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {
-	const { clearCart } = useCartStore();
+	const { cart, clearCart, removeFromCart } = useCartStore();
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const handleCheckoutSuccess = async (sessionId) => {
 			try {
 				await axios.post("/payments/checkout-success", { sessionId });
-				clearCart();
+				
 			} catch (error) {
 				console.log(error);
-			} finally {
-				setIsProcessing(false);
 			}
-		};
-
+		}
+        removeFromCart(cart)
+        clearCart()
+        
 		const sessionId = new URLSearchParams(window.location.search).get("session_id");
 		if (sessionId) {
 			handleCheckoutSuccess(sessionId);
 		}
-        // else {
-		// 	setIsProcessing(false);
-		// 	setError("No session ID found in the URL");
-		// }
-	}, [clearCart]);
+	}, [clearCart, removeFromCart]);
 
 	if (error) return `Error: ${error}`;
 

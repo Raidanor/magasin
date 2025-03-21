@@ -52,6 +52,7 @@ const ProductCard = ({ product }) => {
             else {
                 if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
                 addToCart(newProduct)
+                console.log(newProduct)
             }
 		}
 	}
@@ -97,7 +98,7 @@ const ProductCard = ({ product }) => {
                     </p>
                 </div>
                 <div className="flex">
-                    <div className="flex w-50 max-h-10 mb-10 mr-4">
+                    <div className="flex w-1/2 max-h-10 mb-10 mr-4">
                         <button
                             className='flex items-center justify-end rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
                             text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
@@ -111,12 +112,12 @@ const ProductCard = ({ product }) => {
                     {selected?.length > 1 &&
                         <div className="">
                             <Select
-                                className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 z-100 w-40 text-black"
+                                className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 z-100 w-1/2 text-black"
                                 options={selected}
                                 labelField="size"
                                 valueField="price"
                                 onChange={(values) => setS(values)}
-                                placeholder="Select for price..."
+                                placeholder="Select price..."
                                 closeOnSelect={true}
                             />
                         </div>

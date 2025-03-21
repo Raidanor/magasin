@@ -26,8 +26,9 @@ const FeaturedProducts = ({ featuredProducts }) => {
             _id: p._id,
             info: p.info[0],
             quantity: p.quantity,
-            image: p.image,
+            images: p.images,
             description: p.description,
+            name: p.name
         }
         addToCart(temp)
     }
@@ -56,41 +57,12 @@ const FeaturedProducts = ({ featuredProducts }) => {
 							style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
 						>
 							{featuredProducts?.map((product) => {
-                                const [currentIndexInner, setCurrentIndexInner] = useState(0);
-                                const prevSlideInner = () => {
-                                    setCurrentIndexInner((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
-                                }
-                                const nextSlideInner = () => {
-                                    setCurrentIndexInner((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
-                                }
                                 return(
 								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
 									<div className='bg-gray-800 bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
                                     
-                                    <div className="flex w-full relative flex-col overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4">
-                                        <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
-                                            <img
-                                            src={product?.images[currentIndexInner]}
-                                            className="object-cover w-full"
-                                            />
-                                        </div>
-                                        {product.images.length > 1 &&
-                                        <>
-                                            <button
-                                                onClick={prevSlideInner}
-                                                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                                            >
-                                                <ChevronLeft size={20} />
-                                            </button>
-                                            <button
-                                                onClick={nextSlideInner}
-                                                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                                            >
-                                                <ChevronRight size={20} />
-                                            </button>
-                                        </>
-                                        }
-                                    </div>
+                                    <InnerCarouselImages images={product.images} />
+
 										<div className='p-4'>
 											<h3 className='text-lg font-semibold mb-2 text-white'>{product.name}</h3>
 											<p className='text-emerald-300 font-medium mb-4'>
@@ -135,3 +107,40 @@ const FeaturedProducts = ({ featuredProducts }) => {
 	);
 };
 export default FeaturedProducts;
+
+const InnerCarouselImages = ({images}) => {
+    const [currentIndexInner, setCurrentIndexInner] = useState(0);
+    const prevSlideInner = () => {
+        setCurrentIndexInner((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    }
+    const nextSlideInner = () => {
+        setCurrentIndexInner((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    }
+
+    return(
+        <div className="flex w-full relative flex-col overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4">
+            <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
+                <img
+                src={images[currentIndexInner]}
+                className="object-cover w-full"
+                />
+            </div>
+            {images?.length > 1 &&
+            <>
+                <button
+                    onClick={prevSlideInner}
+                    className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                >
+                    <ChevronLeft size={20} />
+                </button>
+                <button
+                    onClick={nextSlideInner}
+                    className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                >
+                    <ChevronRight size={20} />
+                </button>
+            </>
+            }
+        </div>
+    )
+}
