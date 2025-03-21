@@ -2,6 +2,12 @@ import { create } from "zustand";
 import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 
+function waitforme(millisec) {
+    return new Promise(resolve => {
+        setTimeout(() => { resolve('') }, millisec);
+    })
+}
+
 export const useCartStore = create((set, get) => ({
 	cart: [],
 	coupon: null,
@@ -36,6 +42,7 @@ export const useCartStore = create((set, get) => ({
 	getCartItems: async () => {
 		try {
 			const res = await axios.get("/cart");
+
 			set({ cart: res.data });
 			get().calculateTotals();
 		} catch (error) {
@@ -48,7 +55,7 @@ export const useCartStore = create((set, get) => ({
 	},
 	addToCart: async (product) => {
 		try {
-			await axios.post("/cart", { productId: product._id });
+			await axios.post("/cart", { product });
 			toast.success("Product added to cart");
 
 			set((prevState) => {

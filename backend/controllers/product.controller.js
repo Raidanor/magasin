@@ -39,21 +39,32 @@ export const getFeaturedProducts = async (req, res) => {
 }
 
 export const createProduct = async (req, res) => {
+
+    function waitforme(millisec) {
+        return new Promise(resolve => {
+            setTimeout(() => { resolve('') }, millisec);
+        })
+    }
+
     try {
-        const { name, description, info, image, category} = req.body
+        const { name, description, info, images, category} = req.body
 
         let cloudinaryResponse = null
 
-        if (image)
-        {
-            cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"products"})
-        }
+        let arr = []
 
+        images.forEach(async(image) => {
+            cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"products"})
+            arr.push(cloudinaryResponse.secure_url)
+        });
+
+        // delay for code execution
+        await waitforme(arr.length * 2000)
         const product = await Product.create({
             name,
             description,
             info,
-            image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
+            images: arr,
             category,
         })
 

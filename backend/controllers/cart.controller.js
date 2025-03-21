@@ -1,38 +1,44 @@
 import Product from "../models/product.model.js"
-
+import User from "../models/user.model.js"
 
 export const getCartProducts = async (req, res) => {
     try {
         const products = await Product.find({ _id: {$in:req.user.cartItems}})
-
         //add quantity for each product
+        const user = req.user
+        const user2 = await User.findOne(user._id)
+        // console.log(products.cartItems)
 
         const cartItems = products.map(product => {
             const item = req.user.cartItems.find(cartItem => cartItem.id === product.id)
             return { ...product.toJSON(), quantity: item.quantity}
         })
-
-        res.json(cartItems)
+        // console.log("user.cartItems-----------------------------------------------------------------", user.cartItems)
+        // console.log("cartItems-----------------------------------------------------------------", cartItems)
+        
+        res.json(user.cartItems)
     } catch (error) {
-        console.log("Error in getCartProducts function")
+        console.log("Error in getCartProducts function", error)
         res.status(500).json({ error: error.message})
     }
 }
 
 export const addToCart = async (req, res) => {
 	try {
-		const { productId } = req.body;
+		const { product } = req.body;
 		const user = req.user;
 
-		const existingItem = user.cartItems.find((item) => item?.id === productId);
+        console.log(product)
+		const existingItem = user.cartItems.find((item) => item?.id === product._id);
 
 		if (existingItem) {
 			existingItem.quantity += 1;
 		} else {
-			user.cartItems.push(productId);
+			user.cartItems.push(product);
 		}
 
 		await user.save();
+        
 		res.json(user.cartItems);
 	} catch (error) {
 		console.log("Error in addToCart controller", error.message);
@@ -46,7 +52,7 @@ export const removeAllFromCart = async (req, res) => {
         const { productId } = req.body
         const user = req.user
 
-
+        console.log(productId)
         if (productId) { user.cartItems = [] }
         else { user.cartItems = user.cartItems.filter((item) => item.id !== productId.id) }
 
@@ -54,7 +60,7 @@ export const removeAllFromCart = async (req, res) => {
         res.json(user.cartItems)
 
     } catch (error) {
-        console.log("Error in addToCart function")
+        console.log("Error in removeAllFromCart function", error)
         res.status(500).json({ error: error.message})
     }
 }

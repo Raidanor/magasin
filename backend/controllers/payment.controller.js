@@ -100,6 +100,7 @@ export const checkoutSuccess = async (req, res) => {
 					info: product.info,
 				})),
 				totalAmount: session.amount_total / 100, // convert from cents to dollars,
+                payment_type: "stripe",
 				stripeSessionId: sessionId,
 			});
 
@@ -135,8 +136,6 @@ export const payCash = async (req, res) => {
         }
 
         // create a new Order
-
-        // console.log(products)
         const newOrder = new Order({
             user: user._id,
             products: products.map((product) => ({

@@ -27,7 +27,7 @@ export const protectRoute = async (req, res, next) => {
 
         
     } catch (error) {
-        console.log("Error in protectRoute function")
+        console.log("Error in protectRoute function", error.message)
         res.status(401).json({message: "Unauthorised - invalid access token"})
     }
 }

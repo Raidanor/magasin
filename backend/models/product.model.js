@@ -21,10 +21,11 @@ const productSchema = new mongoose.Schema({
         }
     }],
     
-    image:{
+    images:[{
         type: String,
         required: [false, "Image is required"]
-    },
+    }],
+    
     category:{
         type: String,
         required: true

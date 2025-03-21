@@ -32,6 +32,18 @@ const userSchema = new mongoose.Schema({
     
     cartItems:[
         {
+            name: {
+                type: String,
+                required: true
+            },
+            description: {
+                type: String,
+                required: true
+            },
+            images: [{
+                type: String,
+                required: true
+            }],
             quantity:{
                 type: Number,
                 default: 1

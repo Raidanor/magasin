@@ -11,25 +11,28 @@ const CreateProductForm = () => {
 		description: "",
 		info: [],
 		category: "",
-		image: "",
+		images: [],
 	});
     
     const [s, setS] = useState('')
     const [p, setP] = useState('')
     const [info, setInfo] = useState([])
 
+    const [image, setImage] = useState("")
+
 	const { createProduct, loading } = useProductStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-            console.log(newProduct)
+            // console.log(newProduct)
 			await createProduct(newProduct);
 
-			setNewProduct({ name: "", description: "", info: [], category: "", image: "" });
+			setNewProduct({ name: "", description: "", info: [], category: "", images: "" });
             setInfo([])
             setS("")
-            setP("")
+            setP(0)
+            setImage([])
 		} catch (error) {
 			console.log("error creating a product: ", error.message);
 		}
@@ -41,12 +44,18 @@ const CreateProductForm = () => {
 			const reader = new FileReader();
 
 			reader.onloadend = () => {
-				setNewProduct({ ...newProduct, image: reader.result });
+				// setNewProduct({ ...newProduct, image: reader.result });
+                setImage(image => [ ...image, reader.result ]);
 			};
 
 			reader.readAsDataURL(file); // base64
+            // console.log(image)
 		}
 	};
+
+    useEffect(() => {
+        setNewProduct({...newProduct,  images: image })
+    }, [newProduct.images, image])
 
     useEffect(() => {
         setNewProduct({...newProduct,  info: info })
@@ -58,7 +67,7 @@ const CreateProductForm = () => {
             setP("")
             setS("")
         } catch (error) {
-            console.log("error in addToArray")
+            console.log("error in addToArray", error)
         }
     }
 
@@ -71,7 +80,6 @@ const CreateProductForm = () => {
 		>
 			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
 
-			{/* <form onSubmit={handleSubmit} className='space-y-4'> */}
             <form onSubmit={handleSubmit} className='space-y-4'>
 				<div>
 					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
@@ -184,7 +192,7 @@ const CreateProductForm = () => {
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
-					{newProduct.image && <span className='ml-3 text-sm text-gray-400'>Image uploaded </span>}
+					{Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
 				</div>
 
 				<button
