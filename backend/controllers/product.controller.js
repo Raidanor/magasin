@@ -59,7 +59,7 @@ export const createProduct = async (req, res) => {
         });
 
         // delay for code execution
-        await waitforme(8000)
+        await waitforme(5000)
         const product = await Product.create({
             name,
             description,

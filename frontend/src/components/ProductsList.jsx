@@ -68,7 +68,7 @@ const ProductsList = () => {
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								{product.info.map(p => (
-                                    <div className='text-sm text-gray-300 my-0.5'>Rs.{p.price}</div>
+                                    <div id={p._id} className='text-sm text-gray-300 my-0.5'>Rs.{p.price}</div>
                                 ))}
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>

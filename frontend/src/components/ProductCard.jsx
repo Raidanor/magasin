@@ -52,7 +52,6 @@ const ProductCard = ({ product }) => {
             else {
                 if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
                 addToCart(newProduct)
-                console.log(newProduct)
             }
 		}
 	}
@@ -64,7 +63,7 @@ const ProductCard = ({ product }) => {
                 <img className='object-cover w-full' src={product.images[0]} alt='product image' />
             </div> */}
 
-            <div className="flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4">
+            <div className="flex w-full relative flex-col overflow-hidden rounded-lg  border-gray-700 shadow-lg mb-4">
                 <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
                     <img
                     src={product?.images[currentIndex]}
