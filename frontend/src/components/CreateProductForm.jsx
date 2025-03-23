@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import toast from "react-hot-toast";
 
 const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
 
@@ -15,7 +16,7 @@ const CreateProductForm = () => {
 	});
     
     const [s, setS] = useState('')
-    const [p, setP] = useState('')
+    const [p, setP] = useState(null)
     const [info, setInfo] = useState([])
 
     const [image, setImage] = useState("")
@@ -28,11 +29,12 @@ const CreateProductForm = () => {
             // console.log(newProduct)
 			await createProduct(newProduct);
 
-			setNewProduct({ name: "", description: "", info: [], category: "", images: "" });
+			setNewProduct({ name: "", description: "", info: [], category: "", images: [] });
             setInfo([])
             setS("")
-            setP(0)
+            setP(null)
             setImage([])
+            e.target.reset()
 		} catch (error) {
 			console.log("error creating a product: ", error.message);
 		}
@@ -63,8 +65,13 @@ const CreateProductForm = () => {
 
     const addToArray = async() => {
         try {
+            if (p === null) 
+            {
+                toast.error("Price cannot be empty")
+                return
+            }
             setInfo(info => [...info, {price: p, size: s}])
-            setP("")
+            setP(null)
             setS("")
         } catch (error) {
             console.log("error in addToArray", error)
@@ -119,7 +126,7 @@ const CreateProductForm = () => {
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
 						Add Price & Size
 					</label>
-                    <div className="flex w-100 my-2">
+                    <div className="flex my-2">
 					<input
 						type='number'
 						id='price'
@@ -128,7 +135,9 @@ const CreateProductForm = () => {
 						onChange={(e) => setP(e.target.value)}
 						step='0.01'
                         placeholder="Price"
-						className='mt-1 block w-50 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
+                        
+                        
+						className='mt-1 block w-1/2 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
 						required
@@ -140,7 +149,7 @@ const CreateProductForm = () => {
 						value={s}
                         placeholder="Size(Optional)"
 						onChange={(e) => setS(e.target.value)}
-						className='flex ml-2 mt-1 w-50 bg-gray-700 border border-gray-600 rounded-md
+						className='flex ml-2 mt-1 w-1/2 bg-gray-700 border border-gray-600 rounded-md
 						 shadow-sm py-2 px-3 text-white focus:outline-none 
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
 						
@@ -148,16 +157,15 @@ const CreateProductForm = () => {
 					</input>
                     <br/>
                     </div>
-                    <button className='flex justify-center mt -2 py-2 px-4 border border-transparent rounded-md 
+                    <button type="button" className='flex justify-center mt -2 py-2 px-4 border border-transparent rounded-md 
 					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
 					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
                     onClick={ addToArray }>Add</button>
                     
-                    
 				</div>
                 <ul>
                     {info.map(inf => (
-                        <li>price: {inf.price} size: {inf.size}</li>
+                        <li key={inf.size}>price: {inf.price} size: {inf.size}</li>
                     ))}
                 </ul>
 				<div>

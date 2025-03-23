@@ -59,7 +59,7 @@ export const createProduct = async (req, res) => {
         });
 
         // delay for code execution
-        await waitforme(8000)
+        await waitforme(5000)
         const product = await Product.create({
             name,
             description,
@@ -81,16 +81,18 @@ export const deleteProduct = async (req, res) => {
 
         if (!product) res.status(404).json({message: "Product not found"})
 
-        if (product.image)
+        if (product.images)
         {
-            const publicId = product.image.split("/").pop().split(".")[0]
+            product.images.forEach(async(image) => {
+                const publicId = image.split("/").pop().split(".")[0]
 
-            try {
-                await cloudinary.uploader.destroy(`products/${publicId}`)
-                console.log("deleted image from cloudinary")
-            } catch (error) {
-                console.log("error deleting image from cloudinary")
-            }
+                try {
+                    await cloudinary.uploader.destroy(`products/${publicId}`)
+                    console.log("deleted image from cloudinary")
+                } catch (error) {
+                    console.log("error deleting image from cloudinary")
+                }
+            })
         }
 
         await Product.findByIdAndDelete(req.params.id)

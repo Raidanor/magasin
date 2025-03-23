@@ -62,8 +62,9 @@ const AnalyticsTab = () => {
 					color='from-emerald-500 to-lime-700'
 				/>
 			</div>
+            <p>Data for the last 14 days</p>
 			<motion.div
-				className='bg-gray-800/60 rounded-lg p-6 shadow-lg'
+				className='bg-gray-800/60 rounded-lg p-4 shadow-lg mt-4'
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.25 }}
