@@ -2,6 +2,10 @@ import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
 import { stripe } from "../lib/stripe.js";
 
+
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 export const createCheckoutSession = async (req, res) => {
 	try {
 		const { products, couponCode } = req.body;
@@ -105,6 +109,7 @@ export const checkoutSuccess = async (req, res) => {
 			});
 
 			await newOrder.save();
+            sendEmail()
 
 			res.status(200).json({
 				success: true,
@@ -149,6 +154,7 @@ export const payCash = async (req, res) => {
         });
 
         await newOrder.save();
+        sendEmail()
 
         res.status(200).json({
             success: true,
@@ -184,4 +190,20 @@ async function createNewCoupon(userId) {
 	await newCoupon.save();
 
 	return newCoupon;
+}
+
+function sendEmail() {
+    var postmark = require("postmark");
+
+    var client = new postmark.ServerClient("28491739-6f88-4d98-b32b-d706110ec21b");
+
+    console.log("sending email")
+    client.sendEmail({
+        "From": "160356k@acadiau.ca",
+        "To": "160356k@acadiau.ca",
+        "Subject": "Test",
+        "TextBody": "Hello first email from Postmark!"
+    });
+
+    
 }

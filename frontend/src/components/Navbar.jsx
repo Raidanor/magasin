@@ -70,7 +70,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out'
 								>
 									<UserPlus className='mr-2 sm:my-2' size={18} />
-									<span className='sm:inline sm:text-sm'>Sign Up</span>
+									<span className='sm:inline'>Sign Up</span>
 								</Link>
 								<Link
 									to={"/login"}
@@ -78,7 +78,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out'
 								>
 									<LogIn className='mr-2 sm:my-2' size={18} />
-									<span className='sm:inline sm:text-xs'>Login</span>
+									<span className='sm:inline'>Login</span>
 								</Link>
 							</>
 						)}
