@@ -170,13 +170,12 @@ async function updateFeaturedProductsCache() {
 
 export const editProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
+
+        let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+
+        console.log("product------------------------------------------------------", product)
 
         if (!product) res.status(404).json({message: "Product not found"})
-        
-            // console.log(product)
-            // product = req.body
-            // console.log(product)
 
         res.json({ message: "Product updated" })
     } catch (error) {

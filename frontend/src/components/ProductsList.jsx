@@ -142,7 +142,7 @@ function EditForm({open, onClose, children})
 
    
     const [s, setS] = useState('')
-    const [p, setP] = useState(null)
+    const [p, setP] = useState(0)
     const [info, setInfo] = useState(oneProduct.info)
 
     const [image, setImage] = useState("")
@@ -269,17 +269,25 @@ function EditForm({open, onClose, children})
                         </input>
                         <br/>
                         </div>
-                        <button type="button" className='flex justify-center mt -2 py-2 px-4 border border-transparent rounded-md 
-                        shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
-                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                        onClick={ addToArray }>Add</button>
+                        <div className="flex clearfix">
+                            <button type="button" className='flex justify-center mt-2 py-2 px-4 border border-transparent rounded-md 
+                            shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                            onClick={ addToArray }>Add</button>
+
+                            <button type="button" className="absolute right-5 flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                            shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
+                        </div>
                         
                     </div>
-                    <ul>
+                    
+                    <ul className="p-2">
                         {info?.map(inf => (
                             <li key={inf.size}>price: {inf.price} size: {inf.size}</li>
                         ))}
                     </ul>
+                        
                     <div>
                         <label htmlFor='category' className='block text-sm font-medium text-gray-300'>
                             Category
@@ -303,7 +311,7 @@ function EditForm({open, onClose, children})
                         </select>
                     </div>
 
-                    <div className='mt-1 flex items-center'>
+                    {/* <div className='mt-1 flex items-center'>
                         <input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
                         <label
                             htmlFor='image'
@@ -313,7 +321,7 @@ function EditForm({open, onClose, children})
                             Upload Image
                         </label>
                         {Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
-                    </div>
+                    </div> */}
 
                     <button
                         onClick={handleSubmit}
