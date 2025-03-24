@@ -116,7 +116,7 @@ const ProductCard = ({ product }) => {
                                 labelField="size"
                                 valueField="price"
                                 onChange={(values) => setS(values)}
-                                placeholder="Select price..."
+                                placeholder="Select size"
                                 closeOnSelect={true}
                             />
                         </div>

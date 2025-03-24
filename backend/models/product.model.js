@@ -18,6 +18,11 @@ const productSchema = new mongoose.Schema({
         size:{
             type: String,
             default: ""
+        },
+        slash: {
+            type: Number,
+            min: 0,
+            required: false
         }
     }],
     

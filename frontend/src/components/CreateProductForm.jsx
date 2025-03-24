@@ -25,6 +25,11 @@ const CreateProductForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+        if (info.length === 0)
+        {
+            toast.error("Price is needed")
+            return
+        }
 		try {
             // console.log(newProduct)
 			await createProduct(newProduct);
@@ -222,32 +227,7 @@ const CreateProductForm = () => {
 						</>
 					)}
 				</button>
-			</form>
-
-            {/* <div>
-                <label htmlFor='size' className='block text-sm font-medium text-gray-300'>
-                    Add size (Optional)
-                </label>
-                <input
-                    id='size'
-                    name='size'
-                    type='text'
-                    value={s}
-                    onChange={(e) => setS(e.target.value)}
-                    className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
-                        shadow-sm py-2 px-3 text-white focus:outline-none 
-                        focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
-                    
-                    >
-                </input>
-                <br/>
-                <button className='flex justify-center py-2 px-4 border border-transparent rounded-md 
-                shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
-                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                onClick={ addToArray }>Add</button>
-            </div> */}
-
-                
+			</form>                
 		</motion.div>
 	);
 };
