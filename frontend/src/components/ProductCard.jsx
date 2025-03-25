@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
         let newInfo = {}
         product.info.forEach(element => {
             if (element.size === s[0]?.size) {
-                newInfo = {price: element.price, size: s[0].size}
+                newInfo = {price: element.price, size: s[0].size, slash: element.slash}
                 setNewProduct({...newProduct,  info: newInfo})
             }
         });
@@ -93,7 +93,8 @@ const ProductCard = ({ product }) => {
                 <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                 <div className='mt-2 mb-5 flex items-center justify-between'>
                     <p>
-                        <span className='text-3xl font-bold text-emerald-400'>Rs.{selected?.length > 1 ? newProduct?.info?.price : selected[0]?.price}</span>
+                        {/* <span className='text-3xl font-bold text-emerald-400'>Rs.{selected?.length > 1 ? newProduct?.info?.price : selected[0]?.price}</span> */}
+                        <span className='text-3xl font-bold text-emerald-400'><RenderPrice selected={selected} product={newProduct} /></span>
                     </p>
                 </div>
                 <div className="flex">
@@ -132,3 +133,27 @@ const ProductCard = ({ product }) => {
 	)
 }
 export default ProductCard
+
+function RenderPrice({selected, product}){
+    let price = 0
+    let slash = null
+
+    if (selected.length > 1)
+    {
+        price = product?.info?.price
+    }
+    else{
+        price = selected[0]?.price
+    }
+    // console.log(product.info)
+
+    return(
+        <>
+            {/* Rs.{selected?.length > 1 ? product?.info?.price : selected[0]?.price} */}
+            {product.info.slash ?
+            <><s>Rs.{product.info.slash}</s> &nbsp;Rs.{price}</>
+            : <>Rs.{price}</>}
+        </>
+    )
+
+}
