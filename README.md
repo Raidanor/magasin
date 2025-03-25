@@ -1,4 +1,7 @@
 # e-commerce website
+
+You can visit a live deplotment here: https://magasin-nwj1.onrender.com
+
 Home Page
 ![image](https://github.com/user-attachments/assets/68ffc4b2-042d-4152-a7c4-334847b0bb70)
 
