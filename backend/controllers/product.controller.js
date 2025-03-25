@@ -167,3 +167,29 @@ async function updateFeaturedProductsCache() {
         res.status(401).json({ error: error.message})
     }
 }
+
+export const editProduct = async (req, res) => {
+    try {
+
+        let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+
+        console.log("product------------------------------------------------------", product)
+
+        if (!product) res.status(404).json({message: "Product not found"})
+
+        res.json({ message: "Product updated" })
+    } catch (error) {
+        console.log("Error in editProduct function", error)
+        res.status(401).json({ error: error.message})
+    }
+}
+
+export const getOneProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id)
+        res.json({ product})
+    } catch (error) {
+        console.log("Error in getOneProduct function")
+        res.status(500).json({message: error.message})
+    }
+}

@@ -4,9 +4,12 @@ import axios from "../lib/axios";
 
 export const useProductStore = create((set) => ({
 	products: [],
+    oneProduct: {},
 	loading: false,
 
 	setProducts: (products) => set({ products }),
+
+    // setOneProduct: (oneProduct) => set({ oneProduct }),
     
 	createProduct: async (productData) => {
 		set({ loading: true });
@@ -82,6 +85,33 @@ export const useProductStore = create((set) => ({
 			console.log("Error fetching featured products:", error);
 		}
 	},
+    editProduct: async (newProduct) => {
+		set({ loading: true });
+		try {
+			await axios.post(`/products/edit/${newProduct._id}`, newProduct);
+			
+            set({ loading: false });
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.error || "Failed to edit product info");
+		}
+	},
+    getOneProduct: async (productId) => {
+		set({ loading: true });
+		try {
+			const response = await axios.get(`/products/get/${productId}`);
+            
+			set({ oneProduct: response.data.product, loading: false });
+            
+
+            set({loading: false})
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.error || "Failed to edit product info");
+		}
+	},
+
+
 
     
 }));
