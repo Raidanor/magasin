@@ -57,7 +57,12 @@ const userSchema = new mongoose.Schema({
                     type: Number,
                     default: 0
                 },
-                size: { type: String, default: "" }
+                size: { type: String, default: "" },
+                slash: {
+                    type: Number,
+                    min: 0,
+                    required: false
+                },
             }
         }
     ],

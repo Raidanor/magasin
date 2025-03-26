@@ -64,7 +64,7 @@ const ProductCard = ({ product }) => {
             </div> */}
 
             <div className="flex w-full relative flex-col overflow-hidden rounded-lg  border-gray-700 shadow-lg mb-4">
-                <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
+                <div className="relative mx-3 mt-3 flex lg:h-80 h-60 overflow-hidden rounded-xl">
                     <img
                     src={product?.images[currentIndex]}
                     className="object-cover w-full"

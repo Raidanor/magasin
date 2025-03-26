@@ -154,7 +154,7 @@ function EditForm({open, onClose, children})
         setNewProduct({...newProduct,  info: info })
 
         await editProduct(newProduct)
-        console.log(newProduct)
+        // console.log(newProduct)
     }
 
     const handleImageChange = (e) => {
@@ -286,13 +286,13 @@ function EditForm({open, onClose, children})
 
                         <br/>
                         </div>
-                        <div className="flex clearfix">
-                            <button type="button" className='flex justify-center mt-2 py-2 px-4 border border-transparent rounded-md 
+                        <div className="flex">
+                            <button type="button" className='mr-auto flex justify-center mt-2 py-2 px-4 border border-transparent rounded-md 
                             shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
                             onClick={ addToArray }>Add</button>
 
-                            <button type="button" className="absolute right-5 flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                            <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
                             shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
                         </div>
@@ -301,7 +301,7 @@ function EditForm({open, onClose, children})
                     
                     <ul className="p-2">
                         {info?.map(inf => (
-                            <li key={inf.size}>price: {inf.price} size: {inf.size}</li>
+                            <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
                         ))}
                     </ul>
                         
@@ -327,18 +327,6 @@ function EditForm({open, onClose, children})
                             ))}
                         </select>
                     </div>
-
-                    {/* <div className='mt-1 flex items-center'>
-                        <input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
-                        <label
-                            htmlFor='image'
-                            className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
-                        >
-                            <Upload className='h-5 w-5 inline-block mr-2' />
-                            Upload Image
-                        </label>
-                        {Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
-                    </div> */}
 
                     <button
                         onClick={handleSubmit}
