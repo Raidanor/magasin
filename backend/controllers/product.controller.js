@@ -25,7 +25,7 @@ export const getFeaturedProducts = async (req, res) => {
 
         featuredProducts = await Product.find({ isFeatured:true}).lean()
 
-        if (!featuredProducts) return res.dtatus(404).json({ message: "No featured products found"})
+        if (!featuredProducts) return res.status(404).json({ message: "No featured products found"})
         
         // store in redis for future access
         await redis.set("featured_products", JSON.stringify(featuredProducts))
@@ -59,7 +59,7 @@ export const createProduct = async (req, res) => {
         });
 
         // delay for code execution
-        await waitforme(5000)
+        // await waitforme(5000)
         const product = await Product.create({
             name,
             description,
@@ -67,6 +67,8 @@ export const createProduct = async (req, res) => {
             images: arr,
             category,
         })
+
+        await product.save()
 
         res.status(201).json(product)
     } catch (error) {
