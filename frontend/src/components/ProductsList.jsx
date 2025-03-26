@@ -142,6 +142,7 @@ function EditForm({open, onClose, children})
 
    
     const [s, setS] = useState('')
+    const [slash, setSlash] = useState(null)
     const [p, setP] = useState(0)
     const [info, setInfo] = useState(oneProduct.info)
 
@@ -153,6 +154,7 @@ function EditForm({open, onClose, children})
         setNewProduct({...newProduct,  info: info })
 
         await editProduct(newProduct)
+        // console.log(newProduct)
     }
 
     const handleImageChange = (e) => {
@@ -179,7 +181,7 @@ function EditForm({open, onClose, children})
                 return
             }
             
-            setInfo(info => [...info, {price: p, size: s}])
+            setInfo(info => [...info, {price: p, size: s, slash: slash}])
             setP(null)
             setS("")
         } catch (error) {
@@ -250,11 +252,12 @@ function EditForm({open, onClose, children})
                             onChange={(e) => setP(e.target.value)}
                             step='0.01'
                             placeholder="Price"
-                            className='mt-1 block w-1/2 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
+                            className='mt-1 block w-1/3 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
                             py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
                             focus:border-emerald-500'
                             required
                         />
+
                         <input
                             id='size'
                             name='size'
@@ -262,20 +265,34 @@ function EditForm({open, onClose, children})
                             value={s}
                             placeholder="Size(Optional)"
                             onChange={(e) => setS(e.target.value)}
-                            className='flex ml-2 mt-1 w-1/2 bg-gray-700 border border-gray-600 rounded-md
+                            className='flex ml-2 mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
                             shadow-sm py-2 px-3 text-white focus:outline-none 
                             focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
                             >
                         </input>
+
+                        <input
+                            id='slash'
+                            name='slash'
+                            type='number'
+                            value={slash}
+                            placeholder="Slash(Optional)"
+                            onChange={(e) => setSlash(e.target.value)}
+                            className='flex ml-2 mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
+                            shadow-sm py-2 px-3 text-white focus:outline-none 
+                            focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+                            >
+                        </input>
+
                         <br/>
                         </div>
-                        <div className="flex clearfix">
-                            <button type="button" className='flex justify-center mt-2 py-2 px-4 border border-transparent rounded-md 
+                        <div className="flex">
+                            <button type="button" className='mr-auto flex justify-center mt-2 py-2 px-4 border border-transparent rounded-md 
                             shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
                             onClick={ addToArray }>Add</button>
 
-                            <button type="button" className="absolute right-5 flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                            <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
                             shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
                         </div>
@@ -284,7 +301,7 @@ function EditForm({open, onClose, children})
                     
                     <ul className="p-2">
                         {info?.map(inf => (
-                            <li key={inf.size}>price: {inf.price} size: {inf.size}</li>
+                            <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
                         ))}
                     </ul>
                         
@@ -310,18 +327,6 @@ function EditForm({open, onClose, children})
                             ))}
                         </select>
                     </div>
-
-                    {/* <div className='mt-1 flex items-center'>
-                        <input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
-                        <label
-                            htmlFor='image'
-                            className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
-                        >
-                            <Upload className='h-5 w-5 inline-block mr-2' />
-                            Upload Image
-                        </label>
-                        {Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
-                    </div> */}
 
                     <button
                         onClick={handleSubmit}

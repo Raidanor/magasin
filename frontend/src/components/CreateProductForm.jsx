@@ -16,6 +16,7 @@ const CreateProductForm = () => {
 	});
     
     const [s, setS] = useState('')
+    const [slash, setSlash] = useState(null)
     const [p, setP] = useState(null)
     const [info, setInfo] = useState([])
 
@@ -31,7 +32,6 @@ const CreateProductForm = () => {
             return
         }
 		try {
-            // console.log(newProduct)
 			await createProduct(newProduct);
 
 			setNewProduct({ name: "", description: "", info: [], category: "", images: [] });
@@ -75,7 +75,7 @@ const CreateProductForm = () => {
                 toast.error("Price cannot be empty")
                 return
             }
-            setInfo(info => [...info, {price: p, size: s}])
+            setInfo(info => [...info, {price: p, size: s, slash: slash}])
             setP(null)
             setS("")
         } catch (error) {
@@ -142,7 +142,7 @@ const CreateProductForm = () => {
                         placeholder="Price"
                         
                         
-						className='mt-1 block w-1/2 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
+						className='mt-1 block w-1/3 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
 						required
@@ -154,23 +154,43 @@ const CreateProductForm = () => {
 						value={s}
                         placeholder="Size(Optional)"
 						onChange={(e) => setS(e.target.value)}
-						className='flex ml-2 mt-1 w-1/2 bg-gray-700 border border-gray-600 rounded-md
+						className='flex ml-2 mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
 						 shadow-sm py-2 px-3 text-white focus:outline-none 
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
 						
 					    >
 					</input>
+
+                    <input
+                        id='slash'
+                        name='slash'
+                        type='number'
+                        value={slash}
+                        placeholder="Slash(Optional)"
+                        onChange={(e) => setSlash(e.target.value)}
+                        className='flex ml-2 mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
+                        shadow-sm py-2 px-3 text-white focus:outline-none 
+                        focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+                        >
+                    </input>
+
                     <br/>
                     </div>
-                    <button type="button" className='flex justify-center mt -2 py-2 px-4 border border-transparent rounded-md 
-					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
-					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                    onClick={ addToArray }>Add</button>
-                    
+                    <div className="flex">
+                        <button type="button" className='mr-auto flex justify-start mt-2 py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                        onClick={ addToArray }>Add</button>
+                        
+                        <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
+                        onClick={() => setInfo([])}>Clear</button>
+                    </div>
 				</div>
                 <ul>
                     {info.map(inf => (
-                        <li key={inf.size}>price: {inf.price} size: {inf.size}</li>
+                        <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
                     ))}
                 </ul>
 				<div>
