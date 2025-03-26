@@ -47,7 +47,7 @@ export const createProduct = async (req, res) => {
     }
 
     try {
-        const { name, description, info, images, category} = req.body
+        const { name, description, info, images, category } = req.body
 
         let cloudinaryResponse = null
 
@@ -59,13 +59,13 @@ export const createProduct = async (req, res) => {
         });
 
         // delay for code execution
-        // await waitforme(5000)
+        await waitforme(5000)
         const product = await Product.create({
             name,
             description,
             info,
             images: arr,
-            category,
+            category: category.ref
         })
 
         await product.save()
@@ -134,7 +134,6 @@ export const getProductsByCategory = async (req, res) => {
     try {
         const products = await Product.find({ category })
         res.json({products})
-        // console.log(products)
     } catch (error) {
         console.log("Error in getProductsByCategory function")
         res.status(500).json({ error: error.message})

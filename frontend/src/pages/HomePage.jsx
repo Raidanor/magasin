@@ -8,11 +8,11 @@ import FeaturedProducts from "../components/FeaturedProducts";
 
 
 const categories_ = [
-	{ href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
-	{ href: "/t-shirts", name: "T-shirts", imageUrl: "/tshirts.jpg" },
-	{ href: "/shoes", name: "Shoes", imageUrl: "/shoes.jpg" },
-	{ href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
-    { href: "/kitchenware", name: "Kitchenware", imageUrl: "/kitchenware.jpg" },
+	{ href: "/jeans", name: "Jeans", imageURL: "/jeans.jpg" },
+	{ href: "/t-shirts", name: "T-shirts", imageURL: "/tshirts.jpg" },
+	{ href: "/shoes", name: "Shoes", imageURL: "/shoes.jpg" },
+	{ href: "/bags", name: "Bags", imageURL: "/bags.jpg" },
+    { href: "/kitchenware", name: "Kitchenware", imageURL: "/kitchenware.jpg" },
 ];
 
 const HomePage = () => {
@@ -22,9 +22,8 @@ const HomePage = () => {
 
 	useEffect(() => {
 		fetchFeaturedProducts();
-	}, [fetchFeaturedProducts]);
-
-    console.log(categories)
+        getCategories()
+	}, [fetchFeaturedProducts, getCategories]);
 
 	return (
 		<div className='relative min-h-screen text-white overflow-hidden'>
@@ -39,7 +38,7 @@ const HomePage = () => {
                 {!isLoading && products.length > 0 && <FeaturedProducts featuredProducts={products} />}
                 
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-					{categories_.map((category) => (
+					{categories.map((category) => (
 						<CategoryItem category={category} key={category.name} />
 					))}
 				</div>

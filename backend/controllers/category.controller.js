@@ -9,7 +9,6 @@ export const getCategories = async (req, res) => {
     try {
         const cat = await Category.find({})
         res.json({ cat })
-        console.log(cat)
     } catch (error) {
         console.log("Error in getAllProducts function")
         res.status(500).json({message: error.message})
@@ -19,21 +18,21 @@ export const getCategories = async (req, res) => {
 export const createCategory = async (req, res) => {
 
     try {
-        const { name, imageURL } = req.body
+        const { name, imageURL, ref } = req.body
 
         let cloudinaryResponse = null
 
-        // cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"category"})
+        cloudinaryResponse = await cloudinary.uploader.upload(imageURL, {folder:"category"})
 
         const cat = await Category.create({
             name,
-            imageURL
+            imageURL: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
+            ref
         })
 
         await cat.save()
 
         res.status(201).json(cat)
-        console.log("category created", cat)
     } catch (error) {
         console.log("Error on createCategory controller")
         res.status(500).json({ error: error.message})

@@ -1,9 +1,10 @@
-import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
+import { BarChart, PlusCircle, ShoppingBasket, HardDriveUpload  } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import AnalyticsTab from "../components/AnalyticsTab";
 import CreateProductForm from "../components/CreateProductForm";
+import ManageCategories from "../components/ManageCategories"
 import ProductsList from "../components/ProductsList";
 import { useProductStore } from "../stores/useProductStore";
 
@@ -11,6 +12,7 @@ const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
 	{ id: "products", label: "Products", icon: ShoppingBasket },
 	{ id: "analytics", label: "Analytics", icon: BarChart },
+    { id: "manageCategories", label: "Manage Categories", icon: HardDriveUpload},
 ];
 
 const AdminPage = () => {
@@ -30,7 +32,7 @@ const AdminPage = () => {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8 }}
 				>
-					Admin Dashboard
+					Admin Dashboards
 				</motion.h1>
 
 				<div className='flex justify-center mb-8'>
@@ -52,6 +54,7 @@ const AdminPage = () => {
 				{activeTab === "create" && <CreateProductForm />}
 				{activeTab === "products" && <ProductsList />}
 				{activeTab === "analytics" && <AnalyticsTab />}
+                {activeTab === "manageCategories" && <ManageCategories />}
 			</div>
 		</div>
 	);
