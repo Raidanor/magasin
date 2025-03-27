@@ -25,7 +25,7 @@ export const getFeaturedProducts = async (req, res) => {
 
         featuredProducts = await Product.find({ isFeatured:true}).lean()
 
-        if (!featuredProducts) return res.dtatus(404).json({ message: "No featured products found"})
+        if (!featuredProducts) return res.status(404).json({ message: "No featured products found"})
         
         // store in redis for future access
         await redis.set("featured_products", JSON.stringify(featuredProducts))
@@ -47,7 +47,7 @@ export const createProduct = async (req, res) => {
     }
 
     try {
-        const { name, description, info, images, category} = req.body
+        const { name, description, info, images, category } = req.body
 
         let cloudinaryResponse = null
 
@@ -65,8 +65,10 @@ export const createProduct = async (req, res) => {
             description,
             info,
             images: arr,
-            category,
+            category: category.ref
         })
+
+        await product.save()
 
         res.status(201).json(product)
     } catch (error) {
@@ -132,7 +134,6 @@ export const getProductsByCategory = async (req, res) => {
     try {
         const products = await Product.find({ category })
         res.json({products})
-        // console.log(products)
     } catch (error) {
         console.log("Error in getProductsByCategory function")
         res.status(500).json({ error: error.message})

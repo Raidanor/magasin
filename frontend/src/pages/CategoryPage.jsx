@@ -1,17 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useProductStore } from "../stores/useProductStore";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import ProductCard from "../components/ProductCard";
+import { useCategoryStore } from "../stores/useCategoryStore";
 
 const CategoryPage = () => {
 	const { fetchProductsByCategory, products } = useProductStore();
+    const { categories, getCategories } = useCategoryStore()
 
-	const { category } = useParams();
+	const { category: temp_ } = useParams();
+
+    const [cat, setCat] = useState({})
+
+    let category = {}
 
 	useEffect(() => {
-		fetchProductsByCategory(category);
-	}, [fetchProductsByCategory, category]);
+        getCategories()
+
+        categories?.forEach(element => {
+            if (element.ref  === temp_){
+                category = element
+                setCat(element)
+            }
+        });
+
+		fetchProductsByCategory(category.ref);
+        
+	}, [fetchProductsByCategory, getCategories]);
 
 	return (
 		<div className='min-h-screen'>
@@ -22,7 +38,7 @@ const CategoryPage = () => {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8 }}
 				>
-					{category.charAt(0).toUpperCase() + category.slice(1)}
+					{cat.name}
 				</motion.h1>
 
 				<motion.div

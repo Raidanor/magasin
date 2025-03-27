@@ -120,7 +120,7 @@ const ProductsList = () => {
 					))}
 				</tbody>
 			</table>
-            <EditForm open={isOpen} onClose={() => {setIsOpen(false)}}>
+            <EditForm open={isOpen} onClose={() => {setIsOpen(false)}} oneProduct={oneProduct}>
                 <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
 
             
@@ -131,11 +131,11 @@ const ProductsList = () => {
 export default ProductsList;
 
 
-function EditForm({open, onClose, children})
+function EditForm({open, onClose, children, oneProduct})
 {
     if (!open) return null
 
-    const { editProduct, loading, getOneProduct, oneProduct } = useProductStore();
+    const { editProduct, loading} = useProductStore();
 
     const [newProduct, setNewProduct] = useState({});
     

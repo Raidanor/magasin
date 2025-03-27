@@ -2,11 +2,19 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import { useCategoryStore } from "../stores/useCategoryStore";
+
 import toast from "react-hot-toast";
 
-const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
+const categories_ = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
 
 const CreateProductForm = () => {
+    const { categories, getCategories } = useCategoryStore()
+
+    useEffect(() => {
+        getCategories()
+    }, [getCategories])
+
 	const [newProduct, setNewProduct] = useState({
 		name: "",
 		description: "",
@@ -33,13 +41,13 @@ const CreateProductForm = () => {
         }
 		try {
 			await createProduct(newProduct);
-
+            // console.log(newProduct)
 			setNewProduct({ name: "", description: "", info: [], category: "", images: [] });
             setInfo([])
             setS("")
             setP(null)
             setImage([])
-            e.target.reset()
+            toast.success("Product created")
 		} catch (error) {
 			console.log("error creating a product: ", error.message);
 		}
@@ -201,7 +209,7 @@ const CreateProductForm = () => {
 						id='category'
 						name='category'
 						value={newProduct.category}
-						onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+						onChange={(e) => setNewProduct({ ...newProduct, category: JSON.parse(e.target.value) })}
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md
 						 shadow-sm py-2 px-3 text-white focus:outline-none 
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
@@ -209,8 +217,8 @@ const CreateProductForm = () => {
 					>
 						<option value=''>Select a category</option>
 						    {categories.map((category) => (
-							<option key={category} value={category}>
-								{category}
+							<option key={category._id} value={JSON.stringify(category)}>
+								{category.name}
 						</option>
 						))}
 					</select>
