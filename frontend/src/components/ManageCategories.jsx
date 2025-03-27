@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useCategoryStore } from "../stores/useCategoryStore";
 import toast from "react-hot-toast";
+import { Star, Trash } from "lucide-react"
 
 const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
 
@@ -16,7 +17,7 @@ const ManageCategories = () => {
  
     const [info, setInfo] = useState([])
 
-	const { createCategory, loading } = useCategoryStore();
+	const { categories, createCategory, loading, getCategories, deleteCategory } = useCategoryStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -29,6 +30,11 @@ const ManageCategories = () => {
 			console.log("error creating a product: ", error.message);
 		}
 	}
+
+    const handleDelete = async (categoryId) => {
+        console.log(categoryId)
+        await deleteCategory(categoryId)
+    }
 
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
@@ -43,9 +49,13 @@ const ManageCategories = () => {
 		}
 	};
 
+    useEffect(() => {
+        getCategories()
+    }, [getCategories])
+
 	return (
 		<motion.div
-			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-xl mx-auto'
+			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-2xl mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8 }}
@@ -96,7 +106,7 @@ const ManageCategories = () => {
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
-                    { newCategory.imageURL !== "" ? <>Image Uploaded</> : ""}
+                    { newCategory.imageURL !== "" ? <span className='ml-3 text-sm text-gray-400'>Image Uploaded</span> : ""}
 				</div>
 
 				<button
@@ -118,7 +128,78 @@ const ManageCategories = () => {
 						</>
 					)}
 				</button>
-			</form>                
+			</form>
+
+
+            <div className="mt-10 p-5 rounded-lg border">
+                <h2 className='text-2xl font-semibold mb-6 text-red-500'>Delete Category</h2>
+                <table className=' min-w-full divide-y divide-gray-700'>
+				<thead className='bg-gray-700'>
+					<tr>
+						<th
+							scope='col'
+							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+						>
+							Category
+						</th>
+						<th
+							scope='col'
+							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+						>
+							Ref
+						</th>
+                        <th
+							scope='col'
+							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+						>
+							Products
+						</th>
+                        <th
+							scope='col'
+							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+						>
+							Action
+						</th>
+					</tr>
+				</thead>
+
+				<tbody className='bg-gray-800 divide-y divide-gray-700'>
+					{categories?.map((category) => (
+						<tr key={category._id} className='hover:bg-gray-700'>
+							<td className='px-6 py-4 whitespace-nowrap'>
+								<div className='flex items-center'>
+									<div className='flex-shrink-0 h-10 w-10'>
+										<img
+											className='h-10 w-10 rounded-full object-cover'
+											src={category.imageURL}
+											alt={category.name}
+										/>
+									</div>
+									<div className='ml-4'>
+										<div className='text-sm font-medium text-white'>{category.name}</div>
+									</div>
+								</div>
+							</td>
+
+							<td className='px-6 py-4 whitespace-nowrap'>
+								1
+							</td>
+                            <td className='px-6 py-4 whitespace-nowrap'>
+								{category.ref}
+							</td>
+							<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
+								<button
+									onClick={() => handleDelete(category._id)}
+									className='text-red-400 hover:text-red-300'
+								>
+									<Trash className='h-5 w-5 mx-2' />
+								</button>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+            </div>
 		</motion.div>
 	);
 }

@@ -38,3 +38,31 @@ export const createCategory = async (req, res) => {
         res.status(500).json({ error: error.message})
     }
 }
+
+export const deleteCategory = async (req, res) => {
+    try {
+        const cat = await Category.findById(req.params.id)
+
+        if (!cat) res.status(404).json({message: "Product not found"})
+
+        if (cat.imageURL)
+        {
+            const publicId = cat.imageURL.split("/").pop().split(".")[0]
+
+            try {
+                await cloudinary.uploader.destroy(`category/${publicId}`)
+                console.log("deleted image from cloudinary")
+            } catch (error) {
+                console.log("error deleting image from cloudinary")
+            }
+            
+        }
+
+        await Category.findByIdAndDelete(req.params.id)
+
+        res.json({ message: "Product deleted from database" })
+    } catch (error) {
+        console.log("Error in deleteProduct function", error.message)
+        res.status(401).json({ error: error.message})
+    }
+}

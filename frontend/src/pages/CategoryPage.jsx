@@ -26,7 +26,6 @@ const CategoryPage = () => {
         });
 
 		fetchProductsByCategory(category.ref);
-        console.log(category)
         
 	}, [fetchProductsByCategory, getCategories]);
 
