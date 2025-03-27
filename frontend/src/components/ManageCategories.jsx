@@ -15,9 +15,8 @@ const ManageCategories = () => {
         ref: ""
 	});
  
-    const [info, setInfo] = useState([])
 
-	const { categories, createCategory, loading, getCategories, deleteCategory } = useCategoryStore();
+	const { categories, createCategory, loading, getCategories, deleteCategory, categoryCount, count } = useCategoryStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -32,7 +31,6 @@ const ManageCategories = () => {
 	}
 
     const handleDelete = async (categoryId) => {
-        console.log(categoryId)
         await deleteCategory(categoryId)
     }
 
@@ -51,7 +49,20 @@ const ManageCategories = () => {
 
     useEffect(() => {
         getCategories()
-    }, [getCategories])
+        
+    }, [getCategories, categoryCount])
+
+    const toggleShowAll = async() => {
+        setShowAllCategories(!showAllCategories)
+
+        categories.map(async(category) => {
+            await categoryCount(category.ref)
+        })
+        console.log(count)
+    }
+    
+
+    const [showAllCategories, setShowAllCategories] = useState(false)
 
 	return (
 		<motion.div
@@ -76,7 +87,7 @@ const ManageCategories = () => {
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
 						 px-3 text-white focus:outline-none focus:ring-2
 						focus:ring-emerald-500 focus:border-emerald-500'
-						required="true"
+						required
 					/>
 				</div>
 
@@ -130,76 +141,78 @@ const ManageCategories = () => {
 				</button>
 			</form>
 
+            <button className="btn bg-blue-600 rounded-lg px-4 py-2 mx-auto flex mt-5 w-1/3 justify-center" onClick={toggleShowAll}>Show All Categories</button>
+            {showAllCategories &&
+                <div className="mt-10 p-5 rounded-lg border">
+                    <h2 className='text-2xl font-semibold mb-6 text-red-500'>Delete Category</h2>
+                    <table className=' min-w-full divide-y divide-gray-700'>
+                    <thead className='bg-gray-700'>
+                        <tr>
+                            <th
+                                scope='col'
+                                className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+                            >
+                                Category
+                            </th>
+                            <th
+                                scope='col'
+                                className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+                            >
+                                Ref
+                            </th>
+                            <th
+                                scope='col'
+                                className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+                            >
+                                Products
+                            </th>
+                            <th
+                                scope='col'
+                                className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+                            >
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
 
-            <div className="mt-10 p-5 rounded-lg border">
-                <h2 className='text-2xl font-semibold mb-6 text-red-500'>Delete Category</h2>
-                <table className=' min-w-full divide-y divide-gray-700'>
-				<thead className='bg-gray-700'>
-					<tr>
-						<th
-							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
-						>
-							Category
-						</th>
-						<th
-							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
-						>
-							Ref
-						</th>
-                        <th
-							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
-						>
-							Products
-						</th>
-                        <th
-							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
-						>
-							Action
-						</th>
-					</tr>
-				</thead>
-
-				<tbody className='bg-gray-800 divide-y divide-gray-700'>
-					{categories?.map((category) => (
-						<tr key={category._id} className='hover:bg-gray-700'>
-							<td className='px-6 py-4 whitespace-nowrap'>
-								<div className='flex items-center'>
-									<div className='flex-shrink-0 h-10 w-10'>
-										<img
-											className='h-10 w-10 rounded-full object-cover'
-											src={category.imageURL}
-											alt={category.name}
-										/>
-									</div>
-									<div className='ml-4'>
-										<div className='text-sm font-medium text-white'>{category.name}</div>
-									</div>
-								</div>
-							</td>
-
-							<td className='px-6 py-4 whitespace-nowrap'>
-								1
-							</td>
-                            <td className='px-6 py-4 whitespace-nowrap'>
-								{category.ref}
-							</td>
-							<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
-								<button
-									onClick={() => handleDelete(category._id)}
-									className='text-red-400 hover:text-red-300'
-								>
-									<Trash className='h-5 w-5 mx-2' />
-								</button>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-            </div>
+                    <tbody className='bg-gray-800 divide-y divide-gray-700'>
+                        {categories?.map((category, index) => (
+                            <tr key={category._id} className='hover:bg-gray-700'>
+                                <td className='px-6 py-4 whitespace-nowrap'>
+                                    <div className='flex items-center'>
+                                        <div className='flex-shrink-0 h-10 w-10'>
+                                            <img
+                                                className='h-10 w-10 rounded-full object-cover'
+                                                src={category.imageURL}
+                                                alt={category.name}
+                                            />
+                                        </div>
+                                        <div className='ml-4'>
+                                            <div className='text-sm font-medium text-white'>{category.name}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className='px-6 py-4 whitespace-nowrap justify-center'>
+                                    {category.ref}
+                                </td>
+                                <td className='px-6 py-4 whitespace-nowrap'>
+                                    {count.length > 0 ? count[index] : ""}
+                                </td>
+                                <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
+                                    <button
+                                        onClick={() => handleDelete(category._id)}
+                                        className='text-red-400 hover:text-red-300'
+                                    >
+                                        <Trash className='h-5 w-5 mx-2' />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                </div>
+            }
+            
 		</motion.div>
 	);
 }

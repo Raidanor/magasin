@@ -216,10 +216,10 @@ const CreateProductForm = () => {
 						required
 					>
 						<option value=''>Select a category</option>
-						    {categories.map((category) => (
+						    {categories?.map((category) => (
 							<option key={category._id} value={JSON.stringify(category)}>
 								{category.name}
-						</option>
+						    </option>
 						))}
 					</select>
 				</div>

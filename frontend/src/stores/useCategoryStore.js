@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 
 export const useCategoryStore = create((set, get) => ({
     categories: [],
+    count: [],
     loading: false,
 
     getCategories: async () => {
@@ -44,23 +45,27 @@ export const useCategoryStore = create((set, get) => ({
 				loading: false,
 			}));
 
+            toast.success("Category Deleted")
+
 		} catch (error) {
 			set({ loading: false });
 			toast.error(error.response.data.error || "Failed to delete category");
 		}
 	},
     categoryCount: async(categoryRef) => {
-        
-        set({ loading: true });
+        set({ loading: true, count: [] });
 		try {
-			const response = await axios.get(`/category/count/${categoryRef}`);
-            
-			set({ categories: response.data.category, loading: false });
+			const res = await axios.get(`/category/count/${categoryRef}`);
+
+            set((prevState) => ({
+				count: [...prevState.count, res.data.cat],
+				loading: false,
+			}));
 		} catch (error) {
 			set({ error: "Failed to fetch products", loading: false });
 			toast.error(error.response.data.error || "Failed to fetch products");
 		}
-    }
+    },
 
 
 }))
