@@ -197,7 +197,7 @@ function sendEmail() {
 
     var client = new postmark.ServerClient("28491739-6f88-4d98-b32b-d706110ec21b");
 
-    console.log("sending email")
+    console.log("not sending email")
     // client.sendEmail({
     //     "From": "160356k@acadiau.ca",
     //     "To": "160356k@acadiau.ca",

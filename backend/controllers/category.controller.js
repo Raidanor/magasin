@@ -2,12 +2,13 @@ import { redis }  from "../lib/redis.js"
 import cloudinary from "../lib/cloudinary.js"
 
 import Category from "../models/category.model.js"
-
+import Product from "../models/product.model.js"
 
 
 export const getCategories = async (req, res) => {
     try {
         const cat = await Category.find({})
+
         res.json({ cat })
     } catch (error) {
         console.log("Error in getAllProducts function")
@@ -43,7 +44,7 @@ export const deleteCategory = async (req, res) => {
     try {
         const cat = await Category.findById(req.params.id)
 
-        if (!cat) res.status(404).json({message: "Product not found"})
+        if (!cat) res.status(404).json({message: "Category not found"})
 
         if (cat.imageURL)
         {
@@ -64,5 +65,17 @@ export const deleteCategory = async (req, res) => {
     } catch (error) {
         console.log("Error in deleteProduct function", error.message)
         res.status(401).json({ error: error.message})
+    }
+}
+
+
+export const categoryCount = async (req, res) => {
+    try {
+        const ref = req.params.ref
+        const cat = await Product.countDocuments({category: ref})
+        res.json({ cat })
+    } catch (error) {
+        console.log("Error in getAllProducts function")
+        res.status(500).json({message: error.message})
     }
 }
