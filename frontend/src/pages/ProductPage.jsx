@@ -74,14 +74,14 @@ const ProductPage = () => {
   
 
             <div className='mt-4 px-5 pb-5'>
-                <h5 className='text-2xl font-semibold tracking-tight text-white'>{product.name}</h5>
-                <div className='mt-5 mb-2 font-medium flex items-center justify-between'>
+                <h5 className='text-3xl font-semibold tracking-tight text-white'>{product.name}</h5>
+                <div className='mt-5 mb-5 flex items-center justify-between'>
                     <p>
                         <span className='text-emerald-100'>{product?.description}</span>
                     </p>
                 </div>
                 <div>
-                    <div className="grid grid-cols-3 mx-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-3 mx-auto">
                         {product?.info?.map((inf) => (
                             <ProductCard2 info={inf} />
                         ))}
@@ -113,13 +113,11 @@ const ProductCard2 = ({info}) => {
 	}
 
     return(
-        <div className="flex-col">
-            <span className="flex text-3xl font-bold text-emerald-400 pb-2">{info.slash ?
-            <><s>Rs.{info.slash}</s> &nbsp;Rs.{info.price}</>
-            : <>Rs.{info.price}</>}</span>
+        <div className="flex-col p-3 border border-emerald-500 rounded-xl mx-2">
+            <span className="flex text-xl md:text-2xl font-bold text-emerald-400 pb-2"><RenderPrice info={info} /></span>
             <button
-                className='flex items-center justify-end rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
-                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+                className='flex items-center justify-end rounded-lg bg-emerald-600 px-2.5 md:px-5 py-2.5 text-center text-sm font-medium
+                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 mx-auto'
                 onClick={() => handleAddToCart(info)}
             >
                 <ShoppingCart size={20} className='mr-2' />
@@ -129,25 +127,17 @@ const ProductCard2 = ({info}) => {
     )
 }
 
-function RenderPrice({selected, product}){
-    let price = 0
-
-    if (selected.length > 1)
-    {
-        price = product?.info?.price
-    }
-    else{
-        price = selected[0]?.price
-    }
-    // console.log(product.info)
+function RenderPrice({info}){
 
     return(
-        <>
-            {/* Rs.{selected?.length > 1 ? product?.info?.price : selected[0]?.price} */}
-            {product.info.slash ?
-            <><s>Rs.{product.info.slash}</s> &nbsp;Rs.{price}</>
-            : <>Rs.{price}</>}
-        </>
+        <div>
+            <div className="flex">
+                {info.slash ?
+                <><s>Rs.{info.slash}</s> &nbsp;Rs.{info.price}</>
+                : <>Rs.{info.price}</>}
+            </div>
+            <div className="font-normal">{info.size}</div>
+        </div>
     )
 }
 
