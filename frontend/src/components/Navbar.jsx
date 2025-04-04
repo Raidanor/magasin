@@ -1,4 +1,4 @@
-import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
+import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
@@ -12,18 +12,19 @@ const Navbar = () => {
 		<header className='fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 backdrop-blur-md shadow-lg z-40 transition-all duration-300 border-b border-emerald-800'>
 			<div className='container mx-auto px-2 py-3'>
 				<div className='flex flex-wrap justify-between items-center'>
-					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
-						Paradis
+					<Link to='/' className='text-lg sm:text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
+						The Best Choice
 					</Link>
 
 					<nav className='flex flex-wrap items-center gap-4'>
-						{/* <Link
-							to={"/"}
-							className='text-gray-300 hover:text-emerald-400 transition duration-300
-					        ease-in-out'
-						>
-							Home
-						</Link> */}
+                        <Link
+                            className='hover:bg-gray-500 text-white rounded-md
+                                transition duration-100 ease-in-out flex items-center p-2'
+                            to={"/"}
+                        >
+                            <Home className='inline-block mr-1 my-1' size={20} />
+                            <span className='hidden sm:inline'>Home</span>
+                        </Link>
 						{user && (
 							<Link
 								to={"/cart"}
@@ -69,16 +70,17 @@ const Navbar = () => {
 									className='bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 
 									rounded-md flex items-center transition duration-300 ease-in-out'
 								>
-									<UserPlus className='mr-2 sm:my-2' size={18} />
-									<span className='sm:inline'>Sign Up</span>
+									<UserPlus className='inline-block mx-1 my-1' size={18} />
+									<span className='hidden sm:inline'>Sign Up</span>
 								</Link>
 								<Link
 									to={"/login"}
 									className='bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 
 									rounded-md flex items-center transition duration-300 ease-in-out'
+                                    
 								>
-									<LogIn className='mr-2 sm:my-2' size={18} />
-									<span className='sm:inline'>Login</span>
+									<LogIn className='inline-block mx-1 my-1' size={18} />
+									<span className='hidden sm:inline'>Login</span>
 								</Link>
 							</>
 						)}

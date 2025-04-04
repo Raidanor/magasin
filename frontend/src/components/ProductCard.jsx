@@ -3,6 +3,7 @@ import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Select from "react-dropdown-select"
 
 const ProductCard = ({ product }) => {
@@ -90,13 +91,15 @@ const ProductCard = ({ product }) => {
   
 
             <div className='mt-4 px-5 pb-5 z-0'>
-                <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
-                <div className='mt-2 mb-5 flex items-center justify-between'>
-                    <p>
-                        {/* <span className='text-3xl font-bold text-emerald-400'>Rs.{selected?.length > 1 ? newProduct?.info?.price : selected[0]?.price}</span> */}
-                        <span className='text-3xl font-bold text-emerald-400'><RenderPrice selected={selected} product={newProduct} /></span>
-                    </p>
-                </div>
+                <Link to={"/category/product/" + product?._id} className="hover:underline">
+                    <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
+                    <div className='mt-2 mb-5 flex items-center justify-between'>
+                        <p>
+                            {/* <span className='text-3xl font-bold text-emerald-400'>Rs.{selected?.length > 1 ? newProduct?.info?.price : selected[0]?.price}</span> */}
+                            <span className='text-3xl font-bold text-emerald-400'><RenderPrice selected={selected} product={newProduct} /></span>
+                        </p>
+                    </div>
+                </Link>
                 <div className="flex">
                     <div className="flex w-1/2 max-h-10 mb-10 mr-4">
                         <button
@@ -136,7 +139,6 @@ export default ProductCard
 
 function RenderPrice({selected, product}){
     let price = 0
-    let slash = null
 
     if (selected.length > 1)
     {
@@ -155,5 +157,4 @@ function RenderPrice({selected, product}){
             : <>Rs.{price}</>}
         </>
     )
-
 }
