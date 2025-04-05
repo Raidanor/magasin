@@ -8,6 +8,7 @@ import SignUpPage from './pages/SignUpPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
+import ProductPage from './pages/ProductPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage.jsx'
 import PurchaseCancelPage from './pages/PurchaseCancelPage.jsx'
@@ -52,6 +53,7 @@ function App() {
                     <Route path= "/login" element={user ? <Navigate to="/" /> : <LoginPage /> }/>
                     <Route path= "/secret-dashboard" element={user?.role === "admin" ? <AdminPage /> : <Navigate to="/login" /> }/>
                     <Route path= "/category/:category" element={ <CategoryPage /> }/>
+                    <Route path= "/product/:productId" element={ <ProductPage /> }/>
                     <Route path= "/cart" element={ user ? <CartPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-cancel" element={ user ? <PurchaseCancelPage /> : <Navigate to="/login" />}/>
