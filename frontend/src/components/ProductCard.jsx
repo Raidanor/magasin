@@ -65,10 +65,10 @@ const ProductCard = ({ product }) => {
             </div> */}
 
             <div className="flex w-full relative flex-col overflow-hidden rounded-lg  border-gray-700 shadow-lg mb-4">
-                <div className="relative mx-3 mt-3 flex lg:h-80 h-60 overflow-hidden rounded-xl">
+                <div className="relative mx-3 mt-3 flex md:h-100 h-80 overflow-hidden rounded-xl">
                     <img
                     src={product?.images[currentIndex]}
-                    className="object-cover w-full"
+                    className="object-cover mx-auto rounded-xl"
                     />
                 </div>
                 {product.images.length > 1 &&
@@ -91,7 +91,7 @@ const ProductCard = ({ product }) => {
   
 
             <div className='mt-4 px-5 pb-5 z-0'>
-                <Link to={"/category/product/" + product?._id} className="hover:underline">
+                <Link to={"/product/" + product?._id} className="hover:underline">
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                     <div className='mt-2 mb-5 flex items-center justify-between'>
                         <p>
@@ -103,7 +103,7 @@ const ProductCard = ({ product }) => {
                 <div className="flex">
                     <div className="flex w-1/2 max-h-10 mb-10 mr-4">
                         <button
-                            className='flex items-center justify-end rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
+                            className='flex items-center justify-end rounded-lg bg-emerald-600 px-2.5 md:px-5 py-2.5 text-center text-sm font-medium
                             text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
                             onClick={handleAddToCart}
                         >

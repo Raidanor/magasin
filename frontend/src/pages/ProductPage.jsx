@@ -10,13 +10,10 @@ import { useCartStore } from "../stores/useCartStore";
 
 const ProductPage = () => {
     const { oneProduct: product, getOneProduct } = useProductStore();
-    const { user } = useUserStore();
-	const { addToCart } = useCartStore();
 
     const { productId } = useParams()
 
     useEffect(() => {
-        
         getOneProduct(productId)
     }, [getOneProduct, productId])
 
@@ -31,40 +28,33 @@ const ProductPage = () => {
     }
 
     // -------------------------------------------------------------------------------------------------------------
-    const handleAddToCart = (info) => {
-		if (!user) {
-			toast.error("Please login to add products to cart", { id: "login" });
-			return;
-		}
-        else {
-			// add to cart
-            console.log("add to cart")
-            console.log(info)
-		}
-	}
+
     return (
         
         <div className="container mx-auto">
             <div className='flex relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4 mx-2'>
 
-            <div className="flex lg:h-[60vh] md:h-[60vh] sm:h-[50vh] overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
+            <div className="flex md:h-150 h-120 overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
                 <div className="mx-3 mt-3 flex overflow-hidden rounded-xl">
-                    <img
-                    src={product?.images[currentIndex]}
-                    className=""
-                    />
+                    {product?.images ? 
+                        <img
+                        src={product?.images[currentIndex]}
+                        className="object-cover mx-auto rounded-xl"
+                        /> : 
+                        <></>
+                    }
                 </div>
-                {product.images.length > 1 &&
+                {product?.images?.length > 1 &&
                 <>
                     <button
                         onClick={prevSlide}
-                        className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        className="absolute top-1/3 left-2 transform -translate-y-2/3 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
                     >
                         <ChevronLeft size={24} />
                     </button>
                     <button
                         onClick={nextSlide}
-                        className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        className="absolute top-1/3 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
                     >
                         <ChevronRight size={24} />
                     </button>
@@ -82,9 +72,15 @@ const ProductPage = () => {
                 </div>
                 <div>
                     <div className="grid grid-cols-2 md:grid-cols-3 mx-auto">
-                        {product?.info?.map((inf) => (
-                            <ProductCard2 info={inf} />
-                        ))}
+                        {product ? 
+                            <>
+                                {product?.info?.map((inf) => (
+                                <ProductTag key={inf.size} info={inf} product={product}/>
+                                ))}
+                            </>:
+                            <></>
+                        }
+                        
                         
                     </div>
                 </div>
@@ -96,19 +92,21 @@ const ProductPage = () => {
     )
 }
 
-const ProductCard2 = ({info}) => {
+const ProductTag = ({info, product}) => {
     const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
-    const handleAddToCart = (info) => {
+    let copiedProduct = JSON.parse(JSON.stringify(product));
+    const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Please login to add products to cart", { id: "login" });
 			return;
 		}
         else {
 			// add to cart
-            console.log("add to cart")
-            console.log(info)
+            copiedProduct.info = info
+            
+            addToCart(copiedProduct)
 		}
 	}
 
@@ -117,8 +115,8 @@ const ProductCard2 = ({info}) => {
             <span className="flex text-xl md:text-2xl font-bold text-emerald-400 pb-2"><RenderPrice info={info} /></span>
             <button
                 className='flex items-center justify-end rounded-lg bg-emerald-600 px-2.5 md:px-5 py-2.5 text-center text-sm font-medium
-                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 mx-auto'
-                onClick={() => handleAddToCart(info)}
+                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 mx-auto mt-2'
+                onClick={() => handleAddToCart()}
             >
                 <ShoppingCart size={20} className='mr-2' />
                 Add to cart
@@ -136,7 +134,7 @@ function RenderPrice({info}){
                 <><s>Rs.{info.slash}</s> &nbsp;Rs.{info.price}</>
                 : <>Rs.{info.price}</>}
             </div>
-            <div className="font-normal">{info.size}</div>
+            <div className="font-normal text-white">{info.size}</div>
         </div>
     )
 }
