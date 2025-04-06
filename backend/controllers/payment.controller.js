@@ -1,5 +1,6 @@
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js"
 import { stripe } from "../lib/stripe.js";
 
 
@@ -95,7 +96,6 @@ export const checkoutSuccess = async (req, res) => {
 
 			// create a new Order
 			const products = JSON.parse(session.metadata.products);
-            console.log(products)
 			const newOrder = new Order({
 				user: session.metadata.userId,
 				products: products.map((product) => ({
@@ -109,7 +109,7 @@ export const checkoutSuccess = async (req, res) => {
 			});
 
 			await newOrder.save();
-            sendEmail()
+            sendEmail(newOrder)
 
 			res.status(200).json({
 				success: true,
@@ -140,6 +140,9 @@ export const payCash = async (req, res) => {
             );
         }
 
+        let m_total = total
+        if (payment_type === "cash_on_delivery") m_total += 50
+
         // create a new Order
         const newOrder = new Order({
             user: user._id,
@@ -149,12 +152,12 @@ export const payCash = async (req, res) => {
                 info: product.info,
             })),
             payment_type,
-            totalAmount: total
+            totalAmount: m_total
             // stripeSessionId: sessionId,
         });
 
         await newOrder.save();
-        sendEmail()
+        sendEmail(newOrder)
 
         res.status(200).json({
             success: true,
@@ -192,18 +195,28 @@ async function createNewCoupon(userId) {
 	return newCoupon;
 }
 
-function sendEmail() {
+async function sendEmail(order) {
     var postmark = require("postmark");
 
-    var client = new postmark.ServerClient("28491739-6f88-4d98-b32b-d706110ec21b");
+    var client = new postmark.ServerClient("67f415cd-6067-43b4-bee2-988c5d901d45");
 
-    console.log("not sending email")
-    // client.sendEmail({
-    //     "From": "160356k@acadiau.ca",
-    //     "To": "160356k@acadiau.ca",
-    //     "Subject": "Test",
-    //     "TextBody": "Hello first email from Postmark!"
-    // });
+    console.log("sending email")
 
-    
+    const user = await User.findById(order.user._id)
+
+    const body1 = "<strong>Congratulations on you purchase</strong>"
+                + "<br />"
+                + "<p>Your order is being processed. We'll be delivering at your current address, which is: </p>"
+                + "<p>" + user.address + "</p>"
+                + "<p>If you have any issues please send an email to jasbeen@the-best-choice.store or call 59024904/<p>"
+                + ""
+                    
+
+    client.sendEmail({
+        "From": "jasbeen@the-best-choice.store",
+        "To": "jasbeen@the-best-choice.store",
+        "Subject": "Order Confirmation from The Best Choice",
+        "TextBody": "THis is a body" 
+    });
 }
+
