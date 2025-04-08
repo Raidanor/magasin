@@ -20,8 +20,8 @@
     "express": "^4.21.2",
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
+    "mailersend": "^2.5.0",
     "mongoose": "^8.9.6",
-    "postmark": "^4.0.5",
     "stripe": "^17.6.0"
   },
   "devDependencies": {

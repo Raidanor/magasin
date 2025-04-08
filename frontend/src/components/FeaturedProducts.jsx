@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
+import { Link } from "react-router-dom";
 
 const FeaturedProducts = ({ featuredProducts }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,10 +65,12 @@ const FeaturedProducts = ({ featuredProducts }) => {
                                     <InnerCarouselImages images={product.images} />
 
 										<div className='p-4'>
+                                            <Link to={"/product/" + product?._id} className="hover:underline">
 											<h3 className='text-lg font-semibold mb-2 text-white'>{product.name}</h3>
 											<p className='text-emerald-300 font-medium mb-4'>
 												Rs.{product?.info[0]?.price}
 											</p>
+                                            </Link>
 											<button
 												onClick={() => {handleAddToCart(product)}}
 												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 

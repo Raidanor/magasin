@@ -31,6 +31,8 @@ const OrderSummary = () => {
 			sessionId: session.id,
 		});
 
+        handleCheckoutSuccess(session.id)
+
 		if (result.error) {
 			console.error("Error:", result.error);
 		}
@@ -38,6 +40,7 @@ const OrderSummary = () => {
 
     const handlePayment_Cash = async (type) => {
         // console.log(cart)
+        
 		const res = await axios.post("/payments/pay-cash", {
 			products: cart,
 			couponCode: coupon ? coupon.code : null,
@@ -107,7 +110,7 @@ const OrderSummary = () => {
 
             <Modal open={isOpen} onClose={() => {setIsOpen(false)}}>
                 <button
-					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 					onClick={handlePayment}
@@ -116,7 +119,7 @@ const OrderSummary = () => {
 				</button>
 
                 <button
-					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 					onClick={() => handlePayment_Cash("cash_on_delivery")}
@@ -125,7 +128,7 @@ const OrderSummary = () => {
 				</button>
 
                 <button
-					className='flex w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 					onClick={() => handlePayment_Cash("pickup")}
@@ -146,7 +149,7 @@ function Modal ({ open, children, onClose }) {
            bg-black/60"
             onClick={onClose}
         >
-            <div className={`w-1/2 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
+            <div className={`w-7/8 md:w-3/4 lg:w-2/3 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
                 ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
             `}
             onClick={e => e.stopPropagation()}>
@@ -158,6 +161,14 @@ function Modal ({ open, children, onClose }) {
                 </button>
                 Select payment option:
                 {children}
+
+                <div className="border-b-3 mt-2 bg-red-800 rounded-2xl p-4">
+                    Online Payment: pay online and we'll deliver your items
+                </div>
+                <div className="border-b-3 mt-2 bg-blue-600 rounded-2xl p-4">
+                    Pay Cash on delivery: We'll deliver to your address and you pay upon delivery. An extra fee of Rs.50 will be added
+                </div>
+                <div className="border-b-3 mt-2 bg-green-900 rounded-2xl p-4">Self Pick-up: You pay on pick-up</div>
             </div>
         </div>
     )
