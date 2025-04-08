@@ -3,6 +3,8 @@ import Order from "../models/order.model.js";
 import User from "../models/user.model.js"
 import { stripe } from "../lib/stripe.js";
 
+import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+
 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
@@ -104,7 +106,7 @@ export const checkoutSuccess = async (req, res) => {
 					info: product.info,
 				})),
 				totalAmount: session.amount_total / 100, // convert from cents to dollars,
-                payment_type: "stripe",
+                payment_type: "online",
 				stripeSessionId: sessionId,
 			});
 
@@ -196,27 +198,130 @@ async function createNewCoupon(userId) {
 }
 
 async function sendEmail(order) {
-    var postmark = require("postmark");
-
-    var client = new postmark.ServerClient("67f415cd-6067-43b4-bee2-988c5d901d45");
 
     console.log("sending email")
 
+    const jasbeen = "jasbeen@the-best-choice.store"
+
     const user = await User.findById(order.user._id)
 
-    const body1 = "<strong>Congratulations on you purchase</strong>"
-                + "<br />"
-                + "<p>Your order is being processed. We'll be delivering at your current address, which is: </p>"
-                + "<p>" + user.address + "</p>"
-                + "<p>If you have any issues please send an email to jasbeen@the-best-choice.store or call 59024904/<p>"
-                + ""
-                    
-
-    client.sendEmail({
-        "From": "jasbeen@the-best-choice.store",
-        "To": "jasbeen@the-best-choice.store",
-        "Subject": "Order Confirmation from The Best Choice",
-        "TextBody": "THis is a body" 
+    const mailerSend = new MailerSend({
+        apiKey: process.env.MAILERSEND_API_KEY,
     });
+      
+    const sentFrom = new Sender(jasbeen, "Jasbeen");
+    
+    const recipients = [
+        new Recipient(user.email, user.name)
+    ];
+    
+    // const cc = [
+    //     new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
+    // ];
+
+    const bcc = [
+        new Recipient(jasbeen, "Jasbeen"),
+    ];
+    
+    let personalization = {}
+
+    let emailParams = new EmailParams()
+    .setFrom(sentFrom)
+    .setTo(recipients)
+    .setReplyTo(sentFrom)
+    // .setCc(cc)
+    .setBcc(bcc)
+    .setSubject("Order Confirmation for " + user.name)
+
+    switch (order.payment_type)
+    {
+        case "cash_on_delivery":
+            personalization = [{
+                email: user.email,
+                data: {
+                    address: user.address,
+                },
+            }];
+
+            emailParams
+            .setTemplateId("z86org8k8q1gew13")
+            .setPersonalization(personalization)
+
+            break
+
+        case "online":
+            personalization = [{
+                email: user.email,
+                data: {
+                    address: user.address,
+                },
+            }];
+
+            emailParams
+            .setTemplateId("351ndgwkzjrgzqx8")
+            .setPersonalization(personalization)
+
+            break
+        
+        case "pickup":
+            personalization = [{
+                email: user.email,
+                data: {
+                    pick_up: "101 La Paix Street, Port-Louis"
+                },
+            }];
+        
+            emailParams
+            .setTemplateId("neqvygm1rqzg0p7w")
+            .setPersonalization(personalization)
+            break
+
+    }
+    
+    await mailerSend.email
+    .send(emailParams)
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error));
+
+    // test()
+}
+
+async function test() {
+    const jasbeen = "jasbeen@the-best-choice.store"
+
+    const mailerSend = new MailerSend({
+        apiKey: process.env.MAILERSEND_API_KEY,
+    });
+      
+    const sentFrom = new Sender(jasbeen, "Jasbeen");
+    
+    const recipients = [
+        new Recipient("ism_dil@hotmail.com", "ism_dil")
+    ];
+    
+    // const cc = [
+    //     new Recipient(jasbeen, "Jasbeen")
+    // ];
+
+    const bcc = [
+        new Recipient("silverstallion30@gmail.com", "Ansaar"),
+    ];
+    
+
+    const emailParams = new EmailParams()
+    .setFrom(sentFrom)
+    .setTo(recipients)
+    .setReplyTo(sentFrom)
+    .setBcc(bcc)
+    .setSubject("Subject")
+    .setHtml("This is the HTML content")
+    .setText("This is the text content")
+
+    console.log("sending test email")
+
+    await mailerSend.email
+    .send(emailParams)
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error))
 }
 
