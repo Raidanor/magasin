@@ -156,3 +156,13 @@ export const getProfile = async(req, res) => {
         res.status(401).json({ message: "Server error", error: error.message })
     }
 }
+
+export const getAllUsers = async(req, res) => {
+    try {
+        const allUsers = await User.find({})
+        res.json(allUsers)
+    } catch (error) {
+        console.log("Error in getAllProfiles controller")
+        res.status(401).json({ message: "Server error", error: error.message })
+    }
+}

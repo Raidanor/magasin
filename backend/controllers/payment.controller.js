@@ -215,9 +215,9 @@ async function sendEmail(order) {
         new Recipient(user.email, user.name)
     ];
     
-    // const cc = [
-    //     new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
-    // ];
+    const cc = [
+        new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
+    ];
 
     const bcc = [
         new Recipient(jasbeen, "Jasbeen"),
@@ -229,7 +229,7 @@ async function sendEmail(order) {
     .setFrom(sentFrom)
     .setTo(recipients)
     .setReplyTo(sentFrom)
-    // .setCc(cc)
+    .setCc(cc)
     .setBcc(bcc)
     .setSubject("Order Confirmation for " + user.name)
 

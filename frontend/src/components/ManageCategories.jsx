@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useCategoryStore } from "../stores/useCategoryStore";
-import toast from "react-hot-toast";
-import { Star, Trash } from "lucide-react"
-
-const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
-
+import { Trash } from "lucide-react"
 
 const ManageCategories = () => {
     const [newCategory, setNewCategory] = useState({

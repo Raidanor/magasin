@@ -1,4 +1,4 @@
-import { BarChart, PlusCircle, ShoppingBasket, HardDriveUpload  } from "lucide-react";
+import { BarChart, PlusCircle, ShoppingBasket, HardDriveUpload, UsersIcon  } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -7,12 +7,14 @@ import CreateProductForm from "../components/CreateProductForm";
 import ManageCategories from "../components/ManageCategories"
 import ProductsList from "../components/ProductsList";
 import { useProductStore } from "../stores/useProductStore";
+import AllUsersTab from "../components/AllUsersTab";
 
 const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
 	{ id: "products", label: "Products", icon: ShoppingBasket },
 	{ id: "analytics", label: "Analytics", icon: BarChart },
     { id: "manageCategories", label: "Manage Categories", icon: HardDriveUpload},
+    { id: "allUsers", label: "Users", icon: UsersIcon},
 ];
 
 const AdminPage = () => {
@@ -55,6 +57,7 @@ const AdminPage = () => {
 				{activeTab === "products" && <ProductsList />}
 				{activeTab === "analytics" && <AnalyticsTab />}
                 {activeTab === "manageCategories" && <ManageCategories />}
+                {activeTab === "allUsers" && <AllUsersTab />}
 			</div>
 		</div>
 	);
