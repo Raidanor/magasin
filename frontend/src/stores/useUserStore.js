@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 
 export const useUserStore = create((set, get) => ({
 	user: null,
+    allUsers: null,
 	loading: false,
 	checkingAuth: true,
 
@@ -69,6 +70,17 @@ export const useUserStore = create((set, get) => ({
 			throw error;
 		}
 	},
+
+    getAllUsers: async () => {
+        set({ loading: true });
+        try {
+            const response = await axios.get("auth/all-profiles")
+            set({ allUsers: response.data, loading: false })
+        } catch (error) {
+            set({ loading: false });
+			toast.error(error.response.data.message || "An error occurred");
+        }
+    }
 }));
 
 

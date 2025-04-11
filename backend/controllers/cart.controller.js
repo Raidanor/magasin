@@ -1,21 +1,17 @@
 import Product from "../models/product.model.js"
-import User from "../models/user.model.js"
+import Order from "../models/order.model.js"
 
 export const getCartProducts = async (req, res) => {
     try {
         const products = await Product.find({ _id: {$in:req.user.cartItems}})
         //add quantity for each product
         const user = req.user
-        const user2 = await User.findOne(user._id)
-        // console.log(products.cartItems)
 
         const cartItems = products.map(product => {
             const item = req.user.cartItems.find(cartItem => cartItem.id === product.id)
             return { ...product.toJSON(), quantity: item.quantity}
         })
-        // console.log("user.cartItems-----------------------------------------------------------------", user.cartItems)
-        // console.log("cartItems-----------------------------------------------------------------", cartItems)
-        
+
         res.json(user.cartItems)
     } catch (error) {
         console.log("Error in getCartProducts function", error)
@@ -85,6 +81,18 @@ export const updateQuantity = async (req, res) => {
 
     } catch (error) {
         console.log("Error in updateQuantity function")
+        res.status(500).json({ error: error.message})
+    }
+}
+
+export const getPastOrders = async(req, res) => {
+    try {
+        const orders = await Order.find({ user: req.user._id})
+        console.log(req.user._id)
+
+        res.json(orders)
+    } catch (error) {
+        console.log("Error in getPastOrders function", error)
         res.status(500).json({ error: error.message})
     }
 }

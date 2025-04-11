@@ -10,6 +10,7 @@ function waitforme(millisec) {
 
 export const useCartStore = create((set, get) => ({
 	cart: [],
+    pastOrders: [],
 	coupon: null,
 	total: 0,
 	subtotal: 0,
@@ -100,5 +101,16 @@ export const useCartStore = create((set, get) => ({
 		}
 
 		set({ subtotal, total });
+	},
+
+    getPastOrders: async () => {
+		try {
+			const res = await axios.get("/cart/past-orders");
+
+			set({ pastOrders: res.data });
+			
+		} catch (error) {
+			toast.error(error.response.data.message || "An error occurred");
+		}
 	},
 }));
