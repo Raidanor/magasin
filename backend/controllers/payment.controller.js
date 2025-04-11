@@ -111,7 +111,7 @@ export const checkoutSuccess = async (req, res) => {
 			});
 
 			await newOrder.save();
-            sendEmail(newOrder)
+            // sendEmail(newOrder)
 
 			res.status(200).json({
 				success: true,
@@ -159,7 +159,7 @@ export const payCash = async (req, res) => {
         });
 
         await newOrder.save();
-        sendEmail(newOrder)
+        // sendEmail(newOrder)
 
         res.status(200).json({
             success: true,

@@ -1,4 +1,4 @@
-import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Home } from "lucide-react";
+import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Home, FileBarChart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
@@ -18,7 +18,7 @@ const Navbar = () => {
 
 					<nav className='flex flex-wrap items-center gap-4'>
                         <Link
-                            className='hover:bg-gray-500 text-white rounded-md
+                            className='hover:bg-gray-500/50 text-white rounded-md
                                 transition duration-100 ease-in-out flex items-center p-2'
                             to={"/"}
                         >
@@ -26,6 +26,7 @@ const Navbar = () => {
                             <span className='hidden sm:inline'>Home</span>
                         </Link>
 						{user && (
+                            <>
 							<Link
 								to={"/cart"}
 								className='relative group text-gray-300 hover:text-emerald-400 transition duration-300 
@@ -42,6 +43,16 @@ const Navbar = () => {
 									</span>
 								)}
 							</Link>
+                            <Link
+                            className='hover:bg-emerald-500/30 text-white rounded-md
+                                transition duration-100 ease-in-out flex items-center p-2'
+                            to={"/past-orders"}
+                        >
+                            <FileBarChart className='inline-block mr-1 my-1' size={20} />
+                            <span className='hidden sm:inline'>Orders</span>
+                        </Link>
+                            </>
+                            
 						)}
 						{isAdmin && (
 							<Link
