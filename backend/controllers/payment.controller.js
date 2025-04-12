@@ -159,7 +159,7 @@ export const payCash = async (req, res) => {
         });
 
         await newOrder.save();
-        // sendEmail(newOrder)
+        sendEmail(newOrder)
 
         res.status(200).json({
             success: true,
@@ -215,11 +215,11 @@ async function sendEmail(order) {
         new Recipient(user.email, user.name)
     ];
     
-    const cc = [
-        new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
-    ];
+    // const cc = [
+    //     new Recipient("ansaarkhadaroo@gmail.com", "Ansaar")
+    // ];
 
-    const bcc = [
+    const cc = [
         new Recipient(jasbeen, "Jasbeen"),
     ];
     
@@ -230,7 +230,7 @@ async function sendEmail(order) {
     .setTo(recipients)
     .setReplyTo(sentFrom)
     .setCc(cc)
-    .setBcc(bcc)
+    // .setBcc(bcc)
     .setSubject("Order Confirmation for " + user.name)
 
     switch (order.payment_type)
@@ -240,6 +240,7 @@ async function sendEmail(order) {
                 email: user.email,
                 data: {
                     address: user.address,
+                    total: order.totalAmount
                 },
             }];
 
@@ -254,6 +255,7 @@ async function sendEmail(order) {
                 email: user.email,
                 data: {
                     address: user.address,
+                    total: order.totalAmount
                 },
             }];
 
@@ -267,7 +269,8 @@ async function sendEmail(order) {
             personalization = [{
                 email: user.email,
                 data: {
-                    pick_up: "101 La Paix Street, Port-Louis"
+                    pick_up: "101 La Paix Street, Port-Louis",
+                    total: order.totalAmount
                 },
             }];
         
