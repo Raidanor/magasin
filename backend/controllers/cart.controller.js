@@ -88,7 +88,6 @@ export const updateQuantity = async (req, res) => {
 export const getPastOrders = async(req, res) => {
     try {
         const orders = await Order.find({ user: req.user._id})
-        console.log(req.user._id)
 
         res.json(orders)
     } catch (error) {

@@ -104,7 +104,7 @@ export const useProductStore = create((set) => ({
 			set({ oneProduct: response.data.product, loading: false });
             
 
-            set({loading: false})
+            return response.data.product
 		} catch (error) {
 			set({ loading: false });
 			toast.error(error.response.data.error || "Failed to edit product info");
