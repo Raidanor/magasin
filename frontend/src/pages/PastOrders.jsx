@@ -24,8 +24,8 @@ const PastOrders = () => {
             <div>
                 { pastOrders?.length > 0 ? 
                     pastOrders?.map((order) => 
-                    <div className="container border rounded-lg">
-                        <div className="bg-emerald-800 w-full rounded-lg border-b p-2">
+                    <div className="container border border-red-500 rounded-lg my-4">
+                        <div className="bg-emerald-800 w-full rounded-lg border-b border-red-500 p-2">
                             Order date: {order.createdAt}
                         </div>
                         <div className='p-2'>
