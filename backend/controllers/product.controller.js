@@ -188,7 +188,7 @@ export const editProduct = async (req, res) => {
 export const getOneProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
-        res.json({ product})
+        res.json({ product })
     } catch (error) {
         console.log("Error in getOneProduct function")
         res.status(500).json({message: error.message})

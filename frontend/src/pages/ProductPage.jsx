@@ -97,6 +97,7 @@ const ProductTag = ({info, product}) => {
 	const { addToCart } = useCartStore();
 
     let copiedProduct = JSON.parse(JSON.stringify(product));
+    
     const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Please login to add products to cart", { id: "login" });

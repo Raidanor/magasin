@@ -153,6 +153,9 @@ function Modal ({ open, children, onClose }) {
                 ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
             `}
             onClick={e => e.stopPropagation()}>
+                <div className="sm:w-3/4 md:w-2/3 mx-auto border-3 mt-2 bg-red-500 rounded-2xl p-4">
+                    Attention: Deliveries are only available within Port-Louis
+                </div>
                 <button
                     className="absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
                     onClick={onClose}
@@ -162,7 +165,7 @@ function Modal ({ open, children, onClose }) {
                 Select payment option:
                 {children}
 
-                <div className="border-b-3 mt-2 bg-red-800 rounded-2xl p-4">
+                <div className="border-b-3 mt-2 bg-red-900 rounded-2xl p-4">
                     Online Payment: pay online and we'll deliver your items
                 </div>
                 <div className="border-b-3 mt-2 bg-blue-600 rounded-2xl p-4">

@@ -9,7 +9,11 @@ const orderSchema = new mongoose.Schema(
 		},
 		products: [
 			{
-				product: {
+                name:{
+                    type: String,
+                    required: true
+                },
+				id: {
 					type: mongoose.Schema.Types.ObjectId,
 					ref: "Product",
 					required: true,
@@ -27,7 +31,10 @@ const orderSchema = new mongoose.Schema(
                     },
 
                     size: { type: String, default: "" }
-                }
+                },
+                images:[{
+                    type: String,
+                }],
 			},
 		],
 		totalAmount: {
