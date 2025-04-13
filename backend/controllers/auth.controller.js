@@ -159,7 +159,7 @@ export const getProfile = async(req, res) => {
 
 export const getAllUsers = async(req, res) => {
     try {
-        const allUsers = await User.find({})
+        const allUsers = await User.find({}).select("-password")
         res.json(allUsers)
     } catch (error) {
         console.log("Error in getAllProfiles controller")
