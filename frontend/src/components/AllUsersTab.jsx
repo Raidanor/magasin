@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { motion } from "framer-motion";
 import { useUserStore } from '../stores/useUserStore';
+import { Link } from "react-router-dom";
+
 
 const AllUsersTab = () => {
     const { allUsers, loading, getAllUsers } = useUserStore()
@@ -28,15 +30,17 @@ const AllUsersTab = () => {
                     { user.cartItems.length > 0 ? 
                         user.cartItems?.map((item) => 
                             <div className="text-xs p-2 justify-start">
-                                <div className="border rounded-lg p-2 bg-emerald-900">
-                                    <span className='text-lg'><u>{item.name}</u></span>
-                                    <br />
-                                    Quantity: {item.quantity}
-                                    <br />
-                                    Size: {item.info.size}
-                                    <br />
-                                    Price: {item.info.price}
-                                </div>
+                                <Link to={"/product/" + item?._id} >
+                                    <div className="border rounded-lg p-2 bg-emerald-900">
+                                        <span className='text-lg'><u>{item.name}</u></span>
+                                        <br />
+                                        Quantity: {item.quantity}
+                                        <br />
+                                        Size: {item.info.size}
+                                        <br />
+                                        Price: {item.info.price}
+                                    </div>
+                                </Link>
                             </div>
                         ) : <> No items</> }
 
