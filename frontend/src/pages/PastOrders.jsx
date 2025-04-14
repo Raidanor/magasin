@@ -26,7 +26,16 @@ const PastOrders = () => {
                     pastOrders?.map((order) => 
                     <div className="container border border-red-500 rounded-lg my-4">
                         <div className="bg-emerald-800 w-full rounded-lg border-b border-red-500 p-2">
-                            Order date: {order.createdAt}
+                            Order date: {new Date(order.createdAt).toLocaleString('en-GB', { 
+                                day:'numeric', 
+                                month: 'long', 
+                                year:'numeric', 
+                                hour:"2-digit", 
+                                minute: "2-digit", 
+                                second:"2-digit", 
+                                timeZone: 'Etc/GMT-4', 
+                                timeZoneName: 'short'
+                            })}
                         </div>
                         <div className='p-2'>
                             {order?.products?.map((product) => 
