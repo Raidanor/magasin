@@ -7,7 +7,6 @@ import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 
 import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
 
 export const createCheckoutSession = async (req, res) => {
 	try {
@@ -219,9 +218,9 @@ async function sendEmail(order) {
         new Recipient(user.email, user.name)
     ];
     
-    const cc = [
-        new Recipient(jasbeen, "Jasbeen")
-    ];
+    // const cc = [
+    //     new Recipient(jasbeen, "Jasbeen")
+    // ];
 
     const bcc = [
         new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
@@ -233,7 +232,7 @@ async function sendEmail(order) {
     .setFrom(sentFrom)
     .setTo(recipients)
     .setReplyTo(sentFrom)
-    .setCc(cc)
+    // .setCc(cc)
     .setBcc(bcc)
     .setSubject("Order Confirmation for " + user.name)
 
@@ -249,10 +248,10 @@ async function sendEmail(order) {
             }];
 
             emailParams
-            .setTemplateId("z86org8k8q1gew13")
+            .setTemplateId("351ndgwkzjrgzqx8")
             .setPersonalization(personalization)
 
-            break
+        break
 
         case "online":
             personalization = [{
@@ -267,13 +266,13 @@ async function sendEmail(order) {
             .setTemplateId("351ndgwkzjrgzqx8")
             .setPersonalization(personalization)
 
-            break
+        break
         
         case "pickup":
             personalization = [{
                 email: user.email,
                 data: {
-                    pick_up: "101 La Paix Street, Port-Louis",
+                    pickup_address: "101 La Paix Street, Port-Louis",
                     total: order.totalAmount
                 },
             }];
@@ -281,7 +280,7 @@ async function sendEmail(order) {
             emailParams
             .setTemplateId("neqvygm1rqzg0p7w")
             .setPersonalization(personalization)
-            break
+        break
 
     }
     
@@ -290,6 +289,7 @@ async function sendEmail(order) {
     .then((response) => console.log(response))
     .catch((error) => console.log(error));
 
+    test(order)
 }
 
 async function test(order) {
@@ -304,28 +304,53 @@ async function test(order) {
     const sentFrom = new Sender(jasbeen, "Jasbeen");
     
     const recipients = [
-        new Recipient("ismethkhadaroo@gmail.com", "Ismeth")
+        new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
     ];
     
     const cc = [
-        new Recipient(jasbeen, "Jasbeen")
+        new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
     ];
 
     // const bcc = [
     //     new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
     // ];
     
-    let personalization = {}
+    const personalization = [{
+        email: "ismethkhadaroo@gmail.com",
+        data: {
+            name: user.name,
+            address: user.address,
+            phoneNumber: user.phoneNumber,
 
-    let emailParams = new EmailParams()
+            id: order._id,
+            total: order.totalAmount,
+            products: order.products,
+            createdAt: new Date(order.createdAt).toLocaleString('en-GB', { 
+                day:'numeric', 
+                month: 'long', 
+                year:'numeric', 
+                hour:"2-digit", 
+                minute: "2-digit", 
+                second:"2-digit", 
+                timeZone: 'Etc/GMT-4', 
+                timeZoneName: 'short'
+            }),
+            payment_type: order.payment_type,
+
+        },
+    }];
+
+    const emailParams = new EmailParams()
     .setFrom(sentFrom)
     .setTo(recipients)
     .setReplyTo(sentFrom)
     .setCc(cc)
-    .setBcc(bcc)
+    // .setBcc(bcc)
     .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
+    .setTemplateId("neqvygm1ko5g0p7w")
+    .setPersonalization(personalization)
 
-    console.log("sending test email")
+    console.log("test")
 
     await mailerSend.email
     .send(emailParams)

@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const stripePromise = loadStripe("pk_test_51Qv0awRhPunrIm29dMktxT76QcSP1OncMfiKlsNXyHBNksxYNWbIPxrwiDlrgf6mWDeCMpbIE0Ile5GlUUTaS90A00NQqrjH6W")
 
 const OrderSummary = () => {
-	const { total, subtotal, coupon, isCouponApplied, cart, clearCart } = useCartStore();
+	const { total, subtotal, coupon, isCouponApplied, cart, clearCart, removeFromCart } = useCartStore();
     
 	const savings = subtotal - total;
 	const formattedSubtotal = subtotal.toFixed(2);
@@ -47,8 +47,10 @@ const OrderSummary = () => {
             payment_type: type,
             total: total
 		})
-
+        
+        removeFromCart(cart)
         clearCart()
+
         window.location.href = "/purchase-success"
 	}
 
