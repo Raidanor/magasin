@@ -219,12 +219,12 @@ async function sendEmail(order) {
         new Recipient(user.email, user.name)
     ];
     
-    // const cc = [
-    //     new Recipient("ansaarkhadaroo@gmail.com", "Ansaar")
-    // ];
-
     const cc = [
-        new Recipient(jasbeen, "Jasbeen"),
+        new Recipient(jasbeen, "Jasbeen")
+    ];
+
+    const bcc = [
+        new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
     ];
     
     let personalization = {}
@@ -234,7 +234,7 @@ async function sendEmail(order) {
     .setTo(recipients)
     .setReplyTo(sentFrom)
     .setCc(cc)
-    // .setBcc(bcc)
+    .setBcc(bcc)
     .setSubject("Order Confirmation for " + user.name)
 
     switch (order.payment_type)
