@@ -289,10 +289,10 @@ async function sendEmail(order) {
     .then((response) => console.log(response))
     .catch((error) => console.log(error));
 
-    test(order)
+    sendOrderDetails(order)
 }
 
-async function test(order) {
+async function sendOrderDetails(order) {
 
     const jasbeen = "jasbeen@the-best-choice.store"
     const user = await User.findById(order.user._id)
@@ -306,14 +306,6 @@ async function test(order) {
     const recipients = [
         new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
     ];
-    
-    const cc = [
-        new Recipient("ansaarkhadaroo@gmail.com", "Jasbeen")
-    ];
-
-    // const bcc = [
-    //     new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
-    // ];
     
     const personalization = [{
         email: "ismethkhadaroo@gmail.com",
@@ -344,8 +336,6 @@ async function test(order) {
     .setFrom(sentFrom)
     .setTo(recipients)
     .setReplyTo(sentFrom)
-    .setCc(cc)
-    // .setBcc(bcc)
     .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
     .setTemplateId("neqvygm1ko5g0p7w")
     .setPersonalization(personalization)
