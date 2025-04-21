@@ -23,13 +23,17 @@ export const addToCart = async (req, res) => {
 	try {
 		const { product } = req.body;
 		const user = req.user;
-		const existingItem = user.cartItems.find((item) => item?.id === product._id);
 
+
+		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size);
+        
 		if (existingItem) {
 			existingItem.quantity += 1;
 		} else {
 			user.cartItems.push(product);
 		}
+
+  
 
 		await user.save();
         
@@ -46,6 +50,7 @@ export const removeAllFromCart = async (req, res) => {
         const { productId } = req.body
         const user = req.user
 
+        console.log(productId)
         if (productId) { user.cartItems = [] }
         else { user.cartItems = user.cartItems.filter((item) => item.id !== productId.id) }
 
