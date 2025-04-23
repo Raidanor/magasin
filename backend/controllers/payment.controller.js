@@ -6,8 +6,6 @@ import { stripe } from "../lib/stripe.js";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 
-import { createRequire } from 'module';
-
 export const createCheckoutSession = async (req, res) => {
 	try {
 		const { products, couponCode } = req.body;

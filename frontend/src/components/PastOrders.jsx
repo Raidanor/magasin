@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion } from "framer-motion";
 import { useCartStore } from '../stores/useCartStore';
 
-import OrderItem from "../components/OrderItem"
+import OrderItem from "./OrderItem"
 
 const PastOrders = () => {
     const { pastOrders, getPastOrders } = useCartStore()

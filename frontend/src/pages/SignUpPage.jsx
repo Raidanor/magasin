@@ -92,7 +92,7 @@ const SignUpPage = () => {
 								</div>
 								<input
 									id='phoneNumber'
-									type='text'
+									type='number'
 									required
 									value={formData.phoneNumber}
 									onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}

@@ -6,9 +6,14 @@ import CartItem from "../components/CartItem";
 import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
+import { useEffect } from "react";
 
 const CartPage = () => {
-	const { cart } = useCartStore();
+	const { cart, getCartItems } = useCartStore();
+
+    useEffect(() => {
+        getCartItems()
+    }, [cart])
 
 	return (
 		<div className='py-8 md:py-16'>
@@ -24,8 +29,8 @@ const CartPage = () => {
 							<EmptyCartUI />
 						) : (
 							<div className='space-y-6'>
-								{cart.map((item) => (
-									<CartItem key={item._id} item={item} />
+								{cart.map((item, index) => (
+									<CartItem key={index} item={item} />
 								))}
 							</div>
 						)}

@@ -62,14 +62,14 @@ const ManageCategories = () => {
 
 	return (
 		<motion.div
-			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-2xl mx-auto'
+			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8 }}
 		>
-			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create Category</h2>
 
-            <form onSubmit={handleSubmit} className='space-y-4'>
+            <form onSubmit={handleSubmit} className='space-y-4 w-1/2 mx-auto'>
+                <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create Category</h2>
 				<div>
 					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
 						Category Name

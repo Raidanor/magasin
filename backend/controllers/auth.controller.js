@@ -64,6 +64,27 @@ export const signup = async (req, res) => {
     }    
 }
 
+export const updateProfile = async (req, res) => {
+    const { name, email, phoneNumber, address } = req.body
+    const userId = req.user._id
+
+    try{
+        let user = await User.findById(userId)
+
+        user.name = name || user.name
+        user.email = email || user.email
+        user.address = address || user.address
+        user.phoneNumber = phoneNumber || user.phoneNumber
+    
+        await user.save()
+
+        return res.status(200).json(user)
+
+    } catch(error) {
+        return res.status(500).json({message: error.message})
+    }    
+}
+
 export const login = async (req, res) =>
 {
     try {
@@ -82,6 +103,8 @@ export const login = async (req, res) =>
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                address: user.address,
+                phoneNumber: user.phoneNumber,
                 role: user.role
             })
         } else {

@@ -12,7 +12,8 @@ import ProductPage from './pages/ProductPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage.jsx'
 import PurchaseCancelPage from './pages/PurchaseCancelPage.jsx'
-import PastOrders from "./pages/PastOrders.jsx"
+
+import ProfilePage from "./pages/ProfilePage.jsx"
 
 // Components import
 import Navbar from "./components/Navbar.jsx"
@@ -58,7 +59,7 @@ function App() {
                     <Route path= "/cart" element={ user ? <CartPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-cancel" element={ user ? <PurchaseCancelPage /> : <Navigate to="/login" />}/>
-                    <Route path= "/past-orders" element={ user ? <PastOrders /> : <Navigate to="/login" />}/>
+                    <Route path= "/profile" element={ user ? <ProfilePage /> : <Navigate to="/login" />}/>
                 </Routes>
             </div>
             <Toaster />

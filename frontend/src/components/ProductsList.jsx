@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
 
 const ProductsList = () => {
-	const { deleteProduct, editProduct, toggleFeaturedProduct, products, loading, getOneProduct, oneProduct } = useProductStore();
+	const { deleteProduct, toggleFeaturedProduct, products, getOneProduct, oneProduct } = useProductStore();
 
     const [isOpen, setIsOpen] = useState(false)
 
