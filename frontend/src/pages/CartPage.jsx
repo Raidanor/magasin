@@ -13,7 +13,7 @@ const CartPage = () => {
 
     useEffect(() => {
         getCartItems()
-    }, [])
+    }, [cart])
 
 	return (
 		<div className='py-8 md:py-16'>

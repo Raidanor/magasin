@@ -24,6 +24,20 @@ export const useUserStore = create((set, get) => ({
 			toast.error(error.response.data.message || "An error occurred");
 		}
 	},
+
+    updateProfile: async ({ name, email, phoneNumber, address }) => {
+		set({ loading: true });
+
+		try {
+			const res = await axios.post("/auth/update-profile", { name, email, phoneNumber, address });
+			set({ user: res.data, loading: false });
+
+            toast.success("Profile Updated")
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.message || "An error occurred");
+		}
+	},
 	login: async (email, password) => {
 		set({ loading: true });
 
