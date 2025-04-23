@@ -12,16 +12,18 @@ const EditProfileModal = ({user}) => {
     })
 
     useEffect (() => {
-        
-        setProfileData({
-            name: user.name,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            address: user.address,
+        if (user) {
+            setProfileData({
+                phoneNumber: user.phoneNumber,
+                address: user.address,
+                name: user.name,
+                email: user.email,
+                
 
-        })
+            })
+        }
         
-    }, [])
+    }, [user])
 
     const handleInputChange = (e) =>
     {
@@ -31,7 +33,7 @@ const EditProfileModal = ({user}) => {
     return(
         <div className=''>
             <button 
-                className="btn btn-outline rounded-full btn-sm"
+                className="flex btn rounded-lg btn-sm border border-white bg-emerald-600 w-1/4 mx-auto py-2 my-2 justify-center"
                 onClick={() => document.getElementById("edit_profile_modal").showModal()}
             >
                 Edit Profile

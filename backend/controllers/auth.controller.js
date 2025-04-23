@@ -103,6 +103,8 @@ export const login = async (req, res) =>
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                address: user.address,
+                phoneNumber: user.phoneNumber,
                 role: user.role
             })
         } else {
