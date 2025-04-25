@@ -6,14 +6,12 @@ import { useCategoryStore } from "../stores/useCategoryStore";
 
 import toast from "react-hot-toast";
 
-const categories_ = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
-
 const CreateProductForm = () => {
     const { categories, getCategories } = useCategoryStore()
 
     useEffect(() => {
         getCategories()
-    }, [getCategories])
+    }, [])
 
 	const [newProduct, setNewProduct] = useState({
 		name: "",

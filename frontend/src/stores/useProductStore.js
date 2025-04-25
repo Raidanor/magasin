@@ -91,6 +91,11 @@ export const useProductStore = create((set) => ({
 			await axios.post(`/products/edit/${newProduct._id}`, newProduct);
 			
             set({ loading: false });
+            set((prevState) => ({
+                products: prevState.products.map((item) => (item._id === newProduct._id ? newProduct : item )),
+            }));
+
+            toast.success("Product has been edited")
 		} catch (error) {
 			set({ loading: false });
 			toast.error(error.response.data.error || "Failed to edit product info");

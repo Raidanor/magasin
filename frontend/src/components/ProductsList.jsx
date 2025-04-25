@@ -1,15 +1,19 @@
 import { motion } from "framer-motion";
 import { Trash, Star, Edit3, XCircle, Upload, PlusCircle, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import { useCategoryStore } from "../stores/useCategoryStore";
 
 import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 
-const categories = ["jeans", "t-shirts", "shoes", "bags", "kitchenware"];
-
 const ProductsList = () => {
 	const { deleteProduct, toggleFeaturedProduct, products, getOneProduct, oneProduct } = useProductStore();
+    const { categories, getCategories } = useCategoryStore()
+    
+    useEffect(() => {
+        getCategories()
+    }, [])
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -120,7 +124,12 @@ const ProductsList = () => {
 					))}
 				</tbody>
 			</table>
-            <EditForm open={isOpen} onClose={() => {setIsOpen(false)}} oneProduct={oneProduct}>
+            <EditForm 
+                open={isOpen} 
+                onClose={() => {setIsOpen(false)}} 
+                oneProduct={oneProduct}
+                categories={categories}
+            >
                 <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
 
             
@@ -131,11 +140,11 @@ const ProductsList = () => {
 export default ProductsList;
 
 
-function EditForm({open, onClose, children, oneProduct})
+const EditForm = ({open, onClose, children, oneProduct, categories}) => 
 {
     if (!open) return null
 
-    const { editProduct, loading} = useProductStore();
+    const { editProduct, loading } = useProductStore();
 
     const [newProduct, setNewProduct] = useState({});
     
@@ -320,9 +329,9 @@ function EditForm({open, onClose, children, oneProduct})
                             required
                         >
                             <option value=''>Select a category</option>
-                                {categories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
+                                {categories?.map((category) => (
+                                <option key={category._id} value={category.ref}>
+                                    {category.name}
                             </option>
                             ))}
                         </select>
