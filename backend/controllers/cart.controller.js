@@ -44,15 +44,13 @@ export const addToCart = async (req, res) => {
 	}
 };
 
-
 export const removeAllFromCart = async (req, res) => {
     try {
         const { productId } = req.body
         const user = req.user
 
-        console.log(productId)
-        if (productId) { user.cartItems = [] }
-        else { user.cartItems = user.cartItems.filter((item) => item.id !== productId.id) }
+        if (!productId) { user.cartItems = [] }
+        else { user.cartItems = user.cartItems.filter((item) => item.id !== productId) }
 
         await user.save()
         res.json(user.cartItems)
