@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Trash, Star, Edit3, XCircle, Upload, PlusCircle, Loader } from "lucide-react";
+import { Trash, Star, Edit3, XCircle, Upload, PlusCircle, Loader, BoxesIcon } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
 import { useCategoryStore } from "../stores/useCategoryStore";
 
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const ProductsList = () => {
-	const { deleteProduct, toggleFeaturedProduct, products, getOneProduct, oneProduct } = useProductStore();
+	const { deleteProduct, toggleFeaturedProduct, toggleLimitedProduct, products, getOneProduct, oneProduct } = useProductStore();
     const { categories, getCategories } = useCategoryStore()
     
     useEffect(() => {
@@ -52,15 +52,15 @@ const ProductsList = () => {
 							Category
 						</th>
 
-						<th
+						{/* <th
 							scope='col'
 							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
 						>
 							Featured
-						</th>
+						</th> */}
 						<th
 							scope='col'
-							className='px-8 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+							className='mx-auto px-8 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
 						>
 							Actions
 						</th>
@@ -96,7 +96,7 @@ const ProductsList = () => {
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<div className='text-sm text-gray-300'>{product.category}</div>
 							</td>
-							<td className='px-6 py-4 whitespace-nowrap'>
+							{/* <td className='px-6 py-4 whitespace-nowrap'>
 								<button
 									onClick={() => toggleFeaturedProduct(product._id)}
 									className={`p-1 rounded-full ${
@@ -105,19 +105,39 @@ const ProductsList = () => {
 								>
 									<Star className='h-5 w-5' />
 								</button>
-							</td>
+							</td> */}
+
 							<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
-								<button
-									onClick={() => deleteProduct(product._id)}
-									className='text-red-400 hover:text-red-300'
+                                <button
+									onClick={() => toggleFeaturedProduct(product._id)}
+									className={`p-2 mx-1 rounded-full ${
+										product.isFeatured ? "bg-yellow-400 text-gray-900" : "bg-gray-600 text-gray-300"
+									} hover:bg-yellow-500 transition-colors duration-200`}
 								>
-									<Trash className='h-5 w-5 mx-2' />
+									<Star className='h-5 w-5' />
 								</button>
+
+                                <button
+									onClick={() => toggleLimitedProduct(product._id)}
+									className={`p-2 mx-1 rounded-full ${
+										product.isLimited ? "bg-red-400 text-gray-900" : "bg-gray-600 text-gray-300"
+									} hover:bg-red-500 transition-colors duration-200`}
+								>
+									<BoxesIcon className='h-5 w-5' />
+								</button>
+                                
                                 <button
 									onClick={() => openModal(product._id)}
 									className='text-gray-400 hover:text-white'
 								>
 									<Edit3 className='h-5 w-5 mx-2' />
+								</button>
+
+                                <button
+									onClick={() => deleteProduct(product._id)}
+									className='text-red-400 hover:text-red-300'
+								>
+									<Trash className='h-5 w-5 mx-2' />
 								</button>
 							</td>
 						</tr>

@@ -40,6 +40,10 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isLimited:{
+        type: Boolean,
+        default: false
+    },
     
         
 }, {timestamps: true})

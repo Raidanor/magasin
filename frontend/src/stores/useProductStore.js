@@ -62,7 +62,7 @@ export const useProductStore = create((set) => ({
 	toggleFeaturedProduct: async (productId) => {
 		set({ loading: true });
 		try {
-			const response = await axios.patch(`/products/${productId}`);
+			const response = await axios.patch(`/products/togglefeatured/${productId}`);
 			// this will update the isFeatured prop of the product
 			set((prevProducts) => ({
 				products: prevProducts.products.map((product) =>
@@ -70,6 +70,24 @@ export const useProductStore = create((set) => ({
 				),
 				loading: false,
 			}));
+            toast.success("Product Featured toggle")
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.error || "Failed to update product");
+		}
+	},
+    toggleLimitedProduct: async (productId) => {
+		set({ loading: true });
+		try {
+			const response = await axios.patch(`/products/togglelimited/${productId}`);
+			// this will update the isLimited prop of the product
+			set((prevProducts) => ({
+				products: prevProducts.products.map((product) =>
+					product._id === productId ? { ...product, isLimited: response.data.isLimited } : product
+				),
+				loading: false,
+			}));
+            toast.success("Product Limited toggle")
 		} catch (error) {
 			set({ loading: false });
 			toast.error(error.response.data.error || "Failed to update product");

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, ChevronLeft, ChevronRight, BoxesIcon } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 import { Link } from "react-router-dom";
 
@@ -60,9 +60,13 @@ const FeaturedProducts = ({ featuredProducts }) => {
 							{featuredProducts?.map((product) => {
                                 return(
 								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
-									<div className='bg-gray-800 bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
-                                    
-                                    <InnerCarouselImages images={product.images} />
+                                        <div className='bg-gray-800 bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
+                                        {product.isLimited &&
+                                            <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px] z-99">
+                                                Limited Stock
+                                            </div>
+                                        }
+                                        <InnerCarouselImages images={product.images} />
 
 										<div className='p-4'>
                                             <Link to={"/product/" + product?._id} className="hover:underline">
