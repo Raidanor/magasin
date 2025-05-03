@@ -91,6 +91,11 @@ const ProductCard = ({ product }) => {
   
 
             <div className='mt-4 px-5 pb-5 z-0'>
+                {product.isLimited &&
+                    <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+                        Limited Stock
+                    </div>
+                }
                 <Link to={"/product/" + product?._id} className="hover:underline">
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                     <div className='mt-2 mb-5 flex items-center justify-between'>

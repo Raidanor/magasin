@@ -54,7 +54,6 @@ const ManageCategories = () => {
         categories.map(async(category) => {
             await categoryCount(category.ref)
         })
-        console.log(count)
     }
     
 

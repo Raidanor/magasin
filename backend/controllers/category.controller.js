@@ -75,7 +75,7 @@ export const categoryCount = async (req, res) => {
         const cat = await Product.countDocuments({category: ref})
         res.json({ cat })
     } catch (error) {
-        console.log("Error in getAllProducts function")
+        console.log("Error in categoryCount function")
         res.status(500).json({message: error.message})
     }
 }

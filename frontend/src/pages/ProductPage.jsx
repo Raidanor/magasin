@@ -33,7 +33,11 @@ const ProductPage = () => {
         
         <div className="container mx-auto">
             <div className='flex relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4 mx-2'>
-
+            {product.isLimited &&
+                <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+                    Limited Stock
+                </div>
+            }
             <div className="flex md:h-150 h-120 overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
                 <div className="mx-3 mt-3 flex overflow-hidden rounded-xl">
                     {product?.images ? 

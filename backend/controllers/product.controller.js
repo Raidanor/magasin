@@ -110,19 +110,23 @@ export const getRecommendedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
             {
-                $sample: {size:2},
+                $sample: {size:4},
             },
             {
                 $project:{
                     _id: 1,
                     name: 1,
                     description: 1,
-                    image: 1,
-                    price: 1
+                    images: 1,
+                    info: 1,
+                    isLimited: 1,
+                    category: 1,
+
                 }
             }
         ])
-        res.json(products)
+        res.json({products})
+        console.log("hi hello")
     } catch (error) {
         console.log("Error in getRecommendedProducts function")
         res.status(401).json({ error: error.message})
@@ -154,6 +158,23 @@ export const toggleFeaturedProduct  = async (req, res) => {
         }
     } catch (error) {
         console.log("Error in toggleFeaturedProduct function")
+        res.status(500).json({ error: error.message})
+    }
+}
+
+export const toggleLimitedProduct  = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id)
+        if (product) { 
+            product.isLimited = !product.isLimited 
+            const updatedProduct = await product.save()
+            await updateFeaturedProductsCache()
+            res.json(updatedProduct)
+        } else {
+            res.status(404).json({ message: "Product not Found"})
+        }
+    } catch (error) {
+        console.log("Error in toggleLimitedProduct function")
         res.status(500).json({ error: error.message})
     }
 }
