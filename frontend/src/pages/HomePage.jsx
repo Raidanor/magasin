@@ -5,15 +5,7 @@ import { useCategoryStore } from "../stores/useCategoryStore";
 
 import FeaturedProducts from "../components/FeaturedProducts";
 
-
-
-const categories_ = [
-	{ href: "/jeans", name: "Jeans", imageURL: "/jeans.jpg" },
-	{ href: "/t-shirts", name: "T-shirts", imageURL: "/tshirts.jpg" },
-	{ href: "/shoes", name: "Shoes", imageURL: "/shoes.jpg" },
-	{ href: "/bags", name: "Bags", imageURL: "/bags.jpg" },
-    { href: "/kitchenware", name: "Kitchenware", imageURL: "/kitchenware.jpg" },
-];
+import logo from "../../public/diamond3.svg"
 
 const HomePage = () => {
 	const { fetchFeaturedProducts, products, isLoading } = useProductStore();
@@ -28,6 +20,7 @@ const HomePage = () => {
 	return (
 		<div className='relative min-h-screen text-white overflow-hidden'>
 			<div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
+                <img src={logo} alt="The Best Choice" className="w-1/4 md:w-1/6 mx-auto" />
 				<h1 className='text-center text-5xl sm:text-6xl font-bold text-emerald-400 mb-4'>
 					Explore Our Categories
 				</h1>
