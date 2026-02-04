@@ -21,6 +21,7 @@ import LoadingSpinner from "./components/LoadingSpinner.jsx"
 import { Toaster } from 'react-hot-toast'
 import { useUserStore } from './stores/useUserStore.js'
 import { useCartStore } from './stores/useCartStore.js'
+import Footer from './components/Footer.jsx'
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
     if (checkingAuth) return <LoadingSpinner />
 
     return (
-        <div className='min-h-screen bg-gray-900 text-white relative overflow-hidden'>
+        <div className='min-h-screen bg-gray-900 text-white overflow-hidden flex flex-col'>
             {/* backgroud gradient */}
             <div className='absolute inset-0 overflow-hidden'>
 				<div className='absolute inset-0'>
@@ -47,7 +48,8 @@ function App() {
 				</div>
 			</div>
 
-            <div className='relative z-50 pt-20'>
+            
+            <div className='z-50 pt-20 flex-grow'>
                 <Navbar />
                 <Routes>
                     <Route path= "/" element= {<HomePage />} />
@@ -57,11 +59,12 @@ function App() {
                     <Route path= "/category/:category" element={ <CategoryPage /> }/>
                     <Route path= "/product/:productId" element={ <ProductPage /> }/>
                     <Route path= "/cart" element={ user ? <CartPage /> : <Navigate to="/login" />}/>
-                    <Route path= "/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
+                    <Route path= "/purchase-success/:orderId" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-cancel" element={ user ? <PurchaseCancelPage /> : <Navigate to="/login" />}/>
                     <Route path= "/profile" element={ user ? <ProfilePage /> : <Navigate to="/login" />}/>
                 </Routes>
             </div>
+            <Footer />
             <Toaster />
         </div>
     )

@@ -25,16 +25,13 @@ const productSchema = new mongoose.Schema({
             required: false
         }
     }],
-    
     images:[{
         type: String,
         required: [true, "Image is required"]
     }],
-    
     category:{
         type: String,
         required: true
-        
     },
     isFeatured:{
         type: Boolean,
@@ -44,8 +41,6 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    
-        
 }, {timestamps: true})
 
 

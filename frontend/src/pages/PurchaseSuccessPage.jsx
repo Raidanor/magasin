@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
 import Confetti from "react-confetti";
@@ -8,6 +8,7 @@ import Confetti from "react-confetti";
 const PurchaseSuccessPage = () => {
 	const { cart, clearCart, removeFromCart } = useCartStore();
 	const [error, setError] = useState(null);
+    const { orderId } = useParams() ?? 0;
 
 	useEffect(() => {
 		const handleCheckoutSuccess = async (sessionId) => {
@@ -58,7 +59,7 @@ const PurchaseSuccessPage = () => {
 					<div className='bg-gray-700 rounded-lg p-4 mb-6'>
 						<div className='flex items-center justify-between mb-2'>
 							<span className='text-sm text-gray-400'>Order number</span>
-							<span className='text-sm font-semibold text-emerald-400'>#12345</span>
+							<span className='text-sm font-semibold text-emerald-400'>#{orderId}</span>
 						</div>
 						<div className='flex items-center justify-between'>
 							<span className='text-sm text-gray-400'>Estimated delivery</span>
