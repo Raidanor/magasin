@@ -30,12 +30,12 @@ function App() {
 
     useEffect(() => {
         checkAuth()
-    }, [checkAuth])
+    }, [])
 
     useEffect(() => {
         if (!user) return;
         getCartItems()
-    }, [getCartItems, user])
+    }, [user])
 
     if (checkingAuth) return <LoadingSpinner />
 
