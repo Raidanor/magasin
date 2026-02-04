@@ -68,7 +68,6 @@ export const deleteCategory = async (req, res) => {
     }
 }
 
-
 export const categoryCount = async (req, res) => {
     try {
         const ref = req.params.ref

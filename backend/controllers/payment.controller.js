@@ -110,7 +110,7 @@ export const checkoutSuccess = async (req, res) => {
 			});
 
 			await newOrder.save();
-            sendEmail(newOrder)
+            // sendEmail(newOrder)
 
 			res.status(200).json({
 				success: true,
@@ -160,7 +160,7 @@ export const payCash = async (req, res) => {
         });
 
         await newOrder.save();
-        sendEmail(newOrder)
+        // sendEmail(newOrder)
 
         res.status(200).json({
             success: true,
@@ -337,8 +337,6 @@ async function sendOrderDetails(order) {
     .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
     .setTemplateId("neqvygm1ko5g0p7w")
     .setPersonalization(personalization)
-
-    console.log("test")
 
     await mailerSend.email
     .send(emailParams)

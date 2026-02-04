@@ -40,7 +40,6 @@ const OrderSummary = () => {
 
     const handlePayment_Cash = async (type) => {
         // console.log(cart)
-        
 		const res = await axios.post("/payments/pay-cash", {
 			products: cart,
 			couponCode: coupon ? coupon.code : null,
@@ -51,7 +50,7 @@ const OrderSummary = () => {
         removeFromCart(cart)
         clearCart()
 
-        window.location.href = "/purchase-success"
+        window.location.href = `/purchase-success/${res.data.orderId}`
 	}
 
 	return (
@@ -147,7 +146,7 @@ function Modal ({ open, children, onClose }) {
     if (!open) return null
 
     return(
-        <div className="fixed inset-0 flex justify-center items-center transition-colors 
+        <div className="fixed z-10 inset-0 flex justify-center items-center transition-colors 
            bg-black/60"
             onClick={onClose}
         >
@@ -164,7 +163,9 @@ function Modal ({ open, children, onClose }) {
                 >
                     <X />
                 </button>
-                Select payment option:
+                <div className="mt-4">
+                    Select payment option:
+                </div>
                 {children}
 
                 <div className="border-b-3 mt-2 bg-red-900 rounded-2xl p-4">

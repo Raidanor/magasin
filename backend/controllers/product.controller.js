@@ -126,7 +126,6 @@ export const getRecommendedProducts = async (req, res) => {
             }
         ])
         res.json({products})
-        console.log("hi hello")
     } catch (error) {
         console.log("Error in getRecommendedProducts function")
         res.status(401).json({ error: error.message})

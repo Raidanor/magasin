@@ -57,7 +57,7 @@ function App() {
                     <Route path= "/category/:category" element={ <CategoryPage /> }/>
                     <Route path= "/product/:productId" element={ <ProductPage /> }/>
                     <Route path= "/cart" element={ user ? <CartPage /> : <Navigate to="/login" />}/>
-                    <Route path= "/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
+                    <Route path= "/purchase-success/:orderId" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}/>
                     <Route path= "/purchase-cancel" element={ user ? <PurchaseCancelPage /> : <Navigate to="/login" />}/>
                     <Route path= "/profile" element={ user ? <ProfilePage /> : <Navigate to="/login" />}/>
                 </Routes>

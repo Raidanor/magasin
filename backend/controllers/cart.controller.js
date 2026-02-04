@@ -1,5 +1,6 @@
 import Product from "../models/product.model.js"
 import Order from "../models/order.model.js"
+import User from "../models/user.model.js"
 
 export const getCartProducts = async (req, res) => {
     try {
@@ -24,7 +25,6 @@ export const addToCart = async (req, res) => {
 		const { product } = req.body;
 		const user = req.user;
 
-
 		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size);
         
 		if (existingItem) {
@@ -33,10 +33,7 @@ export const addToCart = async (req, res) => {
 			user.cartItems.push(product);
 		}
 
-  
-
 		await user.save();
-        
 		res.json(user.cartItems);
 	} catch (error) {
 		console.log("Error in addToCart controller", error.message);
@@ -47,7 +44,7 @@ export const addToCart = async (req, res) => {
 export const removeAllFromCart = async (req, res) => {
     try {
         const { productId } = req.body
-        const user = req.user
+        let user = req.user
 
         if (!productId) { user.cartItems = [] }
         else { user.cartItems = user.cartItems.filter((item) => item.id !== productId) }
@@ -97,4 +94,20 @@ export const getPastOrders = async(req, res) => {
         console.log("Error in getPastOrders function", error)
         res.status(500).json({ error: error.message})
     }
+}
+
+export const clearCart = async(req, res) => {
+    try {
+        // const user = await User.findByIdAndUpdate(req.user._id, { $push: { cartItems: [] } }, {new:true})
+        let user = req.user
+        user.cartItems = []
+        console.log(user)
+        await user.save()
+
+        res.json(user)
+    } catch (error) {
+		console.log("Error in clearCart controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+
 }

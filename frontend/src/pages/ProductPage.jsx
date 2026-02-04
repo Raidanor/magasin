@@ -15,7 +15,7 @@ const ProductPage = () => {
 
     useEffect(() => {
         getOneProduct(productId)
-    }, [getOneProduct, productId])
+    }, [productId])
 
 
     // stuff for the image carousel

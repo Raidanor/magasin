@@ -51,14 +51,19 @@ export const useCartStore = create((set, get) => ({
 		}
 	},
 	clearCart: async () => {
-		set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+        try {
+            const res = axios.delete(`cart/clear`)
+
+            set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+        } catch (error) {
+            toast.error(error.response.data.message || "An error occurred");
+        }
+
 	},
 	addToCart: async (product) => {
 		try {
 			await axios.post("/cart", { product });
 			toast.success("Product added to cart");
-
-
 
 			set((prevState) => {
 				const existingItem = prevState.cart.find((item) => item?._id === product._id && item.info.size===product.info.size );
@@ -70,8 +75,6 @@ export const useCartStore = create((set, get) => ({
 					: [...prevState.cart, { ...product, quantity: 1 }];
 				return { cart: newCart };
 			});
-
-
             
 			get().calculateTotals();
 		} catch (error) {
