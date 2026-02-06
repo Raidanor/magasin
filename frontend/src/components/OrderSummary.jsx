@@ -150,7 +150,7 @@ function Modal ({ open, children, onClose }) {
            bg-black/60"
             onClick={onClose}
         >
-            <div className={`w-7/8 md:w-3/4 lg:w-2/3 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
+            <div className={`w-7/8 md:w-3/4 lg:w-1/2 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
                 ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
             `}
             onClick={e => e.stopPropagation()}>

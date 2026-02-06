@@ -31,7 +31,7 @@ const PurchaseSuccessPage = () => {
 	if (error) return `Error: ${error}`;
 
 	return (
-		<div className='h-screen flex items-center justify-center px-4'>
+		<div className='pt-20 flex items-center justify-center px-4'>
 			<Confetti
 				width={window.innerWidth}
 				height={window.innerHeight}
