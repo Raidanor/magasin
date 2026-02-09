@@ -1,7 +1,7 @@
 # e-commerce website
 Built using MERN stack, with redis for cookies caching and tailwind css for styling
 
-You can visit a live deployment here: https://magasin-nwj1.onrender.com
+You can visit a live deployment here: [the-best-choice.store](https://the-best-choice.store/)
 
 Home Page
 
