@@ -3,6 +3,8 @@ import Order from "../models/order.model.js";
 import User from "../models/user.model.js"
 import { stripe } from "../lib/stripe.js";
 
+import axios from "axios"
+
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 const base = "https://api-m.sandbox.paypal.com"; 
@@ -178,6 +180,7 @@ export const payCash = async (req, res) => {
 
 export const createOrderPaypal = async(req, res) => {
     try {
+    console.log("createorder paypal is runing")
     const accessToken = await generateAccessToken();
 
     const order = await axios.post(
@@ -187,7 +190,7 @@ export const createOrderPaypal = async(req, res) => {
             purchase_units: [
                 {
                     amount: {
-                    currency_code: "MUR",
+                    currency_code: "USD",
                     value: "50.00",
                     },
                 },
@@ -199,8 +202,7 @@ export const createOrderPaypal = async(req, res) => {
             },
         }
         );
-        console.log(order)
-        res.json({ id: order.data.id });
+        res.json({ orderId: order.data.id });
     } catch (err) {
         console.error(err.response?.data || err.message);
         res.status(500).send("Error creating order");
@@ -208,6 +210,7 @@ export const createOrderPaypal = async(req, res) => {
 }
 
 export const captureOrderPaypal = async (req, res) => {
+    console.log("captureOrderPaypal is running")
     try {
     const { orderID } = req.body;
     const accessToken = await generateAccessToken();
@@ -231,6 +234,8 @@ export const captureOrderPaypal = async (req, res) => {
 
 // Generate Access Token for Paypal checkout
 async function generateAccessToken() {
+    console.log("generateAccessToken is running")
+
     const auth = Buffer.from(
         process.env.PAYPAL_CLIENT_ID + ":" + process.env.PAYPAL_SECRET
     ).toString("base64");

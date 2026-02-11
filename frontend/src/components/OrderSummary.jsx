@@ -114,21 +114,25 @@ const OrderSummary = () => {
 
             <Modal open={isOpen} onClose={() => {setIsOpen(false)}}>
                 <button
-					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm 
+                    font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 					onClick={handlePayment}
 				>
 					Online payment
 				</button>
-                <PayPalScriptProvider
-                    options={{
-                        "client-id": "AYWwTxv4NPnzJ5qVxk2sRXbSZCVhghRH5zobQOV4lhNqUUfKgd6CxkVje3gVGOJ1jGnV-CBHVVsUioDI",
-                        currency: "USD",
-                    }}
-                    >
-                    <PayPalCheckout />
-                </PayPalScriptProvider>
+                <div className="h-auto overflow-y-auto border rounded-lg p-2">
+                    <PayPalScriptProvider
+                        options={{
+                            "client-id": "AYWwTxv4NPnzJ5qVxk2sRXbSZCVhghRH5zobQOV4lhNqUUfKgd6CxkVje3gVGOJ1jGnV-CBHVVsUioDI",
+                            currency: "USD",
+                        }}
+                        >
+                        <PayPalCheckout />
+                    </PayPalScriptProvider>
+                </div>
+                
 
                 <button
 					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
@@ -157,14 +161,14 @@ function Modal ({ open, children, onClose }) {
     if (!open) return null
 
     return(
-        <div className="fixed z-10 inset-0 flex justify-center items-center transition-colors 
-           bg-black/60"
+        <div className="fixed z-10 inset-0 flex justify-center items-center transition-colors mt-5 
+           bg-black/70"
             onClick={onClose}
         >
-            <div className={`w-7/8 md:w-3/4 lg:w-1/2 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
+            <div className={`w-7/8 md:w-3/4 lg:w-1/2 py-10 px-5 items-center bg-gray-800/90 rounded-xl shadow transition-all outline-1 outline-gray-400 overflow-y-auto max-h-10/12
                 ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
             `}
-            onClick={e => e.stopPropagation()}>
+                onClick={e => e.stopPropagation()}>
                 <div className="sm:w-3/4 md:w-2/3 mx-auto border-3 mt-2 bg-red-500 rounded-2xl p-4">
                     Attention: Deliveries are only available within Port-Louis
                 </div>

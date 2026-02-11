@@ -40,7 +40,7 @@ const EditProfileModal = ({user}) => {
             </button>
 
 
-            <dialog id="edit_profile_modal" className="modal bg-emerald-900/90 mx-auto w-11/12 md:w-1/2 lg:w-2/3 my-auto border-gray-300 border-b border-l border-r rounded-md">
+            <dialog id="edit_profile_modal" className="modal bg-emerald-900/50 mx-auto w-11/12 md:w-1/2 lg:w-2/3 my-auto border-gray-300 border-b border-l border-r rounded-md">
                 <div className="modal-box border-t border-gray-300 shadow-ms py-3 px-5 text-white">
                     <h3 className="font-bold text-lg mb-2 ">Update Profile</h3>
                     <form 
