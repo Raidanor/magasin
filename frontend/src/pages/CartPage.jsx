@@ -8,6 +8,7 @@ import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
 import { useEffect } from "react";
 
+
 const CartPage = () => {
 	const { cart, getCartItems } = useCartStore();
 

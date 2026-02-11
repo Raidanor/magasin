@@ -5,6 +5,8 @@ import { stripe } from "../lib/stripe.js";
 
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
+const base = "https://api-m.sandbox.paypal.com"; 
+// Change to https://api-m.paypal.com for production
 
 export const createCheckoutSession = async (req, res) => {
 	try {
@@ -174,6 +176,81 @@ export const payCash = async (req, res) => {
 	}
 };
 
+export const createOrderPaypal = async(req, res) => {
+    try {
+    const accessToken = await generateAccessToken();
+
+    const order = await axios.post(
+        `${base}/v2/checkout/orders`,
+        {
+            intent: "CAPTURE",
+            purchase_units: [
+                {
+                    amount: {
+                    currency_code: "MUR",
+                    value: "50.00",
+                    },
+                },
+            ],
+        },
+        {
+            headers: {
+            Authorization: `Bearer ${accessToken}`,
+            },
+        }
+        );
+        console.log(order)
+        res.json({ id: order.data.id });
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+        res.status(500).send("Error creating order");
+    }
+}
+
+export const captureOrderPaypal = async (req, res) => {
+    try {
+    const { orderID } = req.body;
+    const accessToken = await generateAccessToken();
+
+    const capture = await axios.post(
+        `${base}/v2/checkout/orders/${orderID}/capture`,
+        {},
+        {
+            headers: {
+            Authorization: `Bearer ${accessToken}`,
+            },
+        }
+        );
+
+        res.json(capture.data);
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+        res.status(500).send("Error capturing order");
+    }
+}
+
+// Generate Access Token for Paypal checkout
+async function generateAccessToken() {
+    const auth = Buffer.from(
+        process.env.PAYPAL_CLIENT_ID + ":" + process.env.PAYPAL_SECRET
+    ).toString("base64");
+
+    const response = await axios.post(
+        `${base}/v1/oauth2/token`,
+        "grant_type=client_credentials",
+        {
+        headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        }
+    );
+
+    return response.data.access_token;
+}
+
+// -------------------------------------------------------------------------------------
+
 async function createStripeCoupon(discountPercentage) {
 	const coupon = await stripe.coupons.create({
 		percent_off: discountPercentage,
@@ -182,7 +259,6 @@ async function createStripeCoupon(discountPercentage) {
 
 	return coupon.id;
 }
-
 async function createNewCoupon(userId) {
 	await Coupon.findOneAndDelete({ userId });
 
@@ -197,7 +273,6 @@ async function createNewCoupon(userId) {
 
 	return newCoupon;
 }
-
 async function sendEmail(order) {
 
     console.log("sending email")
@@ -289,7 +364,6 @@ async function sendEmail(order) {
 
     sendOrderDetails(order)
 }
-
 async function sendOrderDetails(order) {
 
     const jasbeen = "jasbeen@the-best-choice.store"
@@ -343,4 +417,3 @@ async function sendOrderDetails(order) {
     .then((response) => console.log(response))
     .catch((error) => console.log(error))
 }
-
