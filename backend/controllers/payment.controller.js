@@ -126,8 +126,9 @@ export const captureOrderPaypal = async (req, res) => {
         await newOrder.save();
 
         // sendEmail(newOrder)
-
-        res.json(capture.data);
+        const captureData = capture.data
+        const orderId = newOrder._id
+        res.json({captureData, orderId});
     } catch (err) {
         console.error(err.response?.data || err.message);
         res.status(500).send("Error capturing order");
