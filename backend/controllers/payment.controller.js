@@ -5,7 +5,7 @@ import { stripe } from "../lib/stripe.js";
 
 import axios from "axios"
 
-import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+// import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 const base = "https://api-m.sandbox.paypal.com"; 
 // Change to https://api-m.paypal.com for production
@@ -173,36 +173,40 @@ export const payCash = async (req, res) => {
         });
 		
 	} catch (error) {
-		console.error("Error processing successful checkout:", error);
-		res.status(500).json({ message: "Error processing successful checkout", error: error.message });
+		console.error("Error processing checkout:", error);
+		res.status(500).json({ message: "Error processing checkout", error: error.message });
 	}
 };
 
 export const createOrderPaypal = async(req, res) => {
     try {
-    console.log("createorder paypal is runing")
-    const accessToken = await generateAccessToken();
+        const { total } = req.body
+        console.log(total)
 
-    const order = await axios.post(
-        `${base}/v2/checkout/orders`,
-        {
-            intent: "CAPTURE",
-            purchase_units: [
-                {
-                    amount: {
-                    currency_code: "USD",
-                    value: "50.00",
+        console.log("createOrderPaypal is running")
+        const accessToken = await generateAccessToken();
+
+        const order = await axios.post(
+            `${base}/v2/checkout/orders`,
+            {
+                intent: "CAPTURE",
+                purchase_units: [
+                    {
+                        amount: {
+                            currency_code: "USD",
+                            value: total,
+                        },
                     },
-                },
-            ],
-        },
-        {
-            headers: {
-            Authorization: `Bearer ${accessToken}`,
+                ],
             },
-        }
-        );
-        res.json({ orderId: order.data.id });
+            {
+                headers: {
+                Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+        // console.log(order.data.id)
+        res.json({ orderID: order.data.id });
     } catch (err) {
         console.error(err.response?.data || err.message);
         res.status(500).send("Error creating order");
@@ -212,18 +216,38 @@ export const createOrderPaypal = async(req, res) => {
 export const captureOrderPaypal = async (req, res) => {
     console.log("captureOrderPaypal is running")
     try {
-    const { orderID } = req.body;
-    const accessToken = await generateAccessToken();
+        const { products, coupon_Code, total, payment_type, orderID} = req.body
+        const user = req.user
+        console.log(orderID)
 
-    const capture = await axios.post(
-        `${base}/v2/checkout/orders/${orderID}/capture`,
-        {},
-        {
-            headers: {
-            Authorization: `Bearer ${accessToken}`,
-            },
-        }
-        );
+        const accessToken = await generateAccessToken();
+
+        const capture = await axios.post(
+            `${base}/v2/checkout/orders/${orderID}/capture`,
+            {},
+            {
+                headers: {
+                Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+        // create a new Order
+        const newOrder = new Order({
+            user: user._id,
+            products: products.map((product) => ({
+                name: product.name,
+                id: product._id,
+                quantity: product.quantity,
+                info: product.info,
+                images: product.images,
+            })),
+            payment_type,
+            totalAmount: total,
+            paypalOrderId: orderID,
+        });
+
+        await newOrder.save();
+        // sendEmail(newOrder)
 
         res.json(capture.data);
     } catch (err) {
@@ -253,7 +277,6 @@ async function generateAccessToken() {
 
     return response.data.access_token;
 }
-
 // -------------------------------------------------------------------------------------
 
 async function createStripeCoupon(discountPercentage) {
