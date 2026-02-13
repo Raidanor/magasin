@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.9.2",
-    "@stripe/stripe-js": "^5.6.0",
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.7.9",
     "framer-motion": "^12.4.7",

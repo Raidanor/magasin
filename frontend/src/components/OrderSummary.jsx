@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useCartStore } from "../stores/useCartStore";
 import { Link } from "react-router-dom";
 import { MoveRight, X } from "lucide-react";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
 
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PayPalCheckout from "../components/PayPalCheckout"
 
-const stripePromise = loadStripe("pk_test_51Qv0awRhPunrIm29dMktxT76QcSP1OncMfiKlsNXyHBNksxYNWbIPxrwiDlrgf6mWDeCMpbIE0Ile5GlUUTaS90A00NQqrjH6W")
+// const stripePromise = loadStripe("pk_test_51Qv0awRhPunrIm29dMktxT76QcSP1OncMfiKlsNXyHBNksxYNWbIPxrwiDlrgf6mWDeCMpbIE0Ile5GlUUTaS90A00NQqrjH6W")
 
 const OrderSummary = () => {
 	const { total, subtotal, coupon, isCouponApplied, cart, clearCart, removeFromCart } = useCartStore();
@@ -21,25 +21,6 @@ const OrderSummary = () => {
 	const formattedSavings = savings.toFixed(2);
 
     const [isOpen, setIsOpen] = useState(false)
-
-	const handlePayment = async () => {
-		const stripe = await stripePromise;
-		const res = await axios.post("/payments/create-checkout-session", {
-			products: cart,
-			couponCode: coupon ? coupon.code : null,
-		});
-        
-		const session = res.data;
-		const result = await stripe.redirectToCheckout({
-			sessionId: session.id,
-		});
-
-        handleCheckoutSuccess(session.id)
-
-		if (result.error) {
-			console.error("Error:", result.error);
-		}
-	};
 
     const handlePayment_Cash = async (type) => {
         // console.log(cart)
@@ -113,15 +94,6 @@ const OrderSummary = () => {
 			</div>
 
             <Modal open={isOpen} onClose={() => {setIsOpen(false)}}>
-                <button
-					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm 
-                    font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
-					onClick={handlePayment}
-				>
-					Online payment
-				</button>
                 <div className="h-auto overflow-y-auto bg-white border rounded-lg p-2">
                     <PayPalScriptProvider
                         options={{
@@ -129,7 +101,7 @@ const OrderSummary = () => {
                             currency: "USD",
                         }}
                         >
-                        <PayPalCheckout orderDetails={{total, cart}}/>
+                        <PayPalCheckout />
                     </PayPalScriptProvider>
                 </div>
                 

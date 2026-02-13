@@ -1,8 +1,16 @@
+import { useEffect } from "react";
 import axios from "../lib/axios";
+import { useCartStore } from "../stores/useCartStore";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-export default function Checkout({orderDetails}) {
-    const total = orderDetails.total
+export default function Checkout() {
+    const { total, cart, clearCart, removeFromCart } = useCartStore()
+
+    useEffect(() => {
+        // console.log(cart, total)
+
+    })
+
     return (
         <PayPalButtons
             createOrder={ async() => {
@@ -14,15 +22,17 @@ export default function Checkout({orderDetails}) {
             onApprove={ async(data) => {
                 const response = await axios.post("payments/paypal/capture-order-paypal", {
                     orderID: data.orderID,
-                    total: orderDetails.total,
-                    products: orderDetails.cart,
-                    payment_type: "paypal"
+                    total: total,
+                    products: cart,
                 })
 
-                const details = await response.json();
+                const details = await response.data;
                 
                 alert("Payment Successful!");
                 console.log(details);
+
+                removeFromCart(cart)
+                clearCart()
             }}
         />
     );
