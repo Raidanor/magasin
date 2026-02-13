@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../lib/axios";
 import { useCartStore } from "../stores/useCartStore";
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -6,10 +6,7 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 export default function Checkout() {
     const { total, cart, clearCart, removeFromCart } = useCartStore()
 
-    useEffect(() => {
-        // console.log(cart, total)
-
-    })
+    const navigate = useNavigate()
 
     return (
         <PayPalButtons
@@ -25,14 +22,14 @@ export default function Checkout() {
                     total: total,
                     products: cart,
                 })
-
+                console.log(response)
                 const details = await response.data;
                 
                 alert("Payment Successful!");
-                console.log(details);
 
                 removeFromCart(cart)
                 clearCart()
+                navigate("/purchase-success/" + response.data.orderId )
             }}
         />
     );

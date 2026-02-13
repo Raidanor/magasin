@@ -6,29 +6,7 @@ import axios from "../lib/axios";
 import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {
-	const { cart, clearCart, removeFromCart } = useCartStore();
-	const [error, setError] = useState(null);
     const { orderId } = useParams() ?? 0;
-
-	useEffect(() => {
-		const handleCheckoutSuccess = async (sessionId) => {
-			try {
-				await axios.post("/payments/checkout-success", { sessionId });
-				
-			} catch (error) {
-				console.log(error);
-			}
-		}
-        removeFromCart(cart)
-        clearCart()
-        
-		const sessionId = new URLSearchParams(window.location.search).get("session_id");
-		if (sessionId) {
-			handleCheckoutSuccess(sessionId);
-		}
-	}, [clearCart, removeFromCart]);
-
-	if (error) return `Error: ${error}`;
 
 	return (
 		<div className='pt-20 flex items-center justify-center px-4'>
