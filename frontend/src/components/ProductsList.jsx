@@ -22,6 +22,12 @@ const ProductsList = () => {
         await getOneProduct(productId)
     }
     
+    const handleDeleteProduct = (productId) => {
+        const ok = window.confirm("Are you sure you want to delete this product? This cannot be undone");
+        if (ok) {
+            deleteProduct(productId);
+        }
+    }
 
 	return (
 		<motion.div
@@ -113,6 +119,7 @@ const ProductsList = () => {
 									className={`p-2 mx-1 rounded-full ${
 										product.isFeatured ? "bg-yellow-400 text-gray-900" : "bg-gray-600 text-gray-300"
 									} hover:bg-yellow-500 transition-colors duration-200`}
+                                    title="Toggle Featured"
 								>
 									<Star className='h-5 w-5' />
 								</button>
@@ -122,6 +129,7 @@ const ProductsList = () => {
 									className={`p-2 mx-1 rounded-full ${
 										product.isLimited ? "bg-red-400 text-gray-900" : "bg-gray-600 text-gray-300"
 									} hover:bg-red-500 transition-colors duration-200`}
+                                    title="Toggle limited stock"
 								>
 									<BoxesIcon className='h-5 w-5' />
 								</button>
@@ -129,13 +137,15 @@ const ProductsList = () => {
                                 <button
 									onClick={() => openModal(product._id)}
 									className='text-gray-400 hover:text-white'
+                                    title="Edit product info"
 								>
 									<Edit3 className='h-5 w-5 mx-2' />
 								</button>
 
                                 <button
-									onClick={() => deleteProduct(product._id)}
+									onClick={() => handleDeleteProduct(product._id)}
 									className='text-red-400 hover:text-red-300'
+                                    title="Delete Product"
 								>
 									<Trash className='h-5 w-5 mx-2' />
 								</button>

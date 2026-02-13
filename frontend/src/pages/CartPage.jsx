@@ -8,12 +8,13 @@ import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
 import { useEffect } from "react";
 
+
 const CartPage = () => {
 	const { cart, getCartItems } = useCartStore();
 
     useEffect(() => {
         getCartItems()
-    }, [cart])
+    }, [])
 
 	return (
 		<div className='py-8 md:py-16'>

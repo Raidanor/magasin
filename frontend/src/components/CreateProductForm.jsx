@@ -91,7 +91,7 @@ const CreateProductForm = () => {
 
 	return (
 		<motion.div
-			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-xl mx-auto'
+			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 w-full xl:w-3/5 mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8 }}
@@ -184,12 +184,12 @@ const CreateProductForm = () => {
                     </div>
                     <div className="flex">
                         <button type="button" className='mr-auto flex justify-start mt-2 py-2 px-4 border border-transparent rounded-md 
-                        shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                        shadow-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-                        onClick={ addToArray }>Add</button>
+                        onClick={ addToArray }>Add Price & Size</button>
                         
                         <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
-                        shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                        shadow-sm font-medium text-white bg-red-700 hover:bg-red-900 
                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
                         onClick={() => setInfo([])}>Clear</button>
                     </div>
@@ -222,16 +222,26 @@ const CreateProductForm = () => {
 					</select>
 				</div>
 
-				<div className='mt-1 flex items-center'>
+				<div className='mt-1 flex flex-col'>
 					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
 					<label
 						htmlFor='image'
-						className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
+						className='cursor-pointer bg-gray-700 py-2 px-3 mx-auto border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
 					>
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
 					{Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
+                    <div className="flex gap-3 overflow-x-auto p-2 scroll-smooth">
+                        {image.length > 0 && image.map((src, index) => (
+                            <img
+                                key={index}
+                                src={src}
+                                alt={`img-${index}`}
+                                className="h-48 w-auto flex-shrink-0 rounded-lg object-cover"
+                            />
+                        ))}
+                   </div>
 				</div>
 
 				<button

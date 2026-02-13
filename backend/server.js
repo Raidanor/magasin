@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import path from "path"
+import cors from "cors"
 
 
 import authRoutes from "./routes/auth.routes.js"
@@ -19,10 +20,16 @@ dotenv.config()
 
 const app = express()
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json({ limit: "10mb"}))
 app.use(cookieParser())
 
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 5000
 
 const __dirname = path.resolve()
 

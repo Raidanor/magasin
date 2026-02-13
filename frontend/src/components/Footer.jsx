@@ -15,13 +15,13 @@ const Footer = () => {
                 </div>
 
                 {/* Shop */}
-                {/* <div>
+                <div>
                     <h3 className="text-white font-semibold mb-4">Shop</h3>
                     <ul className="space-y-2 text-sm">
                         <li><a href="/products" className="hover:text-white">All Products</a></li>
                         <li><a href="/" className="hover:text-white">Categories</a></li>
                     </ul>
-                </div> */}
+                </div>
 
                 {/* Support */}
                 <div>

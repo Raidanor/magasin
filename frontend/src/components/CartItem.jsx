@@ -49,12 +49,16 @@ const CartItem = ({ item }) => {
 
 					<div className='flex items-center gap-4'>
 						<button
-							className='inline-flex items-center text-sm font-medium text-red-400
-							 hover:text-red-300 hover:underline'
+							className='inline-flex items-center text-sm font-medium text-red-500 border-2 rounded-xl px-2 py-1
+							 hover:text-red-400'
 							onClick={() => removeFromCart(item._id)}
 						>
 							<Trash />
+                            <div className="text-sm font-normal mx-1">
+                                Remove from cart
+                            </div>
 						</button>
+                        
 					</div>
 				</div>
 			</div>

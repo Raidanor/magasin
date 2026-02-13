@@ -22,12 +22,15 @@ const ManageCategories = () => {
 			setNewCategory({ name: "", imagesURL: "", ref: "" });
 
 		} catch (error) {
-			console.log("error creating a product: ", error.message);
+			console.log("error creating a category: ", error.message);
 		}
 	}
 
-    const handleDelete = async (categoryId) => {
-        await deleteCategory(categoryId)
+    const handleDeleteCategory = async (categoryId) => {
+        const ok = window.confirm("Are you sure you want to delete this category? This cannot be undone");
+        if (ok) {
+            await deleteCategory(categoryId)
+        }
     }
 
 	const handleImageChange = (e) => {
@@ -43,10 +46,12 @@ const ManageCategories = () => {
 		}
 	};
 
+    const [showAllCategories, setShowAllCategories] = useState(false)
+
     useEffect(() => {
         getCategories()
         
-    }, [getCategories, categoryCount])
+    }, [getCategories, categoryCount, showAllCategories])
 
     const toggleShowAll = async() => {
         setShowAllCategories(!showAllCategories)
@@ -55,22 +60,19 @@ const ManageCategories = () => {
             await categoryCount(category.ref)
         })
     }
-    
-
-    const [showAllCategories, setShowAllCategories] = useState(false)
 
 	return (
 		<motion.div
-			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 mx-auto'
+			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 w-full xl:w-3/5 mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8 }}
 		>
 
-            <form onSubmit={handleSubmit} className='space-y-4 w-1/2 mx-auto'>
+            <form onSubmit={handleSubmit} className='space-y-4 flex flex-col'>
                 <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create Category</h2>
 				<div>
-					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
+					<label htmlFor='name' className='block font-medium text-gray-300'>
 						Category Name
 					</label>
 					<input
@@ -87,8 +89,8 @@ const ManageCategories = () => {
 				</div>
 
                 <div>
-					<label htmlFor='ref' className='block text-sm font-medium text-gray-300'>
-						Ref Link
+					<label htmlFor='ref' className='block font-medium text-gray-300'>
+						Ref Link   (Replace spaces in name with '-')
 					</label>
 					<input
 						type='text'
@@ -103,16 +105,17 @@ const ManageCategories = () => {
 					/>
 				</div>
 
-				<div className='mt-1 flex items-center'>
+				<div className='mt-1 flex'>
 					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
 					<label
 						htmlFor='image'
-						className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
+						className='cursor-pointer bg-gray-700 py-2 px-3 mx-auto border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
 					>
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
                     { newCategory.imageURL !== "" ? <span className='ml-3 text-sm text-gray-400'>Image Uploaded</span> : ""}
+                    { newCategory.imageURL && <img src={newCategory.imageURL} className="ml-auto h-60 object-center w-1/5 rounded-lg"/>}
 				</div>
 
 				<button
@@ -195,7 +198,7 @@ const ManageCategories = () => {
                                 </td>
                                 <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                                     <button
-                                        onClick={() => handleDelete(category._id)}
+                                        onClick={() => handleDeleteCategory(category._id)}
                                         className='text-red-400 hover:text-red-300'
                                     >
                                         <Trash className='h-5 w-5 mx-2' />

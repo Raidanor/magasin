@@ -19,7 +19,6 @@ export const useCategoryStore = create((set, get) => ({
 			toast.error(error.response.data.error || "Failed to fetch categories");
 		}
 	},
-
     createCategory: async (category) => {
 		set({ loading: true });
 		try {
@@ -34,7 +33,6 @@ export const useCategoryStore = create((set, get) => ({
 			set({ loading: false });
 		}
 	},
-
     deleteCategory: async (categoryId) => {
 		set({ loading: true });
 		try {
@@ -66,6 +64,5 @@ export const useCategoryStore = create((set, get) => ({
 			toast.error(error.response.data.error || "Failed to fetch products");
 		}
     },
-
-
+    
 }))

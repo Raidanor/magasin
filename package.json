@@ -13,16 +13,17 @@
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.13.5",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
     "mailersend": "^2.5.0",
-    "mongoose": "^8.9.6",
-    "stripe": "^17.6.0"
+    "mongoose": "^8.9.6"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
