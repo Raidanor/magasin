@@ -1,8 +1,5 @@
 import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useCartStore } from "../stores/useCartStore";
-import axios from "../lib/axios";
 import Confetti from "react-confetti";
 
 const PurchaseSuccessPage = () => {

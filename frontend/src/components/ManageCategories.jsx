@@ -50,12 +50,11 @@ const ManageCategories = () => {
 
     useEffect(() => {
         getCategories()
-        
-    }, [getCategories, categoryCount, showAllCategories])
+    }, [showAllCategories])
 
     const toggleShowAll = async() => {
         setShowAllCategories(!showAllCategories)
-
+        getCategories()
         categories.map(async(category) => {
             await categoryCount(category.ref)
         })

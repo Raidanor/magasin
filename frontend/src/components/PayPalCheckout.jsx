@@ -22,11 +22,8 @@ export default function Checkout() {
                     total: total,
                     products: cart,
                 })
-                console.log(response)
-                const details = await response.data;
                 
                 alert("Payment Successful!");
-
                 removeFromCart(cart)
                 clearCart()
                 navigate("/purchase-success/" + response.data.orderId )
