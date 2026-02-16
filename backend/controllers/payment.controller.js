@@ -39,7 +39,6 @@ export const payCash = async (req, res) => {
             })),
             payment_type,
             totalAmount: m_total
-            // stripeSessionId: sessionId,
         });
 
         await newOrder.save();
@@ -60,9 +59,6 @@ export const payCash = async (req, res) => {
 export const createOrderPaypal = async(req, res) => {
     try {
         const { total } = req.body
-        console.log(total)
-
-        console.log("createOrderPaypal is running")
         const accessToken = await generateAccessToken();
 
         const order = await axios.post(
@@ -84,7 +80,6 @@ export const createOrderPaypal = async(req, res) => {
                 },
             }
         )
-        console.log(order.data.id)
         res.json({ orderID: order.data.id });
     } catch (err) {
         console.error(err.response?.data || err.message)
@@ -137,7 +132,6 @@ export const captureOrderPaypal = async (req, res) => {
 
 // Generate Access Token for Paypal checkout
 async function generateAccessToken() {
-    console.log("generateAccessToken is running")
 
     const auth = Buffer.from(
         process.env.PAYPAL_CLIENT_ID + ":" + process.env.PAYPAL_SECRET

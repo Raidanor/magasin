@@ -18,8 +18,6 @@ const EditProfileModal = ({user}) => {
                 address: user.address,
                 name: user.name,
                 email: user.email,
-                
-
             })
         }
         

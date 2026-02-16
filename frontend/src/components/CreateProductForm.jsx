@@ -17,7 +17,7 @@ const CreateProductForm = () => {
 		name: "",
 		description: "",
 		info: [],
-		category: "",
+		category: null,
 		images: [],
 	});
     
@@ -82,8 +82,9 @@ const CreateProductForm = () => {
                 return
             }
             setInfo(info => [...info, {price: p, size: s, slash: slash}])
-            setP(null)
+            setP("")
             setS("")
+            setSlash("")
         } catch (error) {
             console.log("error in addToArray", error)
         }
@@ -142,12 +143,10 @@ const CreateProductForm = () => {
 						type='number'
 						id='price'
 						name='price'
-						value={newProduct.price}
+						value={p}
 						onChange={(e) => setP(e.target.value)}
 						step='0.01'
                         placeholder="Price"
-                        
-                        
 						className='mt-1 block w-1/3 bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
@@ -174,6 +173,7 @@ const CreateProductForm = () => {
                         value={slash}
                         placeholder="Slash(Optional)"
                         onChange={(e) => setSlash(e.target.value)}
+                        step='0.01'
                         className='flex ml-2 mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
                         shadow-sm py-2 px-3 text-white focus:outline-none 
                         focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
@@ -213,9 +213,10 @@ const CreateProductForm = () => {
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
 						required
 					>
-						<option value=''>Select a category</option>
+						<option value=''>{newProduct.category ? <>{newProduct.category.name}</> : <>Select a category</>} </option>
 						    {categories?.map((category) => (
 							<option key={category._id} value={JSON.stringify(category)}>
+                                <option key={category._id} value={JSON.stringify(category)}></option>
 								{category.name}
 						    </option>
 						))}
