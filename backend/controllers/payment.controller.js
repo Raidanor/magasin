@@ -44,7 +44,7 @@ export const payCash = async (req, res) => {
 
         await newOrder.save();
         sendEmailToCustomer(newOrder, user)
-        // sendOrderToAdmin(newOrder)
+        sendOrderToAdmin(newOrder)
 
         res.status(200).json({
             success: true,
