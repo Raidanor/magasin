@@ -1,11 +1,12 @@
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js"
 import axios from "axios"
 
 const base = "https://api-m.sandbox.paypal.com"; 
 // Change to https://api-m.paypal.com for production
 
-// import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 export const payCash = async (req, res) => {
 	try {
@@ -42,7 +43,8 @@ export const payCash = async (req, res) => {
         });
 
         await newOrder.save();
-        // sendEmail(newOrder)
+        sendEmailToCustomer(newOrder, user)
+        // sendOrderToAdmin(newOrder)
 
         res.status(200).json({
             success: true,
@@ -150,7 +152,106 @@ async function generateAccessToken() {
 
     return response.data.access_token;
 }
+
 // -------------------------------------------------------------------------------------
+async function sendEmailToCustomer(order, user) {
+    console.log("sending email to customer")
+
+    const mailerSend = new MailerSend({apiKey: process.env.MAILERSEND_API_KEY,});
+
+    const sentFrom = new Sender("jasbeen@the-best-choice.store", "The Best Choice");
+    const recipients = [new Recipient(user.email, user.name)];
+
+    // const bcc = [
+    //     new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
+    // ];
+    let personalization = []
+    let templateId = ""
+    
+    if (order.payment_type == "pickup") {
+        personalization = [{
+            email: user.email,
+            data: {
+                total: order.totalAmount,
+                pickup_address: "101 La Paix Street, Port-Louis"
+            },
+        }];
+        templateId = "neqvygm1rqzg0p7w"
+    } else {
+        personalization = [{
+            email: user.email,
+            data: {
+                address: user.address,
+                total: order.totalAmount
+            },
+        }];
+        templateId = "351ndgwkzjrgzqx8"
+    }
+    
+    let emailParams = new EmailParams()
+    .setFrom(sentFrom)
+    .setTo(recipients)
+    // .setBcc(bcc)
+    .setSubject("Order Confirmation for " + user.name)
+    .setTemplateId(templateId)
+    .setPersonalization(personalization)
+
+    try {
+        const response = await mailerSend.email.send(emailParams)
+        console.log("Email sent:", response);
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
+    
+}
+
+async function sendOrderToAdmin(order, user) {
+    console.log("sending email to admin")
+
+    const mailerSend = new MailerSend({apiKey: process.env.MAILERSEND_API_KEY,});
+    
+    const sentFrom = new Sender("jasbeen@the-best-choice.store", "The Best Choice");
+    const recipients = [new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),];
+    
+    const personalization = [{
+        email: "ismethkhadaroo@gmail.com",
+        data: {
+            name: user.name,
+            address: user.address,
+            phoneNumber: user.phoneNumber,
+
+            id: order._id,
+            total: order.totalAmount,
+            products: order.products,
+            createdAt: new Date(order.createdAt).toLocaleString('en-GB', { 
+                day:'numeric', 
+                month: 'long', 
+                year:'numeric', 
+                hour:"2-digit", 
+                minute: "2-digit", 
+                second:"2-digit", 
+                timeZone: 'Etc/GMT-4', 
+                timeZoneName: 'short'
+            }),
+            payment_type: order.payment_type,
+        },
+    }];
+
+    const emailParams = new EmailParams()
+    .setFrom(sentFrom)
+    .setTo(recipients)
+    .setReplyTo(sentFrom)
+    .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
+    .setTemplateId("neqvygm1ko5g0p7w")
+    .setPersonalization(personalization)
+
+    try {
+        const  response = await mailerSend.email.send(emailParams)
+        console.log("Email sent:", response);
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
+}
 
 // async function createNewCoupon(userId) {
 // 	await Coupon.findOneAndDelete({ userId });
@@ -165,148 +266,4 @@ async function generateAccessToken() {
 // 	await newCoupon.save();
 
 // 	return newCoupon;
-// }
-// async function sendEmail(order) {
-
-//     console.log("sending email")
-
-//     const jasbeen = "jasbeen@the-best-choice.store"
-
-//     const user = await User.findById(order.user._id)
-
-//     const mailerSend = new MailerSend({
-//         apiKey: process.env.MAILERSEND_API_KEY,
-//     });
-      
-//     const sentFrom = new Sender(jasbeen, "Jasbeen");
-    
-//     const recipients = [
-//         new Recipient(user.email, user.name)
-//     ];
-    
-//     // const cc = [
-//     //     new Recipient(jasbeen, "Jasbeen")
-//     // ];
-
-//     const bcc = [
-//         new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
-//     ];
-    
-//     let personalization = {}
-
-//     let emailParams = new EmailParams()
-//     .setFrom(sentFrom)
-//     .setTo(recipients)
-//     .setReplyTo(sentFrom)
-//     // .setCc(cc)
-//     .setBcc(bcc)
-//     .setSubject("Order Confirmation for " + user.name)
-
-//     switch (order.payment_type)
-//     {
-//         case "cash_on_delivery":
-//             personalization = [{
-//                 email: user.email,
-//                 data: {
-//                     address: user.address,
-//                     total: order.totalAmount
-//                 },
-//             }];
-
-//             emailParams
-//             .setTemplateId("351ndgwkzjrgzqx8")
-//             .setPersonalization(personalization)
-
-//         break
-
-//         case "online":
-//             personalization = [{
-//                 email: user.email,
-//                 data: {
-//                     address: user.address,
-//                     total: order.totalAmount
-//                 },
-//             }];
-
-//             emailParams
-//             .setTemplateId("351ndgwkzjrgzqx8")
-//             .setPersonalization(personalization)
-
-//         break
-        
-//         case "pickup":
-//             personalization = [{
-//                 email: user.email,
-//                 data: {
-//                     pickup_address: "101 La Paix Street, Port-Louis",
-//                     total: order.totalAmount
-//                 },
-//             }];
-        
-//             emailParams
-//             .setTemplateId("neqvygm1rqzg0p7w")
-//             .setPersonalization(personalization)
-//         break
-
-//     }
-    
-//     await mailerSend.email
-//     .send(emailParams)
-//     .then((response) => console.log(response))
-//     .catch((error) => console.log(error));
-
-//     sendOrderDetails(order)
-// }
-// async function sendOrderDetails(order) {
-
-//     const jasbeen = "jasbeen@the-best-choice.store"
-//     const user = await User.findById(order.user._id)
-
-//     const mailerSend = new MailerSend({
-//         apiKey: process.env.MAILERSEND_API_KEY,
-//     });
-    
-//     const sentFrom = new Sender(jasbeen, "Jasbeen");
-    
-//     const recipients = [
-//         new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
-//     ];
-    
-//     const personalization = [{
-//         email: "ismethkhadaroo@gmail.com",
-//         data: {
-//             name: user.name,
-//             address: user.address,
-//             phoneNumber: user.phoneNumber,
-
-//             id: order._id,
-//             total: order.totalAmount,
-//             products: order.products,
-//             createdAt: new Date(order.createdAt).toLocaleString('en-GB', { 
-//                 day:'numeric', 
-//                 month: 'long', 
-//                 year:'numeric', 
-//                 hour:"2-digit", 
-//                 minute: "2-digit", 
-//                 second:"2-digit", 
-//                 timeZone: 'Etc/GMT-4', 
-//                 timeZoneName: 'short'
-//             }),
-//             payment_type: order.payment_type,
-
-//         },
-//     }];
-
-//     const emailParams = new EmailParams()
-//     .setFrom(sentFrom)
-//     .setTo(recipients)
-//     .setReplyTo(sentFrom)
-//     .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
-//     .setTemplateId("neqvygm1ko5g0p7w")
-//     .setPersonalization(personalization)
-
-//     await mailerSend.email
-//     .send(emailParams)
-//     .then((response) => console.log(response))
-//     .catch((error) => console.log(error))
 // }
