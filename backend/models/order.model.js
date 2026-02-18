@@ -49,6 +49,7 @@ const orderSchema = new mongoose.Schema(
 		paypalOrderId: {
 			type: String,
 			unique: true,
+            sparse: true
 		},
 	},
 	{ timestamps: true }
