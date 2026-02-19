@@ -1,9 +1,8 @@
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
-import User from "../models/user.model.js"
 import axios from "axios"
 
-const base = "https://api-m.sandbox.paypal.com"; 
+const base = "https://api-m.sandbox.paypal.com";
 // Change to https://api-m.paypal.com for production
 
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
@@ -122,7 +121,6 @@ export const captureOrderPaypal = async (req, res) => {
 
         await newOrder.save();
 
-        // sendEmail(newOrder)
         const captureData = capture.data
         const orderId = newOrder._id
         res.json({captureData, orderId});
@@ -162,9 +160,6 @@ async function sendEmailToCustomer(order, user) {
     const sentFrom = new Sender("jasbeen@the-best-choice.store", "The Best Choice");
     const recipients = [new Recipient(user.email, user.name)];
 
-    // const bcc = [
-    //     new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),
-    // ];
     let personalization = []
     let templateId = ""
     
@@ -191,14 +186,13 @@ async function sendEmailToCustomer(order, user) {
     let emailParams = new EmailParams()
     .setFrom(sentFrom)
     .setTo(recipients)
-    // .setBcc(bcc)
+    .setBcc([new Recipient("jasbeen@the-best-choice.store")])
     .setSubject("Order Confirmation for " + user.name)
     .setTemplateId(templateId)
     .setPersonalization(personalization)
 
     try {
         const response = await mailerSend.email.send(emailParams)
-        console.log("Email sent:", response);
     } catch (error) {
         console.error("Error sending email:", error);
     }
@@ -241,13 +235,13 @@ async function sendOrderToAdmin(order, user) {
     .setFrom(sentFrom)
     .setTo(recipients)
     .setReplyTo(sentFrom)
+    .setBcc([new Recipient("jasbeen@the-best-choice.store")])
     .setSubject("Order Details for " + user.name + ". Date: " + order.createdAt)
     .setTemplateId("neqvygm1ko5g0p7w")
     .setPersonalization(personalization)
 
     try {
-        const  response = await mailerSend.email.send(emailParams)
-        console.log("Email sent:", response);
+        const response = await mailerSend.email.send(emailParams)
     } catch (error) {
         console.error("Error sending email:", error);
     }
