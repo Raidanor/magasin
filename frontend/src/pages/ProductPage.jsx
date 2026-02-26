@@ -8,6 +8,8 @@ import { useProductStore } from '../stores/useProductStore';
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 
+import Select from "react-dropdown-select"
+
 const ProductPage = () => {
     const { oneProduct: product, getOneProduct } = useProductStore();
 
@@ -15,7 +17,7 @@ const ProductPage = () => {
 
     useEffect(() => {
         getOneProduct(productId)
-    }, [productId])
+    }, [])
 
 
     // stuff for the image carousel
@@ -32,14 +34,14 @@ const ProductPage = () => {
     return (
         
         <div className="container mx-auto">
-            <div className='flex relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4 mx-2'>
+            <div className='flex relative flex-col rounded-lg border border-gray-700 shadow-lg mb-4 mx-2'>
             {product.isLimited &&
                 <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
                     Limited Stock
                 </div>
             }
-            <div className="flex md:h-150 h-120 overflow-hidden rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
-                <div className="mx-3 mt-3 flex overflow-hidden rounded-xl">
+            <div className="flex md:h-150 h-120 rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
+                <div className="mx-3 mt-3 flex rounded-xl">
                     {product?.images ? 
                         <img
                         src={product?.images[currentIndex]}
@@ -79,7 +81,7 @@ const ProductPage = () => {
                         {product ? 
                             <>
                                 {product?.info?.map((inf) => (
-                                <ProductTag key={inf.size} info={inf} product={product}/>
+                                    <ProductTag key={inf.size} info={inf} product={product}/>
                                 ))}
                             </>:
                             <></>
@@ -100,6 +102,8 @@ const ProductTag = ({info, product}) => {
     const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
+    const [colorOptions, setColorOptions] = useState(product.colors)
+    const [color, setColor] = useState("")
     let copiedProduct = JSON.parse(JSON.stringify(product));
     
     const handleAddToCart = () => {
@@ -110,7 +114,7 @@ const ProductTag = ({info, product}) => {
         else {
 			// add to cart
             copiedProduct.info = info
-            
+            copiedProduct.colors = color
             addToCart(copiedProduct)
 		}
 	}
@@ -126,12 +130,27 @@ const ProductTag = ({info, product}) => {
                 <ShoppingCart size={20} className='mr-2' />
                 Add to cart
             </button>
+            <div>
+                {colorOptions?.length > 0 &&
+                    <div className="">
+                        <Select
+                            className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
+                            options={colorOptions.map(color => ({ label: color, value: color }))}
+                            labelField="label"
+                            valueField="value"
+                            onChange={(values) => setColor(values[0]?.value)}
+                            placeholder="Select color"
+                            closeOnSelect={true}
+                            searchable={false}
+                        />
+                    </div>
+                }
+            </div>
         </div>
     )
 }
 
 function RenderPrice({info}){
-
     return(
         <div>
             <div className="flex">

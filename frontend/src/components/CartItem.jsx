@@ -4,9 +4,6 @@ import { useEffect } from "react";
 
 const CartItem = ({ item }) => {
 	const { removeFromCart, updateQuantity } = useCartStore();
-    useEffect(() => {
-        console.log(item)
-    })
 
 	return (
 		<div className='rounded-lg border p-4 shadow-sm border-gray-700 bg-gray-800 '>
@@ -46,9 +43,9 @@ const CartItem = ({ item }) => {
 					<p className='text-2xl font-medium text-white hover:text-emerald-400 hover:underline'>
 						{item.name}
 					</p>
-                    <p className='text-base text-white hover:text-emerald-400 hover:underline'>
-						{item.info ? item.info.size : ""}
-                        {item.colors ? item.colors : ""}
+                    <p className='flex hover:text-emerald-400 hover:underline text-sm text-gray-300'>
+						<div className="mr-2">Size: {item.info ? item.info.size : ""}</div>
+                        <div>Color: {item.colors ? item.colors : ""}</div>
 					</p>
 					<p className='text-sm text-gray-400'>{item.description}</p>
 
