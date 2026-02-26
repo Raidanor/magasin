@@ -36,14 +36,16 @@ export const payCash = async (req, res) => {
                 quantity: product.quantity,
                 info: product.info,
                 images: product.images,
+                colors: product.colors
             })),
             payment_type,
             totalAmount: m_total
         });
 
         await newOrder.save();
-        sendEmailToCustomer(newOrder, user)
-        sendOrderToAdmin(newOrder, user)
+        console.log(newOrder)
+        // sendEmailToCustomer(newOrder, user)
+        // sendOrderToAdmin(newOrder, user)
 
         res.status(200).json({
             success: true,
@@ -113,6 +115,7 @@ export const captureOrderPaypal = async (req, res) => {
                 quantity: product.quantity,
                 info: product.info,
                 images: product.images,
+                colors: product.colors
             })),
             payment_type: "paypal",
             totalAmount: total,
@@ -202,7 +205,7 @@ async function sendEmailToCustomer(order, user) {
 async function sendOrderToAdmin(order, user) {
     console.log("sending email to admin")
 
-    const mailerSend = new MailerSend({apiKey: process.env.MAILERSEND_API_KEY,});
+    const mailerSend = new MailerSend({apiKey: process.env.MAILERSEND_API_KEY});
     
     const sentFrom = new Sender("jasbeen@the-best-choice.store", "The Best Choice");
     const recipients = [new Recipient("ismethkhadaroo@gmail.com", "Ismeth"),];

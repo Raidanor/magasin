@@ -25,7 +25,7 @@ export const addToCart = async (req, res) => {
 		const { product } = req.body;
 		const user = req.user;
 
-		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size);
+		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size && item.colors===product.colors);
         
 		if (existingItem) {
 			existingItem.quantity += 1;

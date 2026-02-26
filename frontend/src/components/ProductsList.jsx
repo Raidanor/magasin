@@ -90,13 +90,20 @@ const ProductsList = () => {
 									</div>
 								</div>
 							</td>
-							<td className='px-6 py-4 whitespace-nowrap'>
-                                <div className="max-h-30 overflow-y-auto">
+							<td className='flex px-6 py-4 whitespace-nowrap '>
+                                <div className="max-h-30 overflow-y-auto ">
                                     {product.info.map(p => (
-                                        <div key={p.size} className='text-sm text-gray-300 my-0.5 '>
+                                        <div key={p.size} className='text-sm text-gray-300 my-0.5 px-1'>
                                             Rs.{p.price}
                                             &emsp;
                                             {p.size ? p.size : ""}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="text-sm text-gray-300 my-0.5 border-l px-1">
+                                    {product.colors.map(c => (
+                                        <div key={c}>
+                                            {c}
                                         </div>
                                     ))}
                                 </div>
@@ -335,7 +342,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
                         </div>
-                        {info.length > 0 && 
+                        {info?.length > 0 && 
                             <ul className="p-2 my-2 border rounded-lg">
                                 {info?.map(inf => (
                                     <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
@@ -375,7 +382,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                                 Clear Colors
                             </button>
                         </div>
-                        {newProduct.colors.length > 0 && 
+                        {newProduct?.colors?.length > 0 && 
                             <ul className="p-2 my-2 border rounded-lg">
                                 {newProduct?.colors?.map(color => (
                                     <li key={color}>{color}</li>
