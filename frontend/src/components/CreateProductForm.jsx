@@ -17,6 +17,7 @@ const CreateProductForm = () => {
 		name: "",
 		description: "",
 		info: [],
+        colors: [],
 		category: null,
 		images: [],
 	});
@@ -25,6 +26,8 @@ const CreateProductForm = () => {
     const [slash, setSlash] = useState(null)
     const [p, setP] = useState(null)
     const [info, setInfo] = useState([])
+
+    const [newColor, setNewColor] = useState("")
 
     const [image, setImage] = useState("")
 
@@ -39,12 +42,13 @@ const CreateProductForm = () => {
         }
 		try {
 			await createProduct(newProduct);
-            // console.log(newProduct)
-			setNewProduct({ name: "", description: "", info: [], category: "", images: [] });
+            console.log(newProduct)
+			setNewProduct({ name: "", description: "", info: [], category: "", images: [], colors: [] });
             setInfo([])
             setS("")
             setP(null)
             setImage([])
+
             toast.success("Product created")
 		} catch (error) {
 			console.log("error creating a product: ", error.message);
@@ -90,6 +94,13 @@ const CreateProductForm = () => {
         }
     }
 
+    const addColor = (newColor) => {
+        setNewProduct(prev => ({
+            ...prev,
+            colors: [...prev.colors, newColor]
+        }))
+        setNewColor("")
+    }
 	return (
 		<motion.div
 			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 w-full xl:w-3/5 mx-auto'
@@ -133,7 +144,7 @@ const CreateProductForm = () => {
 						required
 					/>
 				</div>
-
+                {/* adding Price & Size */}
 				<div>
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
 						Add Price & Size
@@ -191,14 +202,53 @@ const CreateProductForm = () => {
                         <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
                         shadow-sm font-medium text-white bg-red-700 hover:bg-red-900 
                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
-                        onClick={() => setInfo([])}>Clear</button>
+                        onClick={() => setInfo([])}>Clear Prices & Sizes</button>
                     </div>
+                    <ul>
+                        {info.map(inf => (
+                            <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
+                        ))}
+                    </ul>
 				</div>
-                <ul>
-                    {info.map(inf => (
-                        <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
-                    ))}
-                </ul>
+
+                {/* Adding Color  */}
+                <div>
+                    <input
+                        id='colors'
+                        name='colors'
+                        type='text'
+                        value={newColor}
+                        placeholder="Colors(Optional)"
+                        onChange={(e) => setNewColor(e.target.value)}
+                        className='flex mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
+                        shadow-sm py-2 px-3 text-white focus:outline-none 
+                        focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+                        >
+                    </input>
+                    <div className="flex">
+                        <button type="button" className='mr-auto flex justify-start mt-2 py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                        onClick={ () => addColor(newColor) }>
+                            Add Color
+                        </button>
+                        <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
+                        onClick={() => setNewProduct(prev => ({
+                            ...prev,
+                            colors: []
+                        }))}>
+                            Clear Colors
+                        </button>
+                    </div>
+                    <ul>
+                        {newProduct.colors.map(color => (
+                            <li key={color}>{color}</li>
+                        ))}
+                    </ul>
+                </div>
+
 				<div>
 					<label htmlFor='category' className='block text-sm font-medium text-gray-300'>
 						Category
@@ -213,10 +263,9 @@ const CreateProductForm = () => {
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
 						required
 					>
-						<option value=''>{newProduct.category ? <>{newProduct.category.name}</> : <>Select a category</>} </option>
+						<option value=''>{newProduct.category ? <>{newProduct.category.name}</> : <>Select a category</>}</option>
 						    {categories?.map((category) => (
 							<option key={category._id} value={JSON.stringify(category)}>
-                                <option key={category._id} value={JSON.stringify(category)}></option>
 								{category.name}
 						    </option>
 						))}

@@ -17,13 +17,19 @@ const productSchema = new mongoose.Schema({
         },
         size:{
             type: String,
-            default: ""
+            default: "",
+            required: false
         },
         slash: {
             type: Number,
             min: 0,
             required: false
         }
+    }],
+    colors: [{
+        type: String,
+        required: false,
+        default: "",
     }],
     images:[{
         type: String,

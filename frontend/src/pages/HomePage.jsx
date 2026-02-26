@@ -13,9 +13,9 @@ const HomePage = () => {
     const { categories, getCategories } = useCategoryStore()
 
 	useEffect(() => {
-		fetchFeaturedProducts();
+		fetchFeaturedProducts();  
         getCategories()
-	}, [fetchFeaturedProducts, getCategories]);
+	}, []);
 
 	return (
 		<div className='relative min-h-screen text-white overflow-hidden'>

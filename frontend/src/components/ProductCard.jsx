@@ -25,6 +25,25 @@ const ProductCard = ({ product }) => {
     }, [s])
 
     const selected = product.info
+    
+    const handleAddToCart = () => {
+		if (!user) {
+			toast.error("Please login to add products to cart", { id: "login" });
+			return;
+		}
+        else {
+			// add to cart
+            if (selected?.length > 1 && s === "")
+            {
+                toast.error("Select a size first")
+            }
+            else {
+                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+                addToCart(newProduct)
+                console.log(newProduct)
+            }
+		}
+	}
 
     useEffect(() => {
         if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
@@ -39,53 +58,31 @@ const ProductCard = ({ product }) => {
         setCurrentIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
     }
 
-	const handleAddToCart = () => {
-		if (!user) {
-			toast.error("Please login to add products to cart", { id: "login" });
-			return;
-		}
-        else {
-			// add to cart
-            if (selected?.length > 1 && s === "")
-            {
-                toast.error("Select a size first")
-            }
-            else {
-                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-                addToCart(newProduct)
-            }
-		}
-	}
-
 	return (
         
-        <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4'>
-            {/* <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-                <img className='object-cover w-full' src={product.images[0]} alt='product image' />
-            </div> */}
-
-            <div className="flex w-full relative flex-col overflow-hidden rounded-lg  border-gray-700 shadow-lg mb-4">
-                <div className="relative mx-3 mt-3 flex md:h-100 h-80 overflow-hidden rounded-xl">
+        <div className='flex w-full relative flex-col rounded-lg border border-gray-700 shadow-lg mb-4'>
+            <div className="flex w-full relative flex-col rounded-lg  border-gray-700 shadow-lg mb-4">
+                <div className="relative mx-3 mt-3 flex md:h-100 h-80 rounded-xl">
                     <img
-                    src={product?.images[currentIndex]}
-                    className="object-cover mx-auto rounded-xl"
+                        src={product?.images[currentIndex]}
+                        className="object-cover mx-auto rounded-xl"
                     />
                 </div>
                 {product.images.length > 1 &&
-                <>
-                    <button
-                        onClick={prevSlide}
-                        className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                    >
-                        <ChevronLeft size={24} />
-                    </button>
-                    <button
-                        onClick={nextSlide}
-                        className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                    >
-                        <ChevronRight size={24} />
-                    </button>
-                </>
+                    <>
+                        <button
+                            onClick={prevSlide}
+                            className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        >
+                            <ChevronLeft size={24} />
+                        </button>
+                        <button
+                            onClick={nextSlide}
+                            className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        >
+                            <ChevronRight size={24} />
+                        </button>
+                    </>
                 }
             </div>
   
@@ -120,13 +117,14 @@ const ProductCard = ({ product }) => {
                     {selected?.length > 1 &&
                         <div className="">
                             <Select
-                                className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 z-100 w-1/2 text-black"
+                                className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
                                 options={selected}
                                 labelField="size"
-                                valueField="price"
+                                valueField="size"
                                 onChange={(values) => setS(values)}
                                 placeholder="Select size"
                                 closeOnSelect={true}
+                                searchable={false}
                             />
                         </div>
                     }
