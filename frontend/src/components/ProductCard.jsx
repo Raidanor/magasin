@@ -13,6 +13,9 @@ const ProductCard = ({ product }) => {
     const [newProduct, setNewProduct] = useState(product)
 
     const [s, setS] = useState("")
+    const [color, setColor] = useState("")
+    const [colorOptions, setColorOptions] = useState(product.colors)
+    const selected = product.info
 
     useEffect(() => {
         let newInfo = {}
@@ -24,7 +27,32 @@ const ProductCard = ({ product }) => {
         });
     }, [s])
 
-    const selected = product.info
+    useEffect(() => {
+        setNewProduct({...newProduct, colors: color})
+    }, [color])
+
+    const handleAddToCart = () => {
+		if (!user) {
+			toast.error("Please login to add products to cart", { id: "login" });
+			return;
+		}
+        else {
+			// add to cart
+            if (selected?.length > 1 && s === "")
+            {
+                toast.error("Select a size first")
+            }
+            else if (colorOptions?.length > 1 && color === "")
+            {
+                toast.error("Select a color")
+            }
+            else {
+                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+                console.log(newProduct)
+                addToCart(newProduct)
+            }
+		}
+	}
 
     useEffect(() => {
         if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
@@ -39,60 +67,36 @@ const ProductCard = ({ product }) => {
         setCurrentIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
     }
 
-	const handleAddToCart = () => {
-		if (!user) {
-			toast.error("Please login to add products to cart", { id: "login" });
-			return;
-		}
-        else {
-			// add to cart
-            if (selected?.length > 1 && s === "")
-            {
-                toast.error("Select a size first")
-            }
-            else {
-                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-                addToCart(newProduct)
-            }
-		}
-	}
-
 	return (
-        
-        <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg mb-4'>
-            {/* <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-                <img className='object-cover w-full' src={product.images[0]} alt='product image' />
-            </div> */}
-
-            <div className="flex w-full relative flex-col overflow-hidden rounded-lg  border-gray-700 shadow-lg mb-4">
-                <div className="relative mx-3 mt-3 flex md:h-100 h-80 overflow-hidden rounded-xl">
+        <div className='flex w-full relative flex-col rounded-lg border border-gray-700 shadow-lg mb-4'>
+            <div className="flex w-full relative flex-col rounded-lg  border-gray-700 shadow-lg mb-4">
+                <div className="relative mx-3 mt-3 flex md:h-100 h-80 rounded-xl">
                     <img
-                    src={product?.images[currentIndex]}
-                    className="object-cover mx-auto rounded-xl"
+                        src={product?.images[currentIndex]}
+                        className="object-cover mx-auto rounded-xl"
                     />
                 </div>
                 {product.images.length > 1 &&
-                <>
-                    <button
-                        onClick={prevSlide}
-                        className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                    >
-                        <ChevronLeft size={24} />
-                    </button>
-                    <button
-                        onClick={nextSlide}
-                        className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
-                    >
-                        <ChevronRight size={24} />
-                    </button>
-                </>
+                    <>
+                        <button
+                            onClick={prevSlide}
+                            className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        >
+                            <ChevronLeft size={24} />
+                        </button>
+                        <button
+                            onClick={nextSlide}
+                            className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-700"
+                        >
+                            <ChevronRight size={24} />
+                        </button>
+                    </>
                 }
             </div>
-  
 
-            <div className='mt-4 px-5 pb-5 z-0'>
+            <div className='mt-4 px-5 pb-5 z-1'>
                 {product.isLimited &&
-                    <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+                    <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px] z-0">
                         Limited Stock
                     </div>
                 }
@@ -100,7 +104,6 @@ const ProductCard = ({ product }) => {
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                     <div className='mt-2 mb-5 flex items-center justify-between'>
                         <p>
-                            {/* <span className='text-3xl font-bold text-emerald-400'>Rs.{selected?.length > 1 ? newProduct?.info?.price : selected[0]?.price}</span> */}
                             <span className='text-3xl font-bold text-emerald-400'><RenderPrice selected={selected} product={newProduct} /></span>
                         </p>
                     </div>
@@ -116,20 +119,41 @@ const ProductCard = ({ product }) => {
                             Add to cart
                         </button>
                     </div>
-
-                    {selected?.length > 1 &&
-                        <div className="">
-                            <Select
-                                className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 z-100 w-1/2 text-black"
-                                options={selected}
-                                labelField="size"
-                                valueField="price"
-                                onChange={(values) => setS(values)}
-                                placeholder="Select size"
-                                closeOnSelect={true}
-                            />
+                    <div className="flex flex-col">
+                        <div>
+                            {selected?.length > 1 &&
+                                <div className="">
+                                    <Select
+                                        className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
+                                        options={selected}
+                                        labelField="size"
+                                        valueField="size"
+                                        onChange={(values) => setS(values)}
+                                        placeholder="Select size"
+                                        closeOnSelect={true}
+                                        searchable={false}
+                                    />
+                                </div>
+                            }
                         </div>
-                    }
+                        <div>
+                            {colorOptions?.length > 0 &&
+                                <div className="">
+                                    <Select
+                                        className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
+                                        options={colorOptions.map(color => ({ label: color, value: color }))}
+                                        labelField="label"
+                                        valueField="value"
+                                        onChange={(values) => setColor(values[0]?.value)}
+                                        placeholder="Select color"
+                                        closeOnSelect={true}
+                                        searchable={false}
+                                    />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
                 </div>
                 <div className='mt-5 mb-2 font-medium flex items-center justify-between'>
                     <p>
@@ -152,11 +176,9 @@ function RenderPrice({selected, product}){
     else{
         price = selected[0]?.price
     }
-    // console.log(product.info)
 
     return(
         <>
-            {/* Rs.{selected?.length > 1 ? product?.info?.price : selected[0]?.price} */}
             {product.info.slash ?
             <><s>Rs.{product.info.slash}</s> &nbsp;Rs.{price}</>
             : <>Rs.{price}</>}

@@ -1,6 +1,5 @@
 import Product from "../models/product.model.js"
 import Order from "../models/order.model.js"
-import User from "../models/user.model.js"
 
 export const getCartProducts = async (req, res) => {
     try {
@@ -25,7 +24,7 @@ export const addToCart = async (req, res) => {
 		const { product } = req.body;
 		const user = req.user;
 
-		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size);
+		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size && item.colors===product.colors);
         
 		if (existingItem) {
 			existingItem.quantity += 1;
@@ -98,10 +97,8 @@ export const getPastOrders = async(req, res) => {
 
 export const clearCart = async(req, res) => {
     try {
-        // const user = await User.findByIdAndUpdate(req.user._id, { $push: { cartItems: [] } }, {new:true})
         let user = req.user
         user.cartItems = []
-        console.log(user)
         await user.save()
 
         res.json(user)

@@ -77,13 +77,13 @@ const OrderSummary = () => {
 				>
 					Buy Cash
 				</motion.button>
-                <div className="max-h-150 overflow-y-auto bg-gray-200 rounded-lg p-2">
+                <div className="bg-gray-200 rounded-lg p-2">
                     <PayPalScriptProvider
                         options={{
                             "client-id": "AYWwTxv4NPnzJ5qVxk2sRXbSZCVhghRH5zobQOV4lhNqUUfKgd6CxkVje3gVGOJ1jGnV-CBHVVsUioDI",
                             currency: "USD",
                         }}
-                        >
+                    >
                         <PayPalCheckout />
                     </PayPalScriptProvider>
                 </div>

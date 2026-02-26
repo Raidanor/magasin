@@ -49,7 +49,7 @@ const ProductsList = () => {
 							scope='col'
 							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
 						>
-							Price
+							Price & Size & Color
 						</th>
 						<th
 							scope='col'
@@ -90,29 +90,27 @@ const ProductsList = () => {
 									</div>
 								</div>
 							</td>
-							<td className='px-6 py-4 whitespace-nowrap'>
-								{product.info.map(p => (
-                                    <div key={p.size} className='text-sm text-gray-300 my-0.5'>
-                                        Rs.{p.price}
-                                        &emsp;
-                                        {p.size ? p.size : ""}
-                                    </div>
-                                ))}
+							<td className='flex px-6 py-4 whitespace-nowrap '>
+                                <div className="max-h-30 overflow-y-auto ">
+                                    {product.info.map(p => (
+                                        <div key={p.size} className='text-sm text-gray-300 my-0.5 px-1'>
+                                            Rs.{p.price}
+                                            &emsp;
+                                            {p.size ? p.size : ""}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="text-sm text-gray-300 my-0.5 border-l px-1">
+                                    {product.colors.map(c => (
+                                        <div key={c}>
+                                            {c}
+                                        </div>
+                                    ))}
+                                </div>
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<div className='text-sm text-gray-300'>{product.category}</div>
 							</td>
-							{/* <td className='px-6 py-4 whitespace-nowrap'>
-								<button
-									onClick={() => toggleFeaturedProduct(product._id)}
-									className={`p-1 rounded-full ${
-										product.isFeatured ? "bg-yellow-400 text-gray-900" : "bg-gray-600 text-gray-300"
-									} hover:bg-yellow-500 transition-colors duration-200`}
-								>
-									<Star className='h-5 w-5' />
-								</button>
-							</td> */}
-
 							<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                                 <button
 									onClick={() => toggleFeaturedProduct(product._id)}
@@ -177,13 +175,13 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
     const { editProduct, loading } = useProductStore();
 
     const [newProduct, setNewProduct] = useState({});
-    
 
-   
     const [s, setS] = useState('')
     const [slash, setSlash] = useState(null)
     const [p, setP] = useState(0)
     const [info, setInfo] = useState(oneProduct.info)
+
+    const [newColor, setNewColor] = useState("")
 
     const [image, setImage] = useState("")
 
@@ -202,11 +200,11 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
 
     useEffect(() => {
         setNewProduct(oneProduct)
-    }, [setNewProduct, oneProduct])
+    }, [oneProduct])
 
     useEffect(() => {
         setInfo(oneProduct.info)
-    }, [setInfo, oneProduct.info])
+    }, [oneProduct.info])
 
     useEffect(() => {
         setNewProduct({...newProduct,  info: info })
@@ -221,18 +219,27 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
             }
             
             setInfo(info => [...info, {price: p, size: s, slash: slash}])
-            setP(null)
+            setP("")
             setS("")
+            setSlash("")
         } catch (error) {
             console.log("error in addToArray", error)
         }
+    }
+
+    const addColor = (newColor) => {
+        setNewProduct(prev => ({
+            ...prev,
+            colors: [...prev.colors, newColor]
+        }))
+        setNewColor("")
     }
     return(
         <div className="fixed inset-0 flex justify-center items-center transition-colors 
            bg-black/60"
             onClick={onClose}
         >
-            <div className={`w-1/2 py-10 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400
+            <div className={`w-3/4 py-4 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400 max-h-5/6 overflow-y-auto
                 ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
             `}
             onClick={e => e.stopPropagation()}>
@@ -277,7 +284,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             required
                         />
                     </div>
-
+                    {/* adding Price & Size */}
                     <div>
                         <label htmlFor='price' className='block text-sm font-medium text-gray-300'>
                             Add Price & Size
@@ -335,14 +342,54 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
                         </div>
-                        
+                        {info?.length > 0 && 
+                            <ul className="p-2 my-2 border rounded-lg">
+                                {info?.map(inf => (
+                                    <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
+                                ))}
+                            </ul>
+                        }
                     </div>
                     
-                    <ul className="p-2">
-                        {info?.map(inf => (
-                            <li key={inf.size}>price: {inf.price} size: {inf.size} {inf?.slash ? <>slash: {inf?.slash}</> : <></>}</li>
-                        ))}
-                    </ul>
+                    {/* Adding Color  */}
+                    <div>
+                        <input
+                            id='colors'
+                            name='colors'
+                            type='text'
+                            value={newColor}
+                            placeholder="Colors(Optional)"
+                            onChange={(e) => setNewColor(e.target.value)}
+                            className='flex mt-1 w-1/3 bg-gray-700 border border-gray-600 rounded-md
+                            shadow-sm py-2 px-3 text-white focus:outline-none 
+                            focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
+                            >
+                        </input>
+                        <div className="flex">
+                            <button type="button" className='mr-auto flex justify-start mt-2 py-2 px-4 border border-transparent rounded-md 
+                            shadow-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                            onClick={ () => addColor(newColor) }>
+                                Add Color
+                            </button>
+                            <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                            shadow-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
+                            onClick={() => setNewProduct(prev => ({
+                                ...prev,
+                                colors: []
+                            }))}>
+                                Clear Colors
+                            </button>
+                        </div>
+                        {newProduct?.colors?.length > 0 && 
+                            <ul className="p-2 my-2 border rounded-lg">
+                                {newProduct?.colors?.map(color => (
+                                    <li key={color}>{color}</li>
+                                ))}
+                            </ul>
+                        }   
+                    </div>
                         
                     <div>
                         <label htmlFor='category' className='block text-sm font-medium text-gray-300'>

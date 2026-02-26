@@ -27,7 +27,7 @@ const CategoryPage = () => {
 
 		fetchProductsByCategory(category.ref);
         
-	}, [fetchProductsByCategory, getCategories]);
+	}, []);
 
 	return (
 		<div className='min-h-screen'>
