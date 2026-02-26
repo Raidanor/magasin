@@ -27,6 +27,10 @@ const ProductCard = ({ product }) => {
         });
     }, [s])
 
+    useEffect(() => {
+        setNewProduct({...newProduct, colors: color})
+    }, [color])
+
     const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Please login to add products to cart", { id: "login" });
@@ -44,8 +48,8 @@ const ProductCard = ({ product }) => {
             }
             else {
                 if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-                addToCart(newProduct)
                 console.log(newProduct)
+                addToCart(newProduct)
             }
 		}
 	}
