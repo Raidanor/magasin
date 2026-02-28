@@ -19,11 +19,11 @@ const CartPage = () => {
 		<div className='py-2 md:py-4'>
 			<div className='mx-auto max-w-screen-xl px-4 2xl:px-0'>
 				<div className='mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8'>
-					<motion.div
+					<div
 						className='mx-auto w-full flex-none lg:max-w-xl xl:max-w-3xl'
 						initial={{ opacity: 0, x: -20 }}
 						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.5, delay: 0.2 }}
+						transition={{ duration: 0.2, delay: 0.2 }}
 					>
 						{cart.length === 0 ? (
 							<EmptyCartUI />
@@ -35,26 +35,23 @@ const CartPage = () => {
 							</div>
 						)}
 						
-					</motion.div>
+					</div>
 
 					{cart.length > 0 && (
-						<div
-							className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'
-						>
-							<OrderSummary />
-							
+						<div className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'>
+							<OrderSummary />	
 						</div>
 					)}
                     
 				</div>
-                <motion.div
-							className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'
-							initial={{ opacity: 0, x: 20 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{ duration: 0.5, delay: 0.4 }}
-					>
-                        {cart.length > 0 && <PeopleAlsoBought />}
-                    </motion.div>
+                <div
+                    className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: 0.2 }}
+                >
+                    {cart.length > 0 && <PeopleAlsoBought />}
+                </div>
 			</div>
 		</div>
 	);
@@ -62,7 +59,7 @@ const CartPage = () => {
 export default CartPage;
 
 const EmptyCartUI = () => (
-	<motion.div
+	<div
 		className='flex flex-col items-center justify-center space-y-4 py-16'
 		initial={{ opacity: 0, y: 20 }}
 		animate={{ opacity: 1, y: 0 }}
@@ -77,5 +74,5 @@ const EmptyCartUI = () => (
 		>
 			Start Shopping
 		</Link>
-	</motion.div>
+	</div>
 );
