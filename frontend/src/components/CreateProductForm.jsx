@@ -121,6 +121,7 @@ const CreateProductForm = () => {
 			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
 
             <form onSubmit={handleSubmit} className='space-y-4'>
+                {/* Adding name */}
 				<div>
 					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
 						Product Name
@@ -137,7 +138,7 @@ const CreateProductForm = () => {
 						required={true}
 					/>
 				</div>
-
+                {/* Adding description */}
 				<div>
 					<label htmlFor='description' className='block text-sm font-medium text-gray-300'>
 						Description
@@ -247,18 +248,18 @@ const CreateProductForm = () => {
                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" 
                         onClick={() => setNewProduct(prev => ({
                             ...prev,
-                            colors: []
+                            colors: null
                         }))}>
                             Clear Colors
                         </button>
                     </div>
                     <ul>
-                        {newProduct.colors.map(color => (
+                        {newProduct?.colors?.map(color => (
                             <li key={color}>{color}</li>
                         ))}
                     </ul>
                 </div>
-
+                {/* Adding Category */}
 				<div>
 					<label htmlFor='category' className='block text-sm font-medium text-gray-300'>
 						Category
