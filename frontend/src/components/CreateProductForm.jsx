@@ -40,7 +40,7 @@ const CreateProductForm = () => {
             toast.error("Price is needed")
             return
         }
-        if (newProduct.images.length = 0){
+        if (newProduct.images.length == 0){
             toast.error("Atleast 1 image must be added")
             return
         }

@@ -21,16 +21,16 @@ export const getCartProducts = async (req, res) => {
 
 export const addToCart = async (req, res) => {
 	try {
+        const user = req.user;
 		const { product } = req.body;
-		const user = req.user;
+        if (Array.isArray(product.info)) product.info = product.info[0]
 
 		const existingItem = user.cartItems.find((item) => item?.id === product._id && item.info.size===product.info.size && item.colors===product.colors);
         
-		if (existingItem) {
+		if (existingItem)
 			existingItem.quantity += 1;
-		} else {
+		else
 			user.cartItems.push(product);
-		}
 
 		await user.save();
 		res.json(user.cartItems);

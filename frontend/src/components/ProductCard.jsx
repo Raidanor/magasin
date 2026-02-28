@@ -38,30 +38,32 @@ const ProductCard = ({ product }) => {
 		}
         else {
 			// add to cart
-            if (selected?.length > 1 && s === "")
-            {
+            if (selected?.length > 1 && s === ""){
                 toast.error("Select a size first")
+                return
             }
-            else if (colorOptions?.length > 1 && color === "")
-            {
+            if (colorOptions?.length > 1 && color === ""){
                 toast.error("Select a color")
+                return
             }
-            else {
-                if (Array.isArray(newProduct.info))
-                    setNewProduct({...newProduct,  info: newProduct.info[0]})
-                if (Array.isArray(newProduct.colors.length) && newProduct.colors.length == 0){
-                    setNewProduct({...newProduct,  colors: ""})
-                    console.log("testt")
-                }
-                console.log(newProduct)
-                addToCart(newProduct)
+            if (Array.isArray(newProduct.colors) && newProduct.colors.length == 0){
+                setNewProduct({...newProduct,  colors: ""})
+                console.log("test1")
             }
+
+            console.log(newProduct)
+            addToCart(newProduct)
 		}
 	}
 
-    // useEffect(() => {
-    //     if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-    // })
+    useEffect(() => {
+        if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+
+        if (Array.isArray(newProduct.colors) && newProduct.colors.length == 0){
+            setNewProduct({...newProduct,  colors: ""})
+            console.log("test2")
+        }
+    }, [])
 
     // stuff for the image carousel
     const [currentIndex, setCurrentIndex] = useState(0);
