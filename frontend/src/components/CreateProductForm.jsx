@@ -17,7 +17,7 @@ const CreateProductForm = () => {
 		name: "",
 		description: "",
 		info: [],
-        colors: [],
+        colors: null,
 		category: null,
 		images: [],
 	});
