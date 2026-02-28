@@ -58,7 +58,7 @@ export const createProduct = async (req, res) => {
             arr.push(cloudinaryResponse.secure_url)
         });
 
-        // delay for code execution
+        // delay for image upload code execution
         await waitforme(5000)
         const product = await Product.create({
             name,

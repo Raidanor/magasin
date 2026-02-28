@@ -40,6 +40,16 @@ const CreateProductForm = () => {
             toast.error("Price is needed")
             return
         }
+        if (newProduct.images.length = 0){
+            toast.error("Atleast 1 image must be added")
+            return
+        }
+        if ( !newProduct.name || !newProduct.description || !newProduct.category){
+            toast.error("Missing information")
+            return
+        }
+
+
 		try {
 			await createProduct(newProduct);
             console.log(newProduct)
@@ -124,7 +134,7 @@ const CreateProductForm = () => {
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
 						 px-3 text-white focus:outline-none focus:ring-2
 						focus:ring-emerald-500 focus:border-emerald-500'
-						required
+						required={true}
 					/>
 				</div>
 
@@ -272,6 +282,7 @@ const CreateProductForm = () => {
 					</select>
 				</div>
 
+                {/* Adding images */}
 				<div className='mt-1 flex flex-col'>
 					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
 					<label

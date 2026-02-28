@@ -47,16 +47,21 @@ const ProductCard = ({ product }) => {
                 toast.error("Select a color")
             }
             else {
-                if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+                if (Array.isArray(newProduct.info))
+                    setNewProduct({...newProduct,  info: newProduct.info[0]})
+                if (Array.isArray(newProduct.colors.length) && newProduct.colors.length == 0){
+                    setNewProduct({...newProduct,  colors: ""})
+                    console.log("testt")
+                }
                 console.log(newProduct)
                 addToCart(newProduct)
             }
 		}
 	}
 
-    useEffect(() => {
-        if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-    })
+    // useEffect(() => {
+    //     if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
+    // })
 
     // stuff for the image carousel
     const [currentIndex, setCurrentIndex] = useState(0);

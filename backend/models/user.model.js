@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
             },
             colors: {
                 type: String,
-                required: false
+                required: false,
             }
         }
     ],
