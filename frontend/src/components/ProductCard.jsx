@@ -46,24 +46,19 @@ const ProductCard = ({ product }) => {
                 toast.error("Select a color")
                 return
             }
-            if (Array.isArray(newProduct.colors) && newProduct.colors.length == 0){
-                setNewProduct({...newProduct,  colors: ""})
-                console.log("test1")
-            }
 
-            console.log(newProduct)
-            addToCart(newProduct)
+            // temp variable cuz useState is always one cycle behind :(
+            const temp = newProduct
+            if (Array.isArray(temp.info))  
+                temp.info = temp.info[0]
+
+            if (Array.isArray(temp.colors) && temp.colors.length == 0)
+                temp.colors = temp.colors[0]
+
+            console.log(temp)
+            addToCart(temp)
 		}
 	}
-
-    useEffect(() => {
-        if (Array.isArray(newProduct.info)) { setNewProduct({...newProduct,  info: newProduct.info[0]}) }
-
-        if (Array.isArray(newProduct.colors) && newProduct.colors.length == 0){
-            setNewProduct({...newProduct,  colors: ""})
-            console.log("test2")
-        }
-    }, [])
 
     // stuff for the image carousel
     const [currentIndex, setCurrentIndex] = useState(0);

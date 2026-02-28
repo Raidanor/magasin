@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { useCartStore } from "../stores/useCartStore";
 import { Link } from "react-router-dom";
 import { MoveRight, X } from "lucide-react";
@@ -35,11 +35,8 @@ const OrderSummary = () => {
 	}
 
 	return (
-		<motion.div
+		<div
 			className='space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6'
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5 }}
 		>
 			<p className='text-xl font-semibold text-emerald-400'>Order summary</p>
 
@@ -69,14 +66,12 @@ const OrderSummary = () => {
 					</dl>
 				</div>
 
-				<motion.button
+				<button
 					className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
 					onClick={() => {setIsOpen(true)}}
 				>
 					Buy Cash
-				</motion.button>
+				</button>
                 <div className="bg-gray-200 rounded-lg p-2">
                     <PayPalScriptProvider
                         options={{
@@ -103,8 +98,6 @@ const OrderSummary = () => {
             <Modal open={isOpen} onClose={() => {setIsOpen(false)}}>
                 <button
 					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
 					onClick={() => handlePayment_Cash("cash_on_delivery")}
 				>
 					Pay cash on delivery
@@ -112,14 +105,12 @@ const OrderSummary = () => {
 
                 <button
 					className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
 					onClick={() => handlePayment_Cash("pickup")}
 				>
 					Self Pick-up
 				</button>
             </Modal>
-		</motion.div>
+		</div>
 	)
 }
 export default OrderSummary;

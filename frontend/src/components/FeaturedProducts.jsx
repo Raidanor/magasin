@@ -22,14 +22,15 @@ const FeaturedProducts = ({ featuredProducts }) => {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-    const handleAddToCart = (p) => {
+    const handleAddToCart = (prod) => {
         const temp = {
-            _id: p._id,
-            info: p.info[0],
-            quantity: p.quantity,
-            images: p.images,
-            description: p.description,
-            name: p.name
+            _id: prod._id,
+            info: prod.info[0],
+            colors: prod.colors ? prod.colors[0] : null,
+            quantity: prod.quantity,
+            images: prod.images,
+            description: prod.description,
+            name: prod.name
         }
         addToCart(temp)
     }

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../lib/axios";
 import { useCartStore } from "../stores/useCartStore";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
     const { total, cart, clearCart, removeFromCart } = useCartStore()
@@ -23,11 +24,12 @@ export default function Checkout() {
                     products: cart,
                 })
                 
-                alert("Payment Successful!");
+                toast.success("Payment Successful!");
                 removeFromCart(cart)
                 clearCart()
                 navigate("/purchase-success/" + response.data.orderId )
             }}
+            style={{ layout: "vertical" }}
         />
     );
 }
