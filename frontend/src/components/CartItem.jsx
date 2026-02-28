@@ -44,8 +44,9 @@ const CartItem = ({ item }) => {
 						{item.name}
 					</p>
                     <p className='flex hover:text-emerald-400 hover:underline text-sm text-gray-300'>
-						<div className="mr-2">Size: {item.info ? item.info.size : ""}</div>
-                        <div>Color: {item.colors ? item.colors : ""}</div>
+						{ item.info && <div>Size: {item.info.size}</div>}
+                        &nbsp;&nbsp;
+                        { item.colors && <div>Color: {item.colors}</div>}
 					</p>
 					<p className='text-sm text-gray-400'>{item.description}</p>
 
