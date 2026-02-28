@@ -76,6 +76,10 @@ export const createOrderPaypal = async(req, res) => {
                         },
                     },
                 ],
+                application_context: {
+                    "return_url": "https://the-best-choice.store/purchase-success/",
+                    "cancel_url": "https://the-best-choice.store/purchase-cancel"
+                }
             },
             {
                 headers: {

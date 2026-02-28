@@ -21,9 +21,6 @@ const CartPage = () => {
 				<div className='mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8'>
 					<div
 						className='mx-auto w-full flex-none lg:max-w-xl xl:max-w-3xl'
-						initial={{ opacity: 0, x: -20 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.2, delay: 0.2 }}
 					>
 						{cart.length === 0 ? (
 							<EmptyCartUI />
@@ -46,9 +43,6 @@ const CartPage = () => {
 				</div>
                 <div
                     className='mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full'
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2, delay: 0.2 }}
                 >
                     {cart.length > 0 && <PeopleAlsoBought />}
                 </div>
@@ -61,9 +55,6 @@ export default CartPage;
 const EmptyCartUI = () => (
 	<div
 		className='flex flex-col items-center justify-center space-y-4 py-16'
-		initial={{ opacity: 0, y: 20 }}
-		animate={{ opacity: 1, y: 0 }}
-		transition={{ duration: 0.5 }}
 	>
 		<ShoppingCart className='h-24 w-24 text-gray-300' />
 		<h3 className='text-2xl font-semibold '>Your cart is empty</h3>
