@@ -10,12 +10,12 @@ const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
-    const [newProduct, setNewProduct] = useState(product)
+    const [newProduct, setNewProduct] = useState({...product, info: product.info[0]})
 
     const [s, setS] = useState("")
     const [color, setColor] = useState("")
     const [colorOptions, setColorOptions] = useState(product.colors)
-    const selected = product.info
+    const [productInfo] = useState(product.info)
 
     useEffect(() => {
         let newInfo = {}
@@ -38,25 +38,25 @@ const ProductCard = ({ product }) => {
 		}
         else {
 			// add to cart
-            if (selected?.length > 1 && s === ""){
+            if (Array.isArray(productInfo) && s === ""){
                 toast.error("Select a size first")
                 return
             }
-            if (colorOptions?.length > 1 && color === ""){
+            if (Array.isArray(colorOptions) && newProduct.colors === ""){
                 toast.error("Select a color")
                 return
             }
 
-            // temp variable cuz useState is always one cycle behind :(
-            const temp = newProduct
-            if (Array.isArray(temp.info))  
-                temp.info = temp.info[0]
+            // copiedProduct variable cuz useState is always one cycle behind :(
+            let copiedProduct = JSON.parse(JSON.stringify(newProduct))
+            if (Array.isArray(copiedProduct.info))  
+                copiedProduct.info = copiedProduct.info[0]
 
-            if (Array.isArray(temp.colors) && temp.colors.length == 0)
-                temp.colors = temp.colors[0]
+            if (Array.isArray(copiedProduct.colors) && copiedProduct.colors.length == 0)
+                copiedProduct.colors = copiedProduct.colors[0]
 
-            console.log(temp)
-            addToCart(temp)
+            console.log(copiedProduct)
+            addToCart(copiedProduct)
 		}
 	}
 
@@ -106,7 +106,7 @@ const ProductCard = ({ product }) => {
                     <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
                     <div className='mt-2 mb-5 flex items-center justify-between'>
                         <p>
-                            <span className='text-3xl font-bold text-emerald-400'><RenderPrice selected={selected} product={newProduct} /></span>
+                            <span className='text-3xl font-bold text-emerald-400'><RenderPrice productInfo={productInfo} product={newProduct} /></span>
                         </p>
                     </div>
                 </Link>
@@ -123,11 +123,11 @@ const ProductCard = ({ product }) => {
                     </div>
                     <div className="flex flex-col">
                         <div>
-                            {selected?.length > 1 &&
+                            {productInfo?.length > 1 &&
                                 <div className="">
                                     <Select
                                         className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
-                                        options={selected}
+                                        options={productInfo}
                                         labelField="size"
                                         valueField="size"
                                         onChange={(values) => setS(values)}
@@ -168,22 +168,19 @@ const ProductCard = ({ product }) => {
 }
 export default ProductCard
 
-function RenderPrice({selected, product}){
+function RenderPrice({productInfo, product}){
     let price = 0
-
-    if (selected.length > 1)
-    {
+    if (productInfo.length > 1)
         price = product?.info?.price
-    }
-    else{
-        price = selected[0]?.price
-    }
+    else
+        price = productInfo[0].price
 
     return(
         <>
             {product.info.slash ?
-            <><s>Rs.{product.info.slash}</s> &nbsp;Rs.{price}</>
-            : <>Rs.{price}</>}
+                <><s>Rs.{product.info.slash}</s> &nbsp;Rs.{price}</>
+                :<>Rs.{price}</>
+            }
         </>
     )
 }
