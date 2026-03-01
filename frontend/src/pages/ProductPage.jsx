@@ -40,7 +40,7 @@ const ProductPage = () => {
                     Limited Stock
                 </div>
             }
-            <div className="flex md:h-150 h-120 rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
+            <div className="flex md:h-120 h-100 rounded-lg border-gray-700 shadow-lg mb-4 mx-auto">
                 <div className="mx-3 mt-3 flex rounded-xl">
                     {product?.images ? 
                         <img
@@ -123,18 +123,18 @@ const ProductTag = ({info, product}) => {
         <div className="flex-col p-3 border border-emerald-500 rounded-xl mx-2">
             <span className="flex text-xl md:text-2xl font-bold text-emerald-400 pb-2"><RenderPrice info={info} /></span>
             <button
-                className='flex items-center justify-end rounded-lg bg-emerald-600 px-2.5 md:px-5 py-2.5 text-center text-sm font-medium
-                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300 mx-auto mt-2'
+                className='flex items-center justify-end rounded-lg bg-emerald-600 mx-auto mt-2 px-2.5 md:px-4 py-2.5 text-center text-sm font-medium
+                text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
                 onClick={() => handleAddToCart()}
             >
                 <ShoppingCart size={20} className='mr-2' />
                 Add to cart
             </button>
-            <div>
+            <div className="mx-auto">
                 {colorOptions?.length > 0 &&
-                    <div className="">
+                    <div className="rounded-lg">
                         <Select
-                            className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 w-1/2 text-black"
+                            className="bg-emerald-600 hover:bg-emerald-700 rounded-lg mt-1 text-black "
                             options={colorOptions.map(color => ({ label: color, value: color }))}
                             labelField="label"
                             valueField="value"
