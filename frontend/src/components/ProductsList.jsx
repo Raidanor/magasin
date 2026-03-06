@@ -9,11 +9,12 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const ProductsList = () => {
-	const { deleteProduct, toggleFeaturedProduct, toggleLimitedProduct, products, getOneProduct, oneProduct } = useProductStore();
+	const { deleteProduct, toggleFeaturedProduct, toggleLimitedProduct, products, getOneProduct, oneProduct, fetchAllProducts } = useProductStore();
     const { categories, getCategories } = useCategoryStore()
     
     useEffect(() => {
         getCategories()
+        fetchAllProducts()
     }, [])
 
     const [isOpen, setIsOpen] = useState(false)

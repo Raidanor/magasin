@@ -29,7 +29,8 @@ export const useProductStore = create((set) => ({
 		set({ loading: true });
 		try {
 			const response = await axios.get("/products");
-			set({ products: response.data.products, loading: false });
+            const sortedResponse = response.data.products.sort((a, b) => a.category.localeCompare(b.category))
+			set({ products: sortedResponse, loading: false });
 		} catch (error) {
 			set({ error: "Failed to fetch products", loading: false });
 			toast.error(error.response.data.error || "Failed to fetch products");
@@ -39,8 +40,9 @@ export const useProductStore = create((set) => ({
 		set({ loading: true });
 		try {
 			const response = await axios.get(`/products/category/${category}`);
+            const sortedResponse = response.data.products.sort((a, b) => a.name.localeCompare(b.name))
             
-			set({ products: response.data.products, loading: false });
+			set({ products: sortedResponse, loading: false });
 		} catch (error) {
 			set({ error: "Failed to fetch products", loading: false });
 			toast.error(error.response.data.error || "Failed to fetch products");
