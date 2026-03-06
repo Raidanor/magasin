@@ -195,8 +195,6 @@ export const editProduct = async (req, res) => {
 
         let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
 
-        console.log("product------------------------------------------------------", product)
-
         if (!product) res.status(404).json({message: "Product not found"})
 
         res.json({ message: "Product updated" })
