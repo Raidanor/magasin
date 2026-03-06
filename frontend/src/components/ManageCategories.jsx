@@ -55,9 +55,8 @@ const ManageCategories = () => {
     const toggleShowAll = async() => {
         setShowAllCategories(!showAllCategories)
         getCategories()
-        categories.map(async(category) => {
-            await categoryCount(category.ref)
-        })
+        const categoryArray = categories.map((category) => {return category.ref})
+        await categoryCount(categoryArray)
     }
 
 	return (
@@ -113,10 +112,11 @@ const ManageCategories = () => {
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
-                    { newCategory.imageURL !== "" ? <span className='ml-3 text-sm text-gray-400'>Image Uploaded</span> : ""}
-                    { newCategory.imageURL && <img src={newCategory.imageURL} className="ml-auto h-60 object-center w-1/5 rounded-lg"/>}
 				</div>
-
+                <>
+                    { newCategory.imageURL !== "" ? <span className='mx-auto text-sm text-gray-400'>Image Uploaded</span> : ""}
+                </>
+                { newCategory.imageURL && <img src={newCategory.imageURL} className="mx-auto h-60 object-center w-1/5 rounded-lg"/>}
 				<button
 					onClick={handleSubmit}
 					className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md 
@@ -173,7 +173,7 @@ const ManageCategories = () => {
                     </thead>
 
                     <tbody className='bg-gray-800 divide-y divide-gray-700'>
-                        {categories?.map((category, index) => (
+                        {categories?.map((category) => (
                             <tr key={category._id} className='hover:bg-gray-700'>
                                 <td className='px-6 py-4 whitespace-nowrap'>
                                     <div className='flex items-center'>
@@ -193,7 +193,7 @@ const ManageCategories = () => {
                                     {category.ref}
                                 </td>
                                 <td className='px-6 py-4 whitespace-nowrap'>
-                                    {count.length > 0 ? count[index] : ""}
+                                    {count[category.ref]}
                                 </td>
                                 <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                                     <button

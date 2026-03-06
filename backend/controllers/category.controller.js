@@ -70,9 +70,17 @@ export const deleteCategory = async (req, res) => {
 
 export const categoryCount = async (req, res) => {
     try {
-        const ref = req.params.ref
-        const cat = await Product.countDocuments({category: ref})
-        res.json({ cat })
+        const categoryArray = req.body
+        const result = Object.fromEntries(
+            await Promise.all(
+                categoryArray.map(async item => [
+                    item,
+                    await Product.countDocuments({ category: item })
+                ])
+            )
+        )
+        
+        res.json({ result })
     } catch (error) {
         console.log("Error in categoryCount function")
         res.status(500).json({message: error.message})

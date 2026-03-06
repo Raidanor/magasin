@@ -9,11 +9,10 @@ export const useCategoryStore = create((set, get) => ({
     loading: false,
 
     getCategories: async () => {
-		
 		try {
 			const response = await axios.get(`/category`);
-            
-			set({ categories: response.data.cat, loading: false });
+            const sortedResponse = response.data.cat.sort((a, b) => a.name.localeCompare(b.name))
+			set({ categories: sortedResponse, loading: false });
 
 		} catch (error) {
 			toast.error(error.response.data.error || "Failed to fetch categories");
@@ -50,15 +49,12 @@ export const useCategoryStore = create((set, get) => ({
 			toast.error(error.response.data.error || "Failed to delete category");
 		}
 	},
-    categoryCount: async(categoryRef) => {
+    categoryCount: async(categoryArray) => {
         set({ loading: true, count: [] });
 		try {
-			const res = await axios.get(`/category/count/${categoryRef}`);
-
-            set((prevState) => ({
-				count: [...prevState.count, res.data.cat],
-				loading: false,
-			}));
+			const res = await axios.post(`/category/count`, categoryArray);
+            
+            set({count: res.data.result});
 		} catch (error) {
 			set({ error: "Failed to fetch products", loading: false });
 			toast.error(error.response.data.error || "Failed to fetch products");
