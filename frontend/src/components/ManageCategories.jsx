@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { PlusCircle, Upload, Loader } from "lucide-react";
+import { PlusCircle, Upload, Loader, Edit3, XCircle } from "lucide-react";
 import { useCategoryStore } from "../stores/useCategoryStore";
 import { Trash } from "lucide-react"
 
@@ -11,8 +11,7 @@ const ManageCategories = () => {
         ref: ""
 	});
  
-
-	const { categories, createCategory, loading, getCategories, deleteCategory, categoryCount, count } = useCategoryStore();
+	const { categories, createCategory, loading, getCategories, deleteCategory, categoryCount, count, getOneCategory, oneCategory } = useCategoryStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -59,6 +58,12 @@ const ManageCategories = () => {
         await categoryCount(categoryArray)
     }
 
+    // editCategory stuff
+    const [isOpen, setIsOpen] = useState(false)
+    const openModal = async (categoryId) => {
+        setIsOpen(true)
+        await getOneCategory(categoryId)
+    }
 	return (
 		<motion.div
 			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 w-full xl:w-3/5 mx-auto'
@@ -143,7 +148,7 @@ const ManageCategories = () => {
                 <div className="mt-10 p-5 rounded-lg border">
                     <h2 className='text-2xl font-semibold mb-6 text-red-500'>Delete Category</h2>
                     <table className=' min-w-full divide-y divide-gray-700'>
-                    <thead className='bg-gray-700'>
+                    <thead className='bg-gray-500'>
                         <tr>
                             <th
                                 scope='col'
@@ -159,7 +164,7 @@ const ManageCategories = () => {
                             </th>
                             <th
                                 scope='col'
-                                className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+                                className='mx-4 px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
                             >
                                 Products
                             </th>
@@ -167,7 +172,7 @@ const ManageCategories = () => {
                                 scope='col'
                                 className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
                             >
-                                Action
+                                Actions
                             </th>
                         </tr>
                     </thead>
@@ -189,19 +194,27 @@ const ManageCategories = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='px-6 py-4 whitespace-nowrap justify-center'>
+                                <td className='px-6 py-4 whitespace-nowrap'>
                                     {category.ref}
                                 </td>
-                                <td className='px-6 py-4 whitespace-nowrap'>
+                                <td className='mx-4 px-4 py-4 '>
                                     {count[category.ref]}
                                 </td>
                                 <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                                     <button
                                         onClick={() => handleDeleteCategory(category._id)}
                                         className='text-red-400 hover:text-red-300'
+                                        title="Delete category"
                                     >
                                         <Trash className='h-5 w-5 mx-2' />
                                     </button>
+                                    <button
+									onClick={() => openModal(category._id)}
+									className='text-gray-400 hover:text-white'
+                                    title="Edit category info"
+								>
+									<Edit3 className='h-5 w-5 mx-2' />
+								</button>
                                 </td>
                             </tr>
                         ))}
@@ -209,8 +222,138 @@ const ManageCategories = () => {
                 </table>
                 </div>
             }
-            
+            <EditForm 
+                open={isOpen} 
+                onClose={() => {setIsOpen(false)}} 
+                oneCategory={oneCategory}
+            >
+                <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
+            </EditForm>
 		</motion.div>
 	);
 }
 export default ManageCategories;
+
+const EditForm = ({open, onClose, children, oneCategory}) => 
+{
+    if (!open) return null
+
+    const { editCategory, loading } = useCategoryStore();
+    const [newCategoryModal, setNewCategoryModal] = useState({});
+    const [image, setImage] = useState("")
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        await editCategory(newCategoryModal)
+        onClose()
+    }
+
+    useEffect(() => {
+        setNewCategoryModal(oneCategory)
+    }, [oneCategory])
+
+    // useEffect(() => {
+    //     console.log(newCategoryModal)
+    // }, [newCategoryModal])
+
+    const handleImageChangeModal = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setNewCategoryModal({ ...newCategoryModal, imageURL: reader.result });
+			};
+			reader.readAsDataURL(file); // base64
+		}
+	};
+
+    return(
+        <div className="fixed inset-0 flex justify-center items-center transition-colors 
+           bg-black/60"
+            onClick={onClose}
+        >
+            <div className={`w-3/4 py-4 px-5 items-center bg-gray-800 rounded-xl shadow transition-all outline-1 outline-gray-400 max-h-5/6 overflow-y-auto
+                ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
+            `}
+            onClick={e => e.stopPropagation()}>
+                <button
+                    className="absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-auto hover:bg-red-900/40 hover:text-gray-600"
+                    onClick={onClose}
+                >
+                    <XCircle className="text-red-600"/>
+                </button>
+                {children}
+                <form onSubmit={handleSubmit} className='space-y-4'>
+                    <div>
+                        <label htmlFor='name' className='block text-sm font-medium text-gray-300'>
+                            Category Name
+                        </label>
+                        <input
+                            type='text'
+                            id='name'
+                            name='name'
+                            value={newCategoryModal?.name}
+                            onChange={(e) => setNewCategoryModal({ ...newCategoryModal, name: e.target.value })}
+                            className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
+                            px-3 text-white focus:outline-none focus:ring-2
+                            focus:ring-emerald-500 focus:border-emerald-500'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor='ref' className='block font-medium text-gray-300'>
+                            Ref Link   (Replace spaces in name with '-')
+                        </label>
+                        <input
+                            type='text'
+                            id='ref'
+                            name='ref'
+                            value={newCategoryModal?.ref}
+                            onChange={(e) => setNewCategoryModal({ ...newCategoryModal, ref: e.target.value })}
+                            className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
+                            px-3 text-white focus:outline-none focus:ring-2
+                            focus:ring-emerald-500 focus:border-emerald-500'
+                            required
+                        />
+                    </div>
+                    {/* Image input */}
+                    <div className='mt-1 flex'>
+                        <input type='file' id='imageModal' className='sr-only' accept='image/*' onChange={handleImageChangeModal} />
+                        <label
+                            htmlFor='imageModal'
+                            className='cursor-pointer bg-gray-700 py-2 px-3 mx-auto border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
+                        >
+                            <Upload className='h-5 w-5 inline-block mr-2' />
+                            Upload Image
+                        </label>
+                    </div>
+                    <>
+                        { newCategoryModal.imageURL !== "" ? <span className='mx-auto text-sm text-gray-400'>Image Uploaded</span> : ""}
+                    </>
+                    { newCategoryModal.imageURL && <img src={newCategoryModal.imageURL} className="mx-auto h-60 object-center w-1/5 rounded-lg"/>}
+
+                    <button
+                        onClick={handleSubmit}
+                        className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
+                                Loading...
+                            </>
+                        ) : (
+                            <>
+                                <PlusCircle className='mr-2 h-5 w-5' />
+                                Edit Category
+                            </>
+                        )}
+                    </button>
+                </form>  
+            </div>
+        </div>
+    )
+}

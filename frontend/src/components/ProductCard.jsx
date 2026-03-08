@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
 
     const [s, setS] = useState("")
     const [color, setColor] = useState("")
-    const [colorOptions, setColorOptions] = useState(product.colors)
+    const [colorOptions, setColorOptions] = useState(product.colors || "")
     const [productInfo] = useState(product.info)
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const ProductCard = ({ product }) => {
                 toast.error("Select a size first")
                 return
             }
-            if (Array.isArray(colorOptions) && newProduct.colors === ""){
+            if (colorOptions.length > 0 && newProduct.colors === ""){
                 toast.error("Select a color")
                 return
             }
@@ -55,7 +55,6 @@ const ProductCard = ({ product }) => {
             if (Array.isArray(copiedProduct.colors) && copiedProduct.colors.length == 0)
                 copiedProduct.colors = copiedProduct.colors[0]
 
-            console.log(copiedProduct)
             addToCart(copiedProduct)
 		}
 	}

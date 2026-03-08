@@ -17,23 +17,21 @@ export const getCategories = async (req, res) => {
 }
 
 export const createCategory = async (req, res) => {
-
     try {
         const { name, imageURL, ref } = req.body
 
         let cloudinaryResponse = null
-
         cloudinaryResponse = await cloudinary.uploader.upload(imageURL, {folder:"category"})
 
-        const cat = await Category.create({
+        const newCategory = await Category.create({
             name,
             imageURL: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
             ref
         })
 
-        await cat.save()
+        await newCategory.save()
 
-        res.status(201).json(cat)
+        res.status(201).json(newCategory)
     } catch (error) {
         console.log("Error on createCategory controller")
         res.status(500).json({ error: error.message})
@@ -83,6 +81,49 @@ export const categoryCount = async (req, res) => {
         res.json({ result })
     } catch (error) {
         console.log("Error in categoryCount function")
+        res.status(500).json({message: error.message})
+    }
+}
+
+export const editCategory = async (req, res) => {
+    try {
+        const oldCategory = await Category.findById(req.params.id)
+        let newCategory = req.body
+        
+        // delete image from cloudinary
+        if (newCategory.imageURL !== oldCategory.imageURL)
+        {
+            let cloudinaryResponse = null
+            const publicId = oldCategory.imageURL.split("/").pop().split(".")[0]
+            try {
+                await cloudinary.uploader.destroy(`category/${publicId}`)
+                console.log("deleted image from cloudinary")
+            } catch (error) {
+                console.log("error deleting image from cloudinary")
+            }
+
+            // upload image to cloudinary
+            cloudinaryResponse = await cloudinary.uploader.upload(newCategory.imageURL, {folder:"category"})
+            newCategory.imageURL = cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : ""
+        }
+
+        newCategory = await Category.findByIdAndUpdate(req.params.id, newCategory, {new:true})
+        if (!oldCategory) res.status(404).json({message: "Category not found"})
+        if (!newCategory) res.status(404).json({message: "Error editing Category"})
+
+        res.json({ message: "Category updated" })
+    } catch (error) {
+        console.log("Error in editCategory function: ", error)
+        res.status(401).json({ error: error.message})
+    }
+}
+
+export const getOneCategory = async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.id)
+        res.json({ category })
+    } catch (error) {
+        console.log("Error in getOneCategory function")
         res.status(500).json({message: error.message})
     }
 }
