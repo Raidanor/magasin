@@ -157,7 +157,7 @@ const ProductsList = () => {
                 oneProduct={oneProduct}
                 categories={categories}
             >
-                <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
+                <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Edit Product</h2>
 
             
             </EditForm>
@@ -179,11 +179,8 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
     const [slash, setSlash] = useState(null)
     const [p, setP] = useState(0)
     const [info, setInfo] = useState(oneProduct.info)
-
     const [newColor, setNewColor] = useState("")
-
     const [image, setImage] = useState("")
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();

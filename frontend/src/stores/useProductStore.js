@@ -134,5 +134,5 @@ export const useProductStore = create((set) => ({
 			set({ loading: false });
 			toast.error(error.response.data.error || "Failed to edit product info");
 		}
-	},    
+	},   
 }));

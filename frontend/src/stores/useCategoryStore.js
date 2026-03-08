@@ -7,6 +7,7 @@ export const useCategoryStore = create((set, get) => ({
     categories: [],
     count: [],
     loading: false,
+    oneCategory: {},
 
     getCategories: async () => {
 		try {
@@ -60,5 +61,33 @@ export const useCategoryStore = create((set, get) => ({
 			toast.error(error.response.data.error || "Failed to fetch products");
 		}
     },
-    
+    editCategory: async (newCategory) => {
+		set({ loading: true });
+		try {
+			await axios.post(`/category/edit/${newCategory._id}`, newCategory);
+			
+            set({ loading: false });
+            set((prevState) => ({
+                categories: prevState.categories.map((item) => (item._id === newCategory._id ? newCategory : item )),
+            }));
+
+            toast.success("Category has been edited")
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.error || "Failed to edit Category info");
+		}
+	},
+    getOneCategory: async (categoryId) => {
+		set({ loading: true });
+		try {
+			const response = await axios.get(`/category/${categoryId}`);
+            
+			set({ oneCategory: response.data.category, loading: false });
+            
+            return response.data.product
+		} catch (error) {
+			set({ loading: false });
+			toast.error(error.response.data.error || "Failed to edit product info");
+		}
+	},   
 }))

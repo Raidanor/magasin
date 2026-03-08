@@ -21,7 +21,7 @@ const EditProfileModal = ({user}) => {
             })
         }
         
-    }, [user])
+    }, [])
 
     const handleInputChange = (e) =>
     {
