@@ -3,8 +3,6 @@ import cloudinary from "../lib/cloudinary.js"
 
 import Product from "../models/product.model.js"
 
-
-
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({})
@@ -70,7 +68,6 @@ export const editProduct = async (req, res) => {
         // let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
         const oldProduct = await Product.findById(req.params.id)
         let newProduct = req.body
-        let arr = []
 
         // if images arrays are different
         if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
@@ -227,11 +224,4 @@ export const getOneProduct = async (req, res) => {
         console.log("Error in getOneProduct function")
         res.status(500).json({message: error.message})
     }
-}
-
-
-function waitforme(millisec) {
-    return new Promise(resolve => {
-        setTimeout(() => { resolve('') }, millisec);
-    })
 }

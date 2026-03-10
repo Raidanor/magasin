@@ -28,6 +28,7 @@ const Footer = () => {
                 <h3 className="text-white font-semibold mb-4">Support</h3>
                     <div className="hover:text-white">Contact Us</div>
                     <div>jasbeen@the-best-choice.store</div>
+                    <div>59204904</div>
                 </div>
 
                 {/* Newsletter / Social */}
