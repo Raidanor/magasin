@@ -191,16 +191,31 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
     }
 
     const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
 
-    }
+			reader.onloadend = () => {
+				// setNewProduct({ ...newProduct, image: reader.result });
+                setImage(image => [ ...image, reader.result ]);
+			};
+
+			reader.readAsDataURL(file); // base64
+		}
+	};
 
     useEffect(() => {
         setNewProduct(oneProduct)
+        setImage(oneProduct.images)
     }, [oneProduct])
 
     useEffect(() => {
         setInfo(oneProduct.info)
     }, [oneProduct.info])
+
+    useEffect(() => {
+        setNewProduct({...newProduct,  images: image })
+    }, [newProduct.images, image])
 
     useEffect(() => {
         setNewProduct({...newProduct,  info: info })
@@ -247,6 +262,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                 </button>
                 {children}
                 <form onSubmit={handleSubmit} className='space-y-4'>
+                    {/* adding name */}
                     <div>
                         <label htmlFor='name' className='block text-sm font-medium text-gray-300'>
                             Product Name
@@ -263,7 +279,8 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             required
                         />
                     </div>
-
+                    
+                    {/* adding description */}
                     <div>
                         <label htmlFor='description' className='block text-sm font-medium text-gray-300'>
                             Description
@@ -280,6 +297,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             required
                         />
                     </div>
+
                     {/* adding Price & Size */}
                     <div>
                         <label htmlFor='price' className='block text-sm font-medium text-gray-300'>
@@ -336,7 +354,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
 
                             <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
                             shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
-                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear</button>
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setInfo([])}>Clear Price & Size</button>
                         </div>
                         {info?.length > 0 && 
                             <ul className="p-2 my-2 border rounded-lg">
@@ -346,7 +364,7 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             </ul>
                         }
                     </div>
-                    
+
                     {/* Adding Color  */}
                     <div>
                         <input
@@ -386,7 +404,8 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                             </ul>
                         }   
                     </div>
-                        
+
+                    {/* adding category */}
                     <div>
                         <label htmlFor='category' className='block text-sm font-medium text-gray-300'>
                             Category
@@ -410,6 +429,36 @@ const EditForm = ({open, onClose, children, oneProduct, categories}) =>
                         </select>
                     </div>
 
+                    {/* Adding images */}
+                    <div className='mt-1 flex flex-col'>
+                        <input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
+                        <label
+                            htmlFor='image'
+                            className='cursor-pointer bg-gray-700 py-2 px-3 mx-auto border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
+                        >
+                            <Upload className='h-5 w-5 inline-block mr-2' />
+                            Upload Image
+                            
+                        </label>
+                        <button type="button" className="ml-auto flex mt-2 py-2 px-4 border border-transparent rounded-md 
+                        shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-900 
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 disabled:opacity-50" onClick={() => setImage([])}>
+                            Clear images
+                        </button>
+                        {Array.isArray(image) && <span className='ml-3 text-sm text-gray-400'>{image.length} image(s) uploaded </span>}
+                        <div className="flex gap-3 overflow-x-auto p-2 scroll-smooth">
+                            {image?.length > 0 && image.map((src, index) => (
+                                <img
+                                    key={index}
+                                    src={src}
+                                    alt={`img-${index}`}
+                                    className="h-48 w-auto flex-shrink-0 rounded-lg object-cover"
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* submit button */}
                     <button
                         onClick={handleSubmit}
                         className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md 

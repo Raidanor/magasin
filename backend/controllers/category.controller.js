@@ -90,9 +90,10 @@ export const editCategory = async (req, res) => {
         const oldCategory = await Category.findById(req.params.id)
         let newCategory = req.body
         
-        // delete image from cloudinary
+        // if new images
         if (newCategory.imageURL !== oldCategory.imageURL)
         {
+            // delete image from cloudinary
             let cloudinaryResponse = null
             const publicId = oldCategory.imageURL.split("/").pop().split(".")[0]
             try {
@@ -107,9 +108,10 @@ export const editCategory = async (req, res) => {
             newCategory.imageURL = cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : ""
         }
 
-        newCategory = await Category.findByIdAndUpdate(req.params.id, newCategory, {new:true})
+        
         if (!oldCategory) res.status(404).json({message: "Category not found"})
         if (!newCategory) res.status(404).json({message: "Error editing Category"})
+        newCategory = await Category.findByIdAndUpdate(req.params.id, newCategory, {new:true})
 
         res.json({ message: "Category updated" })
     } catch (error) {

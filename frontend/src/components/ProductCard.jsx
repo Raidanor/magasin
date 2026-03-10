@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
 		}
         else {
 			// add to cart
-            if (Array.isArray(productInfo) && s === ""){
+            if (productInfo.length > 1 && s === ""){
                 toast.error("Select a size first")
                 return
             }
