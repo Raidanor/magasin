@@ -39,18 +39,10 @@ export const getFeaturedProducts = async (req, res) => {
 }
 
 export const createProduct = async (req, res) => {
-
-    function waitforme(millisec) {
-        return new Promise(resolve => {
-            setTimeout(() => { resolve('') }, millisec);
-        })
-    }
-
     try {
         const { name, description, info, images, colors, category } = req.body
 
         let cloudinaryResponse = null
-
         let arr = []
 
         images.forEach(async(image) => {
@@ -192,11 +184,44 @@ async function updateFeaturedProductsCache() {
 
 export const editProduct = async (req, res) => {
     try {
+        // let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+        const oldProduct = await Product.findById(req.params.id)
+        let newProduct = req.body
+        let arr = []
 
-        let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+        // if images arrays are different
+        if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
+            console.log("entering loop")
+            // delete image from cloudinary
+            oldProduct.images.forEach(async(image) => {
+                const publicId = image.split("/").pop().split(".")[0]
+                try {
+                    await cloudinary.uploader.destroy(`products/${publicId}`)
+                    console.log("deleted image from cloudinary")
+                } catch (error) {
+                    console.log("error deleting image from cloudinary")
+                }
+            })
 
-        if (!product) res.status(404).json({message: "Product not found"})
+            // upload image to cloudinary
+            let cloudinaryResponse = null
 
+            newProduct.images.forEach(async(image) => {
+                cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"products"})
+                arr.push(cloudinaryResponse.secure_url)
+            });
+            // delay for image upload code execution
+            await waitforme(5000)
+
+            newProduct.images = arr
+        }
+        if (!oldProduct) res.status(404).json({message: "Product not found"})
+        if (!newProduct) res.status(404).json({message: "Error editing Product"})
+        newProduct = await Product.findByIdAndUpdate(req.params.id, newProduct, {new:true})
+
+        console.log(oldProduct)
+        console.log("------------------------------------------------------------")
+        console.log(newProduct)
         res.json({ message: "Product updated" })
     } catch (error) {
         console.log("Error in editProduct function", error)
@@ -212,4 +237,11 @@ export const getOneProduct = async (req, res) => {
         console.log("Error in getOneProduct function")
         res.status(500).json({message: error.message})
     }
+}
+
+
+function waitforme(millisec) {
+    return new Promise(resolve => {
+        setTimeout(() => { resolve('') }, millisec);
+    })
 }
