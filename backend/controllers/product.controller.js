@@ -42,31 +42,68 @@ export const createProduct = async (req, res) => {
     try {
         const { name, description, info, images, colors, category } = req.body
 
-        let cloudinaryResponse = null
-        let arr = []
+        const uploadedImages = await Promise.all(
+            images.map(async (image) => {
+                const cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" })
+                return cloudinaryResponse.secure_url
+            })
+        )
 
-        images.forEach(async(image) => {
-            cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"products"})
-            arr.push(cloudinaryResponse.secure_url)
-        });
-
-        // delay for image upload code execution
-        await waitforme(5000)
         const product = await Product.create({
             name,
             description,
             info,
-            images: arr,
+            images: uploadedImages,
             colors,
             category: category.ref
         })
-
-        await product.save()
 
         res.status(201).json(product)
     } catch (error) {
         console.log("Error on createProduct controller")
         res.status(500).json({ error: error.message})
+    }
+}
+
+export const editProduct = async (req, res) => {
+    try {
+        // let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
+        const oldProduct = await Product.findById(req.params.id)
+        let newProduct = req.body
+        let arr = []
+
+        // if images arrays are different
+        if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
+
+            // delete image from cloudinary
+            oldProduct.images.forEach(async(image) => {
+                const publicId = image.split("/").pop().split(".")[0]
+                try {
+                    await cloudinary.uploader.destroy(`products/${publicId}`)
+                    console.log("deleted image from cloudinary")
+                } catch (error) {
+                    console.log("error deleting image from cloudinary")
+                }
+            })
+
+            // upload image to cloudinary
+            const uploadedImages = await Promise.all(
+                newProduct.images.map(async (image) => {
+                    const cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" })
+                    return cloudinaryResponse.secure_url
+                })
+            )
+
+            newProduct.images = uploadedImages
+        }
+        if (!oldProduct) res.status(404).json({message: "Product not found"})
+        if (!newProduct) res.status(404).json({message: "Error editing Product"})
+        newProduct = await Product.findByIdAndUpdate(req.params.id, newProduct, {new:true})
+
+        res.json({ message: "Product updated" })
+    } catch (error) {
+        console.log("Error in editProduct function", error)
+        res.status(401).json({ error: error.message})
     }
 }
 
@@ -178,53 +215,6 @@ async function updateFeaturedProductsCache() {
         await redis.set("featured_products", JSON.stringify(featuredProducts))
     } catch (error) {
         console.log("Error in updateFeaturedProductsCache function")
-        res.status(401).json({ error: error.message})
-    }
-}
-
-export const editProduct = async (req, res) => {
-    try {
-        // let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
-        const oldProduct = await Product.findById(req.params.id)
-        let newProduct = req.body
-        let arr = []
-
-        // if images arrays are different
-        if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
-            console.log("entering loop")
-            // delete image from cloudinary
-            oldProduct.images.forEach(async(image) => {
-                const publicId = image.split("/").pop().split(".")[0]
-                try {
-                    await cloudinary.uploader.destroy(`products/${publicId}`)
-                    console.log("deleted image from cloudinary")
-                } catch (error) {
-                    console.log("error deleting image from cloudinary")
-                }
-            })
-
-            // upload image to cloudinary
-            let cloudinaryResponse = null
-
-            newProduct.images.forEach(async(image) => {
-                cloudinaryResponse = await cloudinary.uploader.upload(image, {folder:"products"})
-                arr.push(cloudinaryResponse.secure_url)
-            });
-            // delay for image upload code execution
-            await waitforme(5000)
-
-            newProduct.images = arr
-        }
-        if (!oldProduct) res.status(404).json({message: "Product not found"})
-        if (!newProduct) res.status(404).json({message: "Error editing Product"})
-        newProduct = await Product.findByIdAndUpdate(req.params.id, newProduct, {new:true})
-
-        console.log(oldProduct)
-        console.log("------------------------------------------------------------")
-        console.log(newProduct)
-        res.json({ message: "Product updated" })
-    } catch (error) {
-        console.log("Error in editProduct function", error)
         res.status(401).json({ error: error.message})
     }
 }
