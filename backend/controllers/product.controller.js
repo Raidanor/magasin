@@ -69,13 +69,6 @@ export const editProduct = async (req, res) => {
         const oldProduct = await Product.findById(req.params.id)
         let newProduct = req.body
 
-        // let oldImages = oldProduct.images
-        // let newImages = newProduct.images
-
-        console.log(oldProduct)
-        console.log("//////////////////////////////////////////////////")
-        console.log(newProduct)
-
         // if images arrays are different
         if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
 
@@ -111,9 +104,6 @@ export const editProduct = async (req, res) => {
         if (!newProduct) res.status(404).json({message: "Error editing Product"})
         newProduct = await Product.findByIdAndUpdate(req.params.id, newProduct, {new:true})
 
-        console.log(oldProduct)
-        console.log("--------------------------------------")
-        console.log(newProduct)
         res.json({ message: "Product updated" })
     } catch (error) {
         console.log("Error in editProduct function", error)
