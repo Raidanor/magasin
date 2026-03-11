@@ -11,7 +11,7 @@ import AllUsersTab from "../components/AllUsersTab";
 
 const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
-	{ id: "products", label: "Products", icon: ShoppingBasket },
+	{ id: "products", label: "Products List", icon: ShoppingBasket },
 	{ id: "analytics", label: "Analytics", icon: BarChart },
     { id: "manageCategories", label: "Manage Categories", icon: HardDriveUpload},
     { id: "allUsers", label: "Users", icon: UsersIcon},

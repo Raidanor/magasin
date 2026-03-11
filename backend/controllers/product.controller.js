@@ -3,8 +3,6 @@ import cloudinary from "../lib/cloudinary.js"
 
 import Product from "../models/product.model.js"
 
-
-
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({})
@@ -70,13 +68,16 @@ export const editProduct = async (req, res) => {
         // let product = await Product.findByIdAndUpdate(req.params.id, req.body, {new:true})
         const oldProduct = await Product.findById(req.params.id)
         let newProduct = req.body
-        let arr = []
 
         // if images arrays are different
         if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
 
             // delete image from cloudinary
             oldProduct.images.forEach(async(image) => {
+                if (!image) return null
+                if (image.startsWith("http")) {
+                    return
+                }
                 const publicId = image.split("/").pop().split(".")[0]
                 try {
                     await cloudinary.uploader.destroy(`products/${publicId}`)
@@ -89,6 +90,9 @@ export const editProduct = async (req, res) => {
             // upload image to cloudinary
             const uploadedImages = await Promise.all(
                 newProduct.images.map(async (image) => {
+                    if (image.startsWith("http")) {
+                        return image
+                    }
                     const cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" })
                     return cloudinaryResponse.secure_url
                 })
@@ -227,11 +231,4 @@ export const getOneProduct = async (req, res) => {
         console.log("Error in getOneProduct function")
         res.status(500).json({message: error.message})
     }
-}
-
-
-function waitforme(millisec) {
-    return new Promise(resolve => {
-        setTimeout(() => { resolve('') }, millisec);
-    })
 }
