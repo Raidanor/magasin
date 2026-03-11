@@ -69,11 +69,22 @@ export const editProduct = async (req, res) => {
         const oldProduct = await Product.findById(req.params.id)
         let newProduct = req.body
 
+        // let oldImages = oldProduct.images
+        // let newImages = newProduct.images
+
+        console.log(oldProduct)
+        console.log("//////////////////////////////////////////////////")
+        console.log(newProduct)
+
         // if images arrays are different
         if (JSON.stringify(newProduct.images) != JSON.stringify(oldProduct.images)){
 
             // delete image from cloudinary
             oldProduct.images.forEach(async(image) => {
+                if (!image) return null
+                if (image.startsWith("http")) {
+                    return
+                }
                 const publicId = image.split("/").pop().split(".")[0]
                 try {
                     await cloudinary.uploader.destroy(`products/${publicId}`)
@@ -86,6 +97,9 @@ export const editProduct = async (req, res) => {
             // upload image to cloudinary
             const uploadedImages = await Promise.all(
                 newProduct.images.map(async (image) => {
+                    if (image.startsWith("http")) {
+                        return image
+                    }
                     const cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" })
                     return cloudinaryResponse.secure_url
                 })
@@ -97,6 +111,9 @@ export const editProduct = async (req, res) => {
         if (!newProduct) res.status(404).json({message: "Error editing Product"})
         newProduct = await Product.findByIdAndUpdate(req.params.id, newProduct, {new:true})
 
+        console.log(oldProduct)
+        console.log("--------------------------------------")
+        console.log(newProduct)
         res.json({ message: "Product updated" })
     } catch (error) {
         console.log("Error in editProduct function", error)
