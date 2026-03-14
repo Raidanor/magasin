@@ -101,7 +101,7 @@ const OrderSummary = () => {
                         className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
                         onClick={() => handlePayment_Cash("cash_on_delivery")}
                     >
-                        Pay cash on delivery
+                        Place Order
                     </button>
 
                     <button
