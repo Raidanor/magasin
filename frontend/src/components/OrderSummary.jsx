@@ -72,7 +72,7 @@ const OrderSummary = () => {
 				>
 					Buy Cash
 				</button>
-                <div className="bg-gray-200 rounded-lg p-2">
+                {/* <div className="bg-gray-200 rounded-lg p-2">
                     <PayPalScriptProvider
                         options={{
                             "client-id": "AYWwTxv4NPnzJ5qVxk2sRXbSZCVhghRH5zobQOV4lhNqUUfKgd6CxkVje3gVGOJ1jGnV-CBHVVsUioDI",
@@ -81,7 +81,7 @@ const OrderSummary = () => {
                     >
                         <PayPalCheckout />
                     </PayPalScriptProvider>
-                </div>
+                </div> */}
 
 				<div className='flex items-center justify-center gap-2'>
 					<span className='text-sm font-normal text-gray-400'>or</span>
