@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Phone, House } from "lucide-react";
+import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Phone, House, MoveRight, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useUserStore } from "../stores/useUserStore";
+import TOSModal from "../components/TOSModal";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
@@ -17,8 +19,13 @@ const SignUpPage = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+        if (!agreed)
+            return toast.error("You must agree to the terms and conditions")
 		signup(formData);
 	};
+
+    const [isOpen, setIsOpen] = useState(false)
+    const [agreed, setAgreed] = useState(false);
 
 	return (
 		<div className='flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
@@ -170,6 +177,16 @@ const SignUpPage = () => {
 								/>
 							</div>
 						</div>
+                        <button
+                            type="button"
+                            className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+                            onClick={() => {setIsOpen(true)}}
+                        >
+                            Terms & Conditions
+                        </button>
+                        {isOpen && 
+                            <TOSModal isOpen={isOpen} setIsOpen={setIsOpen} onClose={() => {setIsOpen(false)}} agreed={agreed} setAgreed={setAgreed} />
+                        }
 
 						<button
 							type='submit'
@@ -177,7 +194,7 @@ const SignUpPage = () => {
 							rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600
 							 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2
 							  focus:ring-emerald-500 transition duration-150 ease-in-out disabled:opacity-50'
-							disabled={loading}
+							disabled={loading || !agreed}
 						>
 							{loading ? (
 								<>

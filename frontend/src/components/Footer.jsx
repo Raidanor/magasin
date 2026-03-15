@@ -5,13 +5,13 @@ const Footer = () => {
                 
                 {/* Brand */}
                 <div>
-                <h2 className="text-2xl font-bold text-white mb-4">
-                    The Best Choice
-                </h2>
-                <p className="text-sm text-gray-400 leading-relaxed">
-                    Your go-to destination for quality products, unbeatable prices,
-                    and fast delivery.
-                </p>
+                    <h2 className="text-2xl font-bold text-white mb-4">
+                        The Best Choice
+                    </h2>
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                        Your go-to destination for quality products, unbeatable prices,
+                        and fast delivery.
+                    </p>
                 </div>
 
                 {/* Shop */}
@@ -25,10 +25,10 @@ const Footer = () => {
 
                 {/* Support */}
                 <div>
-                <h3 className="text-white font-semibold mb-4">Support</h3>
+                    <h3 className="text-white font-semibold mb-4">Support</h3>
                     <div className="hover:text-white">Contact Us</div>
-                    <div>jasbeen@the-best-choice.store</div>
-                    <div>59204904</div>
+                    <div>Email: jasbeen@the-best-choice.store</div>
+                    <div>Phone: 59204904</div>
                 </div>
 
                 {/* Newsletter / Social */}

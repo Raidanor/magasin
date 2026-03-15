@@ -49,7 +49,7 @@ const ProductCard = ({ product }) => {
 
             // copiedProduct variable cuz useState is always one cycle behind :(
             let copiedProduct = JSON.parse(JSON.stringify(newProduct))
-            if (Array.isArray(copiedProduct.info))  
+            if (Array.isArray(copiedProduct.info))
                 copiedProduct.info = copiedProduct.info[0]
 
             if (Array.isArray(copiedProduct.colors) && copiedProduct.colors.length == 0)
