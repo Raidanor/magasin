@@ -70,7 +70,7 @@ const OrderSummary = () => {
 					className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					onClick={() => {setIsOpen(true)}}
 				>
-					Buy Cash
+					Place Order
 				</button>
                 {/* <div className="bg-gray-200 rounded-lg p-2">
                     <PayPalScriptProvider
@@ -101,7 +101,7 @@ const OrderSummary = () => {
                         className='flex w-full md:w-1/2 mx-auto justify-center rounded-lg bg-emerald-600 px-5 py-2.5 my-5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
                         onClick={() => handlePayment_Cash("cash_on_delivery")}
                     >
-                        Place Order
+                        Buy Cash
                     </button>
 
                     <button
@@ -143,7 +143,7 @@ function Modal ({ open, children, onClose }) {
                 </div>
                 {children}
                 <div className="border-b-3 mt-2 bg-blue-600 rounded-2xl p-4">
-                    Pay Cash on delivery: We'll deliver to your address and you pay upon delivery. An extra fee of Rs.50 will be added
+                    Buy Cash: We'll deliver to your address and you pay upon delivery. An extra fee of Rs.50 will be added
                 </div>
                 <div className="border-b-3 mt-2 bg-green-900 rounded-2xl p-4">Self Pick-up: You pay on pick-up</div>
             </div>
