@@ -175,7 +175,8 @@ async function sendEmailToCustomer(order, user) {
             email: user.email,
             data: {
                 total: order.totalAmount,
-                pickup_address: "101 La Paix Street, Port-Louis"
+                pickup_address: "101 La Paix Street, Port-Louis",
+                products: order.products
             },
         }];
         templateId = "neqvygm1rqzg0p7w"
@@ -184,7 +185,8 @@ async function sendEmailToCustomer(order, user) {
             email: user.email,
             data: {
                 address: user.address,
-                total: order.totalAmount
+                total: order.totalAmount,
+                products: order.products
             },
         }];
         templateId = "351ndgwkzjrgzqx8"

@@ -125,12 +125,12 @@ export default function TermsModal({ isOpen, setIsOpen, onAccept, onClose, agree
                 {/* Footer */}
                 <div className="border-t px-6 py-4">
 
-                    <label className="flex items-center gap-2 text-sm text-gray-700 mb-4">
+                    <label className="flex items-center gap-2 text-sm text-white mb-4">
                         <input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300"
-                        checked={agreed}
-                        onChange={(e) => setAgreed(e.target.checked)}
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300"
+                            checked={agreed}
+                            onChange={(e) => setAgreed(e.target.checked)}
                         />
                         I agree to the Terms and Conditions
                     </label>
