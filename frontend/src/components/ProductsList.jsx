@@ -33,35 +33,35 @@ const ProductsList = () => {
 
 	return (
 		<motion.div
-			className='bg-gray-800 shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto flex'
+			className='bg-gray-800 shadow-lg rounded-lg overflow-hidden mx-auto flex w-full xl:w-4/5'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.8 }}
+			transition={{ duration: 0.2 }}
 		>
-			<table className=' min-w-full divide-y divide-gray-700'>
+			<table className='table-auto min-w-full divide-y divide-gray-700'>
 				<thead className='bg-gray-500'>
 					<tr>
 						<th
 							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+							className='pl-3 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider '
 						>
 							Product
 						</th>
 						<th
 							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+							className=' py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider  '
 						>
 							Price & Size & Color
 						</th>
 						<th
 							scope='col'
-							className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+							className='text-left text-xs font-medium text-gray-300 uppercase tracking-wider  '
 						>
 							Category
 						</th>
 						<th
 							scope='col'
-							className='mx-auto px-8 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'
+							className='py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider  '
 						>
 							Actions
 						</th>
@@ -72,9 +72,9 @@ const ProductsList = () => {
 					{products?.map((product) => (
 						<tr key={product._id} className='hover:bg-gray-700'>
                             
-							<td className='px-6 py-4 whitespace-nowrap'>
+							<td className='pl-3 py-4 whitespace-nowrap '>
                                 <Link to={`/product/${product._id}`}>
-                                    <div className='flex items-center hover:underline'>
+                                    <div className='flex items-center hover:underline '>
                                         <div className='flex-shrink-0 h-10 w-10'>
                                             <img
                                                 className='h-10 w-10 rounded-full object-cover'
@@ -82,14 +82,14 @@ const ProductsList = () => {
                                                 alt={product.name}
                                             />
                                         </div>
-                                        <div className='ml-4'>
+                                        <div className='ml-2 truncate'>
                                             <div className='text-sm font-medium text-white'>{product.name}</div>
                                         </div>
                                     </div>
                                 </Link>
 							</td>
                             
-							<td className='flex px-6 py-4 whitespace-nowrap '>
+							<td className='flex py-4 whitespace-nowrap '>
                                 <div className="max-h-30 overflow-y-auto ">
                                     {product.info.map(p => (
                                         <div key={p.size} className='text-sm text-gray-300 my-0.5 px-1'>
@@ -107,10 +107,10 @@ const ProductsList = () => {
                                     ))}
                                 </div>
 							</td>
-							<td className='px-6 py-4 whitespace-nowrap'>
+							<td className='py-4 whitespace-nowrap'>
 								<div className='text-sm text-gray-300'>{product.category}</div>
 							</td>
-							<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
+							<td className='py-4 whitespace-nowrap text-sm font-medium'>
                                 <button
 									onClick={() => toggleFeaturedProduct(product._id)}
 									className={`p-2 mx-1 rounded-full ${
@@ -158,8 +158,6 @@ const ProductsList = () => {
                 categories={categories}
             >
                 <h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Edit Product</h2>
-
-            
             </EditForm>
 		</motion.div>
 	);

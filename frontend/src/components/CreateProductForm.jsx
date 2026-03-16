@@ -115,7 +115,7 @@ const CreateProductForm = () => {
 			className='bg-gray-800 shadow-lg rounded-lg p-8 mb-8 w-full xl:w-3/5 mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.8 }}
+			transition={{ duration: 0.2 }}
 		>
 			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
 
