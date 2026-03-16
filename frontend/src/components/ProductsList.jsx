@@ -100,7 +100,7 @@ const ProductsList = () => {
                                     ))}
                                 </div>
                                 <div className="text-sm text-gray-300 my-0.5 border-l px-1">
-                                    {product.colors.map(c => (
+                                    {product?.colors?.map(c => (
                                         <div key={c}>
                                             {c}
                                         </div>
