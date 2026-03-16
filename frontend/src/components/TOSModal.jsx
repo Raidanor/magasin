@@ -29,7 +29,7 @@ export default function TermsModal({ isOpen, setIsOpen, onAccept, onClose, agree
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
 
-            <div className="relative w-full max-w-2xl bg-gray-950 rounded-xl shadow-xl flex flex-col">
+            <div className="relative w-full max-w-2xl bg-gray-950 rounded-xl shadow-xl flex flex-col" onClick={e => e.stopPropagation()}>
 
                 {/* Header */}
                 <div className="border-b px-6 py-4">
